@@ -1,22 +1,28 @@
 const express = require('express');
-const { Tea } = require('../models');
-const router = express.Router();
-const {bootstrapField, createTeaForm} = require('../forms');
+const hbs = require('hbs')
+const wax = require('wax-on');
+const helpers = require('handlebars-helpers')({
+    handlebars: hbs.handlebars
+  });
+const moment = require('moment');
+moment().format();
 
-router.get('/',async function (req,res){
-    // res.send("Its ALIVE!!!")
-    const tea = await Tea.collection().fetch({})
-    res.render('tea/index',{
-        tea: tea.toJSON(),
-    })
+require('dotenv').config();
+const app = express();
+wax.on(hbs.handlebars);
+wax.setLayoutPath('./views/layouts')
+
+app.set('view engine', 'hbs');
+app.use(express.urlencoded({
+  extended: false
+}))
+
+const teaRoutes = require('./routes/tea');
+
+
+app.use('/tea',teaRoutes);
+
+
+app.listen(3000,function (res,req){
+    console.log("Server started")
 })
-
-router.get('/create',function (req,res){
-    const teaForm = createTeaForm();
-    res.render('tea/create',{
-        forms: teaForm.toHTML(bootstrapField)
-    })
-
-})
-
-module.exports = router;

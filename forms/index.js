@@ -24,7 +24,7 @@ const bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createTeaForm = () => {
+const createTeaForm = (packaging) => {
     return forms.create({
         'name':fields.string({
             required:true,
@@ -35,7 +35,27 @@ const createTeaForm = () => {
             required:true,
             errorAfterField:true,
             validators:[validators.integer(),validators.min(0)]
+        }),
+        'weight':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.integer(),validators.min(0)]
+        }),
+        'sachet':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.integer(),validators.min(0)]
+        }),
+        'image_url':fields.string({
+            required:true,
+            errorAfterField:true
         })
+        // 'packaging':fields.string({
+        //     required:true,
+        //     errorAfterField:true,
+        //     widget:widgets.select(),
+        //     choices:packaging
+        // })
     })
 }
 

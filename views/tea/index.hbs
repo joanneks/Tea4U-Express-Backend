@@ -1,7 +1,47 @@
 {{#extends 'base'}}
     {{#block 'content'}}
     <div class="container">
-        {{{forms}}}
+        <div>
+            <h1 style="display:inline-block">List of Tea</h1>
+            <a href="/tea/create" class="btn btn-primary btn-sm" style="float:right">Create</a>    
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Stock (qty)</th>
+                    <th>Cost ($)</th>
+                    <th>Weight (g)</th>
+                    <th>Sachet (qty)</th>
+                    <th>Image</th>
+                    <th>Packaging</th>
+                    <th>Created on</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tea}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.quantity}}</td>
+                    <td>{{divide this.cost 100}}</td>
+                    <td>{{this.weight}}</td>
+                    <td>{{this.sachet}}</td>
+                    <td><img src="{{this.image_url}}" style="height:100px"/></td>
+                    <td>{{this.packaging}}</td>
+                    <td>{{#moment}}
+                        '{{this.datetime_created}}' format=''
+                        {{/moment}}</td>
+                    <td>
+                        <a href="/tea/edit/:tea_id" class="btn btn-primary btn-sm ">Edit</button>
+                        <a href="/tea/delete/:tea_id" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 
     {{/block}}

@@ -18,7 +18,7 @@ exports.up = function(db) {
   return db.createTable('tea',{
     id:{type:'int',primaryKey:true,autoIncrement:true,unsigned:true},
     name:{type:'string',length:50, notNull:true},
-    cost:{type:'smallint',unsigned:true, notNull:true},
+    cost:{type:'mediumint',unsigned:true, notNull:true},
     weight:{type:'smallint',unsigned:true, notNull:true, defaultValue:0},
     sachet:{type:'smallint',unsigned:true, notNull:true, defaultValue:0},
     packaging:{type:'string',length:20,notNull:true},
