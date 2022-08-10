@@ -1,6 +1,6 @@
 {{#extends 'base'}}
     {{#block 'content'}}
-    <div class="container">
+    <div class="container-fluid">
         <div>
             <h1 style="display:inline-block">List of Tea</h1>
             <a href="/tea/create" class="btn btn-primary btn-sm" style="float:right">Create</a>    
@@ -9,14 +9,15 @@
             <thead>
                 <tr>
                     <th>Id</th>
+                    <th>Brand</th>
                     <th>Name</th>
+                    <th>Tea Type</th>
+                    <th>Packaging</th>
                     <th>Stock (qty)</th>
                     <th>Cost ($)</th>
                     <th>Weight (g)</th>
                     <th>Sachet (qty)</th>
-                    <th>Image</th>
-                    <th>Packaging</th>
-                    <th>Created on</th>
+                    <th>Product Image</th>
                     <th></th>
                 </tr>
             </thead>
@@ -24,19 +25,32 @@
                 {{#each tea}}
                 <tr>
                     <td>{{this.id}}</td>
-                    <td>{{this.name}}</td>
+                    <td>Kindred Tea</td>
+                    <td>
+                        {{this.name}}
+                    </td>
+                    <td>Oolong Tea</td>
+                    <td>Loose-leaf</td>
                     <td>{{this.quantity}}</td>
                     <td>{{divide this.cost 100}}</td>
                     <td>{{this.weight}}</td>
                     <td>{{this.sachet}}</td>
-                    <td><img src="{{this.image_url}}" style="height:100px"/></td>
-                    <td>{{this.packaging}}</td>
-                    <td>{{#moment}}
-                        '{{this.datetime_created}}' format=''
-                        {{/moment}}</td>
                     <td>
-                        <a href="/tea/edit/:tea_id" class="btn btn-primary btn-sm ">Edit</button>
-                        <a href="/tea/delete/:tea_id" class="btn btn-danger btn-sm">Delete</button>
+                        <div><img src="{{this.image_url}}" style="height:100px"/></div>
+                    </td>
+                    <td>
+                        <a href="/tea/edit/:tea_id" class="btn btn-primary btn-sm ">Edit</a>
+                        <a href="/tea/delete/:tea_id" class="btn btn-danger btn-sm">Delete</a>
+                        <div style="margin-top:30px;font-size:smaller;font-style:italic">
+                            created on {{#moment}}
+                            '{{this.datetime_created}}' format=''
+                            {{/moment}}
+                        </div>
+                        <div style="font-size:smaller;font-style:italic">
+                            last modified on {{#moment}}
+                            '{{this.datetime_created}}' format=''
+                            {{/moment}}
+                        </div>                        
                     </td>
                 </tr>
                 {{/each}}
