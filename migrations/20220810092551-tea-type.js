@@ -16,7 +16,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable('tea_types',{
-    id:{type:'tinyint',unsigned:true,primaryKey:true,autoIncrement:true},
+    id:{type:'smallint',unsigned:true,primaryKey:true,autoIncrement:true},
     name:{type:'string',length:20}
   });
 };

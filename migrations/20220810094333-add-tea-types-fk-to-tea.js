@@ -16,11 +16,11 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.addColumn('tea','tea_type_id',{
-    'type':'tinyint',
+    'type':'smallint',
     'unsigned': true,
     'notNull': true,
     'foreignKey': {
-      'name': 'tea_tea_types_fk',
+      'name': 'tea_tea_type_fk',
       'table': 'tea_types',
       'mapping':'id',
       'rules': {
