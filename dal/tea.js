@@ -14,11 +14,18 @@ async function getAllTeaTypes(){
     return teaTypes;
 };
 
+async function getTeaById(teaId){
+    const tea = await Tea.where({id:teaId}).fetch({
+        require:true,
+        withRelated:['teaType','brand']
+    });
+    return tea;
+};
 
 async function getAllTea(){
     return await Tea.collection.fetchAll({
-        withRelated:'teaType'
+        withRelated:['teaType','brand']
     })
-}
+};
 
-module.exports = {getAllTeaTypes, getAllTea, getAllBrands}
+module.exports = {getAllTeaTypes, getAllTea, getAllBrands, getTeaById}

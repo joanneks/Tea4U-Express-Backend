@@ -37,8 +37,8 @@
                         <div><img src="{{this.image_url}}" style="height:100px"/></div>
                     </td>
                     <td>
-                        <a href="/tea/edit/:tea_id" class="btn btn-primary btn-sm ">Edit</a>
-                        <a href="/tea/delete/:tea_id" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="/tea/edit/{{this.id}}" class="btn btn-primary btn-sm ">Edit</a>
+                        <a href="/tea/delete/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>
                         <div style="margin-top:30px;font-size:smaller;font-style:italic">
                             created on {{#moment}}
                             '{{this.datetime_created}}' format='YYYY-MM-DD'
