@@ -1,4 +1,4 @@
-const { Tea, TeaType, Brand} = require('../models');
+const { Tea, TeaType, Brand, Packaging} = require('../models');
 
 async function getAllBrands(){
     const brands = await Brand.fetchAll().map(brand => {
@@ -14,18 +14,25 @@ async function getAllTeaTypes(){
     return teaTypes;
 };
 
+async function getAllPackaging (){
+    const packaging = await Packaging.fetchAll().map(packaging => {
+        return [packaging.get('id'),packaging.get('name')];
+    });
+    return packaging;
+}
+
 async function getTeaById(teaId){
     const tea = await Tea.where({id:teaId}).fetch({
         require:true,
-        withRelated:['teaType','brand']
+        withRelated:['teaType','brand','packaging']
     });
     return tea;
 };
 
 async function getAllTea(){
     return await Tea.collection.fetchAll({
-        withRelated:['teaType','brand']
+        withRelated:['teaType','brand','packaging']
     })
 };
 
-module.exports = {getAllTeaTypes, getAllTea, getAllBrands, getTeaById}
+module.exports = {getAllTeaTypes, getAllTea, getAllBrands, getAllPackaging, getTeaById}

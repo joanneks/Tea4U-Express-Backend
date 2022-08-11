@@ -24,7 +24,7 @@ const bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createTeaForm = (brands,teaTypes) => {
+const createTeaForm = (brands,teaTypes,packaging) => {
     return forms.create({
         'name':fields.string({
             required:true,
@@ -44,6 +44,12 @@ const createTeaForm = (brands,teaTypes) => {
             errorAfterField:true,
             widget:widgets.select(),
             choices:teaTypes
+        }),
+        'packaging_id':fields.string({
+            required:true,
+            errorAfterField:true,
+            widget:widgets.select(),
+            choices:packaging
         }),
         'cost':fields.number({
             required:true,
@@ -114,7 +120,7 @@ const createTeaForm = (brands,teaTypes) => {
     })
 }
 
-const editTeaForm = (brands,teaTypes) => {
+const editTeaForm = (brands,teaTypes,packaging) => {
     return forms.create({
         'name':fields.string({
             required:true,
@@ -134,6 +140,12 @@ const editTeaForm = (brands,teaTypes) => {
             errorAfterField:true,
             widget:widgets.select(),
             choices:teaTypes
+        }),
+        'packaging_id':fields.string({
+            required:true,
+            errorAfterField:true,
+            widget:widgets.select(),
+            choices:packaging
         }),
         'cost':fields.number({
             label:'Cost ($)',

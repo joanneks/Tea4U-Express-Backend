@@ -8,7 +8,7 @@ const momentTimezone = require('moment-timezone');
 
 router.get('/',async function (req,res){
     const tea = await Tea.collection().fetch({
-        withRelated:['teaType','brand']
+        withRelated:['teaType','brand','packaging']
     });
 
     res.render('tea/index',{
@@ -19,7 +19,8 @@ router.get('/',async function (req,res){
 router.get('/create',async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
-    const teaForm = createTeaForm(brands,teaTypes);
+    const packaging = await dataLayer.getAllPackaging();
+    const teaForm = createTeaForm(brands,teaTypes,packaging);
     res.render('tea/create',{
         form: teaForm.toHTML(bootstrapField),
     })
@@ -28,7 +29,8 @@ router.get('/create',async function (req,res){
 router.post ('/create',async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
-    const teaForm = createTeaForm(brands,teaTypes);
+    const packaging = await dataLayer.getAllPackaging();
+    const teaForm = createTeaForm(brands,teaTypes,packaging);
     
     teaForm.handle(req,{
         'success':async function(teaForm){
@@ -63,12 +65,14 @@ router.get('/edit/:tea_id',async function(req,res){
     const tea = await dataLayer.getTeaById(req.params.tea_id);
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
-    const teaForm = editTeaForm(brands,teaTypes);
+    const packaging = await dataLayer.getAllPackaging();
+    const teaForm = editTeaForm(brands,teaTypes,packaging);
 
     // set field values from values last saved in database 
     teaForm.fields.name.value = tea.get('name');
     teaForm.fields.brand_id.value = tea.get('brand_id');
     teaForm.fields.tea_type_id.value = tea.get('tea_type_id');
+    teaForm.fields.packaging_id.value = tea.get('packaging_id');
     teaForm.fields.cost.value = tea.get('cost')/100;
     teaForm.fields.quantity.value = tea.get('quantity');
     teaForm.fields.weight.value = tea.get('weight');
@@ -91,7 +95,8 @@ router.post('/edit/:tea_id',async function(req,res){
     const tea = await dataLayer.getTeaById(req.params.tea_id);
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
-    const teaForm = editTeaForm(brands,teaTypes);
+    const packaging = await dataLayer.getAllPackaging();
+    const teaForm = editTeaForm(brands,teaTypes,packaging);
 
     teaForm.handle(req,{
         'success':async function (teaForm){

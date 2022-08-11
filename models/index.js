@@ -7,6 +7,9 @@ const Tea = bookshelf.model('Tea',{
     },
     brand: function(){
         return this.belongsTo('Brand');
+    },
+    packaging: function(){
+        return this.belongsTo('Packaging');
     }
 });
 
@@ -24,4 +27,11 @@ const TeaType = bookshelf.model('TeaType',{
     }
 });
 
-module.exports = { Tea, TeaType, Brand }
+const Packaging = bookshelf.model('Packaging',{
+    tableName:'packaging',
+    tea: function (){
+        return this.hasMany('Tea');
+    }
+});
+
+module.exports = { Tea, TeaType, Brand, Packaging }
