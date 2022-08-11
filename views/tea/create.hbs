@@ -1,7 +1,14 @@
 {{#extends 'base'}}
     {{#block 'content'}}
     <div class="container">
-        {{{forms}}}
+        <h1>Create New Tea Product</h1>
+        <form method="POST">
+            <div class="my-4">
+                <h2>Product Details</h2>
+                {{{formsTea}}}
+            </div>
+            <input type="submit" class="btn btn-primary my-3 "/>
+        </form>
     </div>
 
     {{/block}}

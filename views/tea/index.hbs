@@ -25,11 +25,9 @@
                 {{#each tea}}
                 <tr>
                     <td>{{this.id}}</td>
-                    <td>Kindred Tea</td>
-                    <td>
-                        {{this.name}}
-                    </td>
-                    <td>Oolong Tea</td>
+                    <td>{{this.brand_id}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.teaType.name}}</td>
                     <td>Loose-leaf</td>
                     <td>{{this.quantity}}</td>
                     <td>{{divide this.cost 100}}</td>
@@ -43,7 +41,7 @@
                         <a href="/tea/delete/:tea_id" class="btn btn-danger btn-sm">Delete</a>
                         <div style="margin-top:30px;font-size:smaller;font-style:italic">
                             created on {{#moment}}
-                            '{{this.datetime_created}}' format=''
+                            '{{this.datetime_created}}' format='YYYY-MM-DD'
                             {{/moment}}
                         </div>
                         <div style="font-size:smaller;font-style:italic">
