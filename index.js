@@ -17,11 +17,12 @@ app.use(express.urlencoded({
   extended: false
 }))
 
+const cloudinaryRoutes = require('./routes/cloudinary');
 const teaRoutes = require('./routes/tea');
 const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
 
-
+app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea',teaRoutes);
 app.use('/user',userRoutes);
 app.use('/cart',cartRoutes);

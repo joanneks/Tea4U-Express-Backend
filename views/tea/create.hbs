@@ -7,9 +7,58 @@
                 <h2>Product Details</h2>
                 {{{form}}}
             </div>
+            <div>
+                {{!-- <img src="hidden value" style="height:150px;margin-bottom:10px;" id="uploaded_image"/> --}}
+                <img src="hidden value" style="display:none" id="uploaded_image"/>
+            </div>
+            <div>
+                <a href="#" class="btn btn-primary" id="upload_widget">Add Image</a>
+            </div>
             <input type="submit" class="btn btn-primary my-3 "/>
         </form>
     </div>
 
     {{/block}}
+
+    {{#block 'js'}}
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+        <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+
+        <script>
+            function generateSignature(callback,params_to_sign){
+                axios.get('/cloudinary/sign',{
+                    'params':{
+                        'params_to_sign': params_to_sign
+                    }
+                }).then(function(response){
+                    callback(response.data);
+                });
+            };
+        </script>
+
+        <script>
+            const myWidget = cloudinary.createUploadWidget({
+                cloudName:"{{cloudinaryName}}",
+                apiKey:"{{cloudinaryApiKey}}",
+                uploadPreset:"{{cloudinaryPreset}}",
+                uploadSignature:generateSignature
+            }, (error, result)=>{
+                if(!error && result.event == "success"){
+                    console.log(result);
+                    document.querySelector('#id_image_url').value = result.info.url;
+                    document.querySelector('#uploaded_image').src = result.info.url;
+                    document.querySelector('#uploaded_image').style.display='block';
+                };
+            });
+
+            document.querySelector("#upload_widget").addEventListener('click',function(e){
+                console.log('click works')
+                e.preventDefault();
+                myWidget.open();
+            })
+        </script>
+
+    {{/block}}
+
 {{/extends}}

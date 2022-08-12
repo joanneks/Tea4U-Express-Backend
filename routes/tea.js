@@ -23,6 +23,9 @@ router.get('/create',async function (req,res){
     const teaForm = createTeaForm(brands,teaTypes,packaging,placeOfOrigins,tasteProfiles);
     res.render('tea/create',{
         form: teaForm.toHTML(bootstrapField),
+        'cloudinaryName':process.env.CLOUDINARY_NAME,
+        'cloudinaryApiKey':process.env.CLOUDINARY_API_KEY,
+        'cloudinaryPreset':process.env.CLOUDINARY_UPLOAD_PRESET,
     })
 })
 
@@ -32,7 +35,7 @@ router.post ('/create',async function (req,res){
     const packaging = await dataLayer.getAllPackaging();
     const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
     const tasteProfiles = await dataLayer.getAllTasteProfiles();
-    const teaForm = createTeaForm(brands,teaTypes,packaging,placeOfOrigins);
+    const teaForm = createTeaForm(brands,teaTypes,packaging,placeOfOrigins,tasteProfiles);
     
     teaForm.handle(req,{
         'success':async function(teaForm){
@@ -43,6 +46,7 @@ router.post ('/create',async function (req,res){
             const teaLastModifiedDate = teaCreatedDate;
 
             tea.set('cost',teaForm.data.cost*100);
+            tea.set('image_url',teaForm.data.image_url);
             tea.set('datetime_created',teaCreatedDate);
             tea.set('datetime_last_modified',teaLastModifiedDate);
             tea.set(teaData);
@@ -100,7 +104,10 @@ router.get('/edit/:tea_id',async function(req,res){
 
     res.render('tea/edit',{
         form: teaForm.toHTML(bootstrapField),
-        tea: tea.toJSON()
+        tea: tea.toJSON(),
+        'cloudinaryName':process.env.CLOUDINARY_NAME,
+        'cloudinaryApiKey':process.env.CLOUDINARY_API_KEY,
+        'cloudinaryPreset':process.env.CLOUDINARY_UPLOAD_PRESET,
     })
 })
 

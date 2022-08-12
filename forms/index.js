@@ -51,10 +51,10 @@ const createTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) =
             widget:widgets.select(),
             choices:packaging
         }),
-        'cost':fields.number({
+        'cost':fields.string({
             required:true,
             errorAfterField:true,
-            validators:[validators.integer(),validators.min(0)]
+            validators:[validators.digits(),validators.min(0)]
         }),
         'quantity':fields.number({
             label:'Stock Quantity',
@@ -125,12 +125,15 @@ const createTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) =
             errorAfterField:true,
             validators:[validators.integer(),validators.min(0)]
         }),
-        'image_url':fields.url({
-            label:'Image URL',
-            required:true,
-            errorAfterField:true,
-            validators:[validators.maxlength(255)]
+        'image_url':fields.string({
+            widget:widgets.hidden()
         })
+        // 'image_url':fields.url({
+        //     label:'Image URL',
+        //     required:true,
+        //     errorAfterField:true,
+        //     validators:[validators.maxlength(255)]
+        // })
     })
 }
 
@@ -235,12 +238,15 @@ const editTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) => 
             errorAfterField:true,
             validators:[validators.integer(),validators.min(0)]
         }),
-        'image_url':fields.url({
-            label:'Image URL',
-            required:true,
-            errorAfterField:true,
-            validators:[validators.maxlength(255)]
+        'image_url':fields.string({
+            widget:widgets.hidden()
         })
+        // 'image_url':fields.url({
+        //     label:'Image URL',
+        //     required:true,
+        //     errorAfterField:true,
+        //     validators:[validators.maxlength(255)]
+        // })
     })
 }
 
