@@ -24,7 +24,7 @@ const bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createTeaForm = (brands,teaTypes,packaging) => {
+const createTeaForm = (brands,teaTypes,packaging,placeOfOrigin) => {
     return forms.create({
         'name':fields.string({
             required:true,
@@ -74,6 +74,13 @@ const createTeaForm = (brands,teaTypes,packaging) => {
             errorAfterField:true,
             validators:[validators.integer(),validators.min(0)]
         }),
+        'place_of_origin_id':fields.string({
+            label:'Place of Origin',
+            required:true,
+            errorAfterField:true,
+            widget:widgets.select(),
+            choices:placeOfOrigin
+        }),
         'description':fields.string({
             label:'Description (max. 400 characters)',
             required:true,
@@ -120,7 +127,7 @@ const createTeaForm = (brands,teaTypes,packaging) => {
     })
 }
 
-const editTeaForm = (brands,teaTypes,packaging) => {
+const editTeaForm = (brands,teaTypes,packaging,placeOfOrigin) => {
     return forms.create({
         'name':fields.string({
             required:true,
@@ -170,6 +177,13 @@ const editTeaForm = (brands,teaTypes,packaging) => {
             required:true,
             errorAfterField:true,
             validators:[validators.integer(),validators.min(0)]
+        }),
+        'place_of_origin_id':fields.string({
+            label:'Place of Origin',
+            required:true,
+            errorAfterField:true,
+            widget:widgets.select(),
+            choices:placeOfOrigin
         }),
         'description':fields.string({
             label:'Description (max. 400 characters)',

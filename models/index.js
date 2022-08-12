@@ -10,6 +10,9 @@ const Tea = bookshelf.model('Tea',{
     },
     packaging: function(){
         return this.belongsTo('Packaging');
+    },
+    placeOfOrigin: function (){
+        return this.belongsTo('PlaceOfOrigin');
     }
 });
 
@@ -34,4 +37,11 @@ const Packaging = bookshelf.model('Packaging',{
     }
 });
 
-module.exports = { Tea, TeaType, Brand, Packaging }
+const PlaceOfOrigin = bookshelf.model('PlaceOfOrigin',{
+    tableName:'place_of_origin',
+    tea: function(){
+        return this.hasMany('Tea');
+    }
+});
+
+module.exports = { Tea, TeaType, Brand, Packaging, PlaceOfOrigin }
