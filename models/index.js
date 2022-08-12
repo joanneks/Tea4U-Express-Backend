@@ -48,10 +48,10 @@ const PlaceOfOrigin = bookshelf.model('PlaceOfOrigin',{
 });
 
 const TasteProfile = bookshelf.model('TasteProfile',{
-    tablename:'place_of_origin',
+    tableName:'taste_profiles',
     tea: function(){
         return this.hasMany('Tea')
     }
 })
 
-module.exports = { Tea, TeaType, Brand, Packaging, PlaceOfOrigin }
+module.exports = { Tea, TeaType, Brand, Packaging, PlaceOfOrigin, TasteProfile }

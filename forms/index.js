@@ -24,7 +24,7 @@ const bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createTeaForm = (brands,teaTypes,packaging,placeOfOrigin) => {
+const createTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) => {
     return forms.create({
         'name':fields.string({
             required:true,
@@ -79,7 +79,14 @@ const createTeaForm = (brands,teaTypes,packaging,placeOfOrigin) => {
             required:true,
             errorAfterField:true,
             widget:widgets.select(),
-            choices:placeOfOrigin
+            choices:placeOfOrigins
+        }),
+        'taste_profiles':fields.string({
+            label:'Taste Profile(s)',
+            required:true,
+            errorAfterField:true,
+            widget:widgets.multipleSelect(),
+            choices:tasteProfiles
         }),
         'description':fields.string({
             label:'Description (max. 400 characters)',
@@ -127,7 +134,7 @@ const createTeaForm = (brands,teaTypes,packaging,placeOfOrigin) => {
     })
 }
 
-const editTeaForm = (brands,teaTypes,packaging,placeOfOrigin) => {
+const editTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) => {
     return forms.create({
         'name':fields.string({
             required:true,
@@ -183,7 +190,13 @@ const editTeaForm = (brands,teaTypes,packaging,placeOfOrigin) => {
             required:true,
             errorAfterField:true,
             widget:widgets.select(),
-            choices:placeOfOrigin
+            choices:placeOfOrigins
+        }),
+        'taste_profiles':fields.string({
+            required:true,
+            errorAfterField:true,
+            widget:widgets.multipleSelect(),
+            choices:tasteProfiles
         }),
         'description':fields.string({
             label:'Description (max. 400 characters)',

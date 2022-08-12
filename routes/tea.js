@@ -18,8 +18,9 @@ router.get('/create',async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
     const packaging = await dataLayer.getAllPackaging();
-    const placeOfOrigin = await dataLayer.getAllPlaceOfOrigin();
-    const teaForm = createTeaForm(brands,teaTypes,packaging,placeOfOrigin);
+    const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
+    const tasteProfiles = await dataLayer.getAllTasteProfiles();
+    const teaForm = createTeaForm(brands,teaTypes,packaging,placeOfOrigins,tasteProfiles);
     res.render('tea/create',{
         form: teaForm.toHTML(bootstrapField),
     })
@@ -29,23 +30,29 @@ router.post ('/create',async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
     const packaging = await dataLayer.getAllPackaging();
-    const placeOfOrigin = await dataLayer.getAllPlaceOfOrigin();
-    const teaForm = createTeaForm(brands,teaTypes,packaging,placeOfOrigin);
+    const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
+    const tasteProfiles = await dataLayer.getAllTasteProfiles();
+    const teaForm = createTeaForm(brands,teaTypes,packaging,placeOfOrigins);
     
     teaForm.handle(req,{
         'success':async function(teaForm){
             const tea = new Tea();
-            let {cost,...teaData} = teaForm.data;
+            let {cost,taste_profiles,...teaData} = teaForm.data;
 
             const teaCreatedDate= moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
             const teaLastModifiedDate = teaCreatedDate;
 
             tea.set('cost',teaForm.data.cost*100);
-            // teaForm.data.datetime_created = teaCreatedDate;
             tea.set('datetime_created',teaCreatedDate);
-            tea.set('datetime_last_modified',teaLastModifiedDate)
+            tea.set('datetime_last_modified',teaLastModifiedDate);
             tea.set(teaData);
+
             await tea.save();
+
+            if(teaForm.data.taste_profiles){
+                await tea.tasteProfile().attach(teaForm.data.taste_profiles.split(','));
+            };
+
             res.redirect('/tea');
         },
         'error':function(teaForm){
@@ -66,8 +73,9 @@ router.get('/edit/:tea_id',async function(req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
     const packaging = await dataLayer.getAllPackaging();
-    const placeOfOrigin = await dataLayer.getAllPlaceOfOrigin();
-    const teaForm = editTeaForm(brands,teaTypes,packaging,placeOfOrigin);
+    const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
+    const tasteProfiles = await dataLayer.getAllTasteProfiles();
+    const teaForm = editTeaForm(brands,teaTypes,packaging,placeOfOrigins,tasteProfiles);
 
     // set field values from values last saved in database 
     teaForm.fields.name.value = tea.get('name');
@@ -86,6 +94,10 @@ router.get('/edit/:tea_id',async function(req,res){
     teaForm.fields.brew_sachet_quantity.value = tea.get('brew_sachet_quantity');
     teaForm.fields.brew_time.value = tea.get('brew_time');
 
+    let selectedTasteProfiles = await tea.related('tasteProfile').pluck('id');
+    console.log('selected taste profiles ----',selectedTasteProfiles);
+    teaForm.fields.taste_profiles.value = selectedTasteProfiles;
+
     res.render('tea/edit',{
         form: teaForm.toHTML(bootstrapField),
         tea: tea.toJSON()
@@ -97,12 +109,13 @@ router.post('/edit/:tea_id',async function(req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
     const packaging = await dataLayer.getAllPackaging();
-    const placeOfOrigin = await dataLayer.getAllPlaceOfOrigin();
-    const teaForm = editTeaForm(brands,teaTypes,packaging,placeOfOrigin);
+    const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
+    const tasteProfiles = await dataLayer.getAllTasteProfiles();
+    const teaForm = editTeaForm(brands,teaTypes,packaging,placeOfOrigins,tasteProfiles);
 
     teaForm.handle(req,{
         'success':async function (teaForm){
-            let {cost,...teaData} = teaForm.data;
+            let {cost,taste_profiles,...teaData} = teaForm.data;
 
             const teaLastModifiedDate= moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
             
@@ -111,6 +124,14 @@ router.post('/edit/:tea_id',async function(req,res){
             tea.set(teaData);
             await tea.save();
 
+            let tasteProfileIds = taste_profiles.split(',').map(id => parseInt(id));
+            console.log(tasteProfileIds);
+            let existingTasteProfilesIds = await tea.related('tasteProfile').pluck('id');
+            console.log(existingTasteProfilesIds);
+            let toRemove = existingTasteProfilesIds.filter( id => tasteProfileIds.includes(id) === false);
+            console.log(toRemove);
+            await tea.tasteProfile().detach(toRemove);
+            await tea.tasteProfile().attach(tasteProfileIds)
             res.redirect('/tea')
         },
         'error':function(teaForm){
