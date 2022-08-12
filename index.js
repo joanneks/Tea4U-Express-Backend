@@ -18,9 +18,13 @@ app.use(express.urlencoded({
 }))
 
 const teaRoutes = require('./routes/tea');
+const userRoutes = require('./routes/user');
+const cartRoutes = require('./routes/cart');
 
 
 app.use('/tea',teaRoutes);
+app.use('/user',userRoutes);
+app.use('/cart',cartRoutes);
 
 
 app.listen(3000,function (res,req){

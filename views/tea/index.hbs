@@ -16,7 +16,6 @@
                     <th>Stock (qty)</th>
                     <th>Cost ($)</th>
                     <th>Weight (g)</th>
-                    <th>Sachet (qty)</th>
                     <th>Product Image</th>
                     <th></th>
                 </tr>
@@ -25,21 +24,31 @@
                 {{#each tea}}
                 <tr>
                     <td>{{this.id}}</td>
-                    <td>{{this.brand_id}}</td>
-                    <td>{{this.name}}</td>
+                    <td>{{this.brand.name}}</td>
+                    <td>
+                        {{this.name}}
+                        <div style="font-style:italic; font-size:smaller;margin-top:10px;margin-bottom:5px;">
+                            Place of Origin: {{this.placeOfOrigin.name}}
+                        </div>
+                        <div>
+                            {{#each this.tasteProfile}}
+                            <span class="badge bg-warning">{{this.name}}</span>
+                            {{/each}}
+                        </div>
+                    </td>
                     <td>{{this.teaType.name}}</td>
                     <td>{{this.packaging.name}}</td>
                     <td>{{this.quantity}}</td>
                     <td>{{divide this.cost 100}}</td>
                     <td>{{this.weight}}</td>
-                    <td>{{this.sachet}}</td>
                     <td>
                         <div><img src="{{this.image_url}}" style="height:100px"/></div>
                     </td>
                     <td>
                         <a href="/tea/edit/{{this.id}}" class="btn btn-primary btn-sm ">Edit</a>
                         <a href="/tea/delete/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>
-                        <div style="margin-top:30px;font-size:smaller;font-style:italic">
+                        <a href="/cart/add/{{this.id}}" class="btn btn-success btn-sm">Add to cart</a>
+                        <div style="margin-top:10px;font-size:smaller;font-style:italic">
                             created on {{#moment}}
                             '{{this.datetime_created}}' format='YYYY-MM-DD'
                             {{/moment}}
