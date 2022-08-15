@@ -36,6 +36,18 @@
             <a class="nav-link" href="/user" style="margin-left:15px;margin-right:15px;">Users</a>
           </li>
         </ul>
+
+        <div>
+          {{#if user}}
+          <span style="margin-right:10px;">{{user.username}}</span>
+          {{!-- <a href="/cart" class="btn btn-primary btn-sm">Cart ({{cartCount}})</a> --}}
+          <a href="/user/logout" class="btn btn-danger btn-sm">Logout</a>
+          {{else}}
+
+          <span style="margin-right:10px;">Hi Guest</span>
+          <a href="/users/login" class="btn btn-sm btn-success">Login</a>
+          {{/if}}
+        </div>
       </div>
 
     </nav>

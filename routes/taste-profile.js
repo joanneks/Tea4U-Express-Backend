@@ -3,8 +3,9 @@ const router = express.Router();
 const {createTasteProfileForm, editTasteProfileForm, bootstrapField} = require('../forms');
 const dataLayer = require('../dal/taste-profile');
 const {TasteProfile} = require('../models');
+const {checkIfAuthenticated} = require('../middlewares');
 
-router.get('/',async function (req,res){
+router.get('/', checkIfAuthenticated, async function (req,res){
     const tasteProfiles = await dataLayer.getAllTasteProfiles();
     console.log(tasteProfiles.toJSON());
     const tasteProfileForm  = createTasteProfileForm();
@@ -14,7 +15,7 @@ router.get('/',async function (req,res){
     });
 });
 
-router.post('/',async function (req,res){
+router.post('/', checkIfAuthenticated,async function (req,res){
     const tasteProfiles = await dataLayer.getAllTasteProfiles();
     const tasteProfileForm  = createTasteProfileForm();
     tasteProfileForm.handle(req,{
@@ -39,7 +40,7 @@ router.post('/',async function (req,res){
     })
 });
 
-router.get('/edit/:taste_profile_id',async function (req,res){
+router.get('/edit/:taste_profile_id', checkIfAuthenticated,async function (req,res){
     const tasteProfiles = await dataLayer.getAllTasteProfiles();
     const tasteProfileForm  = editTasteProfileForm();
     const tasteProfile = await dataLayer.getTasteProfileById(req.params.taste_profile_id);
@@ -70,7 +71,7 @@ router.get('/edit/:taste_profile_id',async function (req,res){
     })
 })
 
-router.post('/edit/:taste_profile_id',async function (req,res){
+router.post('/edit/:taste_profile_id', checkIfAuthenticated,async function (req,res){
     const tasteProfiles = await dataLayer.getAllTasteProfiles();
     const tasteProfileForm  = editTasteProfileForm();
     const tasteProfile = await dataLayer.getTasteProfileById(req.params.taste_profile_id);
@@ -97,7 +98,7 @@ router.post('/edit/:taste_profile_id',async function (req,res){
     })
 })
 
-router.get('/delete/:taste_profile_id', async function (req,res){
+router.get('/delete/:taste_profile_id', checkIfAuthenticated, async function (req,res){
     const tasteProfile = await dataLayer.getTasteProfileById(req.params.taste_profile_id);
     tasteProfile.destroy();
     res.redirect('/taste-profile');

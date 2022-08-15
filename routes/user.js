@@ -1,11 +1,12 @@
 const express =require('express');
 const router = express.Router();
-const {createUserForm, editUserForm, editUserPasswordForm, bootstrapField} = require('../forms');
+const {createUserForm, editUserForm, editUserPasswordForm, createLoginForm, bootstrapField} = require('../forms');
 const dataLayer = require('../dal/user');
 const {User} = require('../models');
 const moment = require('moment');
 const momentTimezone = require('moment-timezone');
 const crypto = require('crypto');
+const {checkIfAuthenticated} = require('../middlewares');
 
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
@@ -14,22 +15,63 @@ const getHashedPassword = (password) => {
     return hash;
 }
 
+router.get('/logout', function(req,res){
+    req.session.user = null;
+    req.flash('success_messages', "You have been logged out");
+    res.redirect('/user/login')
+})
 
-router.get('/',async function(req,res){
-    const users = await dataLayer.getAllUsers();
-    res.render('user/index',{
-        'users':users.toJSON()
-    });
-});
+router.get('/login', async function (req,res){
+    const loginForm = createLoginForm();
+    res.render('user/login',{
+        form:loginForm.toHTML(bootstrapField)
+    })
+})
 
-router.get('/register',function(req,res){
+router.post('/login', async function (req,res){
+    const loginForm = createLoginForm();
+    loginForm.handle(req,{
+        'success':async function(loginForm){
+            const user = await User.where({
+                email: loginForm.data.email,
+                password: getHashedPassword(loginForm.data.password)
+            }).fetch({
+                require:false
+            })
+            if(!user){
+                req.flash('error_messages', "Invalid credentials");
+                res.redirect("/users/login");
+            } else {
+                req.session.user = {
+                    id: user.get('id'),
+                    email: user.get('email'),
+                    username: user.get('username')
+                }
+                req.flash('success_messages', 'Welcome back, ' + user.get('username'));
+                res.redirect('/tea');
+            }
+        },
+        'error':async function(loginForm){
+            res.render('user/login',{
+                form:loginForm.toHTML(bootstrapField)
+            })
+        },
+        'empty':async function(loginForm){
+            res.render('user/login',{
+                form:loginForm.toHTML(bootstrapField)
+            })
+        },
+    })
+})
+
+router.get('/register', function(req,res){
     const userForm  = createUserForm();
     res.render('user/register',{
         'form': userForm.toHTML(bootstrapField)
     });
 });
 
-router.post('/register',function(req,res){
+router.post('/register', function(req,res){
     const userForm  = createUserForm();
     const user = new User();
     userForm.handle(req,{
@@ -59,7 +101,14 @@ router.post('/register',function(req,res){
     })
 });
 
-router.get('/edit/:user_id',async function(req,res){
+router.get('/', checkIfAuthenticated, async function(req,res){
+    const users = await dataLayer.getAllUsers();
+    res.render('user/index',{
+        'users':users.toJSON()
+    });
+});
+
+router.get('/edit/:user_id', checkIfAuthenticated, async function(req,res){
     const user = await dataLayer.getUserById(req.params.user_id);
     const userForm  = editUserForm();
     // set field values from values last saved in database 
@@ -73,7 +122,7 @@ router.get('/edit/:user_id',async function(req,res){
     });
 })
 
-router.post('/edit/:user_id',async function(req,res){
+router.post('/edit/:user_id', checkIfAuthenticated, async function(req,res){
     const user = await dataLayer.getUserById(req.params.user_id);
     const userForm  = editUserForm();
 
@@ -100,7 +149,7 @@ router.post('/edit/:user_id',async function(req,res){
     })
 })
 
-router.get('/edit-password/:user_id',async function(req,res){
+router.get('/edit-password/:user_id', checkIfAuthenticated, async function(req,res){
     const user = await dataLayer.getUserById(req.params.user_id);
     const userForm  = editUserPasswordForm();
     res.render('user/password',{
@@ -109,7 +158,7 @@ router.get('/edit-password/:user_id',async function(req,res){
     });
 })
 
-router.post('/edit-password/:user_id',async function(req,res){
+router.post('/edit-password/:user_id', checkIfAuthenticated, async function(req,res){
     const user = await dataLayer.getUserById(req.params.user_id);
     const userForm  = editUserPasswordForm();
     userForm.handle(req,{
@@ -152,8 +201,7 @@ router.post('/edit-password/:user_id',async function(req,res){
     })
 })
 
-
-router.get('/delete/:user_id',async function(req,res){
+router.get('/delete/:user_id', checkIfAuthenticated, async function(req,res){
     const user = await dataLayer.getUserById(req.params.user_id);
     user.destroy();
     res.redirect('/user');

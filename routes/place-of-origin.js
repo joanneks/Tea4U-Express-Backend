@@ -3,8 +3,9 @@ const router = express.Router();
 const {createPlaceOfOriginForm, editPlaceOfOriginForm , bootstrapField} = require('../forms');
 const dataLayer = require('../dal/place-of-origin');
 const {PlaceOfOrigin} = require('../models');
+const {checkIfAuthenticated} = require('../middlewares');
 
-router.get('/',async function (req,res){
+router.get('/', checkIfAuthenticated,async function (req,res){
     const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
     const placeOfOriginForm  = createPlaceOfOriginForm();
     res.render('dashboard/place-of-origin/index',{
@@ -13,7 +14,7 @@ router.get('/',async function (req,res){
     });
 });
 
-router.post('/',async function (req,res){
+router.post('/', checkIfAuthenticated,async function (req,res){
     const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
     const placeOfOriginForm  = createPlaceOfOriginForm();
     placeOfOriginForm.handle(req,{
@@ -38,7 +39,7 @@ router.post('/',async function (req,res){
     })
 });
 
-router.get('/edit/:place_of_origin_id',async function (req,res){
+router.get('/edit/:place_of_origin_id', checkIfAuthenticated,async function (req,res){
     const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
     const placeOfOriginForm  = createPlaceOfOriginForm();
     const placeOfOrigin = await dataLayer.getPlaceOfOriginById(req.params.place_of_origin_id);
@@ -70,7 +71,7 @@ router.get('/edit/:place_of_origin_id',async function (req,res){
     })
 })
 
-router.post('/edit/:place_of_origin_id',async function (req,res){
+router.post('/edit/:place_of_origin_id', checkIfAuthenticated,async function (req,res){
     const placeOfOriginForm  = editPlaceOfOriginForm();
     const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
     const placeOfOrigin = await dataLayer.getPlaceOfOriginById(req.params.place_of_origin_id);
@@ -97,7 +98,7 @@ router.post('/edit/:place_of_origin_id',async function (req,res){
     })
 })
 
-router.get('/delete/:place_of_origin_id', async function (req,res){
+router.get('/delete/:place_of_origin_id', checkIfAuthenticated, async function (req,res){
     const placeOfOrigin = await dataLayer.getPlaceOfOriginById(req.params.place_of_origin_id);
     placeOfOrigin.destroy();
     res.redirect('/place-of-origin');

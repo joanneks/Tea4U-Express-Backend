@@ -3,8 +3,9 @@ const router = express.Router();
 const {createBrandForm, editBrandForm, bootstrapField} = require('../forms');
 const dataLayer = require('../dal/brand');
 const {Brand} = require('../models');
+const {checkIfAuthenticated} = require('../middlewares');
 
-router.get('/',async function (req,res){
+router.get('/', checkIfAuthenticated,async function (req,res){
     const brands = await dataLayer.getAllBrands();
     const brandForm  = createBrandForm();
     res.render('dashboard/brand/index',{
@@ -13,7 +14,7 @@ router.get('/',async function (req,res){
     });
 });
 
-router.post('/',async function (req,res){
+router.post('/', checkIfAuthenticated,async function (req,res){
     const brands = await dataLayer.getAllBrands();
     const brandForm  = createBrandForm();
     brandForm.handle(req,{
@@ -38,7 +39,7 @@ router.post('/',async function (req,res){
     })
 });
 
-router.get('/edit/:brand_id',async function (req,res){
+router.get('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
     const brandForm  = editBrandForm();
     const brands = await dataLayer.getAllBrands();
     const brand = await dataLayer.getBrandById(req.params.brand_id);
@@ -69,7 +70,7 @@ router.get('/edit/:brand_id',async function (req,res){
     })
 })
 
-router.post('/edit/:brand_id',async function (req,res){
+router.post('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
     const brandForm  = editBrandForm();
     const brands = await dataLayer.getAllBrands();
     const brand = await dataLayer.getBrandById(req.params.brand_id);
@@ -96,7 +97,7 @@ router.post('/edit/:brand_id',async function (req,res){
     })
 })
 
-router.get('/delete/:brand_id', async function (req,res){
+router.get('/delete/:brand_id', checkIfAuthenticated, async function (req,res){
     const brand = await dataLayer.getBrandById(req.params.brand_id);
     brand.destroy();
     res.redirect('/brand');

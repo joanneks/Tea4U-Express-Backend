@@ -5,8 +5,9 @@ const router = express.Router();
 const {bootstrapField, createTeaForm, editTeaForm } = require('../forms');
 const moment = require('moment');
 const momentTimezone = require('moment-timezone');
+const {checkIfAuthenticated} = require('../middlewares');
 
-router.get('/',async function (req,res){
+router.get('/', checkIfAuthenticated, async function (req,res){
     const tea = await dataLayer.getAllTea();
 
     res.render('tea/index',{
@@ -14,7 +15,7 @@ router.get('/',async function (req,res){
     })
 })
 
-router.get('/create',async function (req,res){
+router.get('/create', checkIfAuthenticated, async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
     const packaging = await dataLayer.getAllPackaging();
@@ -29,7 +30,7 @@ router.get('/create',async function (req,res){
     })
 })
 
-router.post ('/create',async function (req,res){
+router.post ('/create', checkIfAuthenticated, async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
     const packaging = await dataLayer.getAllPackaging();
@@ -72,7 +73,7 @@ router.post ('/create',async function (req,res){
     })  
 })
 
-router.get('/edit/:tea_id',async function(req,res){
+router.get('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
     const tea = await dataLayer.getTeaById(req.params.tea_id);
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
@@ -111,7 +112,7 @@ router.get('/edit/:tea_id',async function(req,res){
     })
 })
 
-router.post('/edit/:tea_id',async function(req,res){
+router.post('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
     const tea = await dataLayer.getTeaById(req.params.tea_id);
     const teaTypes = await dataLayer.getAllTeaTypes();
     const brands = await dataLayer.getAllBrands();
@@ -157,7 +158,7 @@ router.post('/edit/:tea_id',async function(req,res){
 
 })
 
-router.get('/delete/:tea_id',async function(req,res){
+router.get('/delete/:tea_id', checkIfAuthenticated, async function(req,res){
     const tea = await dataLayer.getTeaById(req.params.tea_id);
     tea.destroy();
     res.redirect('/tea');

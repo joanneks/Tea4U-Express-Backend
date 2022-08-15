@@ -264,6 +264,11 @@ const createUserForm = () => {
             errorAfterField:true,
             validators:[validators.minlength(2)]
         }),
+        'username':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(5)]
+        }),
         'email':fields.email({
             required:true,
             errorAfterField:true,
@@ -295,6 +300,11 @@ const editUserForm = () => {
             errorAfterField:true,
             validators:[validators.minlength(2)]
         }),
+        'username':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(5)]
+        }),
         'email':fields.email({
             required:true,
             errorAfterField:true,
@@ -322,6 +332,19 @@ const editUserPasswordForm = () => {
             required:true,
             errorAfterField:true,
             validators: [ validators.matchField('password')]
+        })
+    })
+}
+
+const createLoginForm = () => {
+    return forms.create({
+        'email':fields.email({
+            required:true,
+            errorAfterField:true
+        }),
+        'password':fields.password({
+            required:true,
+            errorAfterField:true
         })
     })
 }
@@ -395,7 +418,7 @@ const editPlaceOfOriginForm = () => {
 module.exports = {
     bootstrapField, 
     createTeaForm, editTeaForm, 
-    createUserForm, editUserForm, editUserPasswordForm, 
+    createUserForm, editUserForm, editUserPasswordForm, createLoginForm,
     createBrandForm, editBrandForm, 
     createTasteProfileForm, editTasteProfileForm, 
     createPlaceOfOriginForm, editPlaceOfOriginForm 
