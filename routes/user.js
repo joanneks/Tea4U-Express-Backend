@@ -5,6 +5,14 @@ const dataLayer = require('../dal/user');
 const {User} = require('../models');
 const moment = require('moment');
 const momentTimezone = require('moment-timezone');
+const crypto = require('crypto');
+
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    // the output will be converted to hexdecimal
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+}
 
 
 router.get('/',async function(req,res){
@@ -29,6 +37,8 @@ router.post('/register',function(req,res){
             const {confirm_password,...userFormData} = userForm.data;
             const userCreatedDate= moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
             const userLastModifiedDate = userCreatedDate;
+            userFormData.password = getHashedPassword(userFormData.password);
+            console.log(userFormData.password);
             
             user.set('datetime_created',userCreatedDate);
             user.set('datetime_last_modified',userLastModifiedDate);
@@ -106,8 +116,18 @@ router.post('/edit-password/:user_id',async function(req,res){
         'success':async function (userForm){
             const {former_password,confirm_password,userFormData} = userForm.data;
             const formerPassword = user.get('password');
+            const formerPasswordUserInput = getHashedPassword(userForm.data.former_password);
+            console.log('formerPasswordUserInput',formerPasswordUserInput);
+            console.log('former-password',formerPassword);
+            console.log(formerPasswordUserInput == formerPassword);
+            console.log('userForm.data.password',userForm.data.password);
+            const password = getHashedPassword(userForm.data.password);
+            console.log(password);
+
             if(userForm.data.former_password == formerPassword){
-                user.set('password',userForm.data.password);
+                console.log('true condition met');
+                console.log('---------',password);
+                user.set('password',password);
                 await user.save();
                 res.redirect('/user');
             } else {

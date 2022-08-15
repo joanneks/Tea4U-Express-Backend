@@ -326,4 +326,77 @@ const editUserPasswordForm = () => {
     })
 }
 
-module.exports = {bootstrapField, createTeaForm, editTeaForm, createUserForm, editUserForm, editUserPasswordForm }
+const createBrandForm = () => {
+    return forms.create({
+        'name':fields.string({
+            label:'Brand Name',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        })
+    })
+}
+
+const editBrandForm = () => {
+    return forms.create({
+        'name':fields.string({
+            label:'Update Brand Name',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        })
+    })
+}
+
+const createTasteProfileForm = () => {
+    return forms.create({
+        'name':fields.string({
+            label:'Taste Profile',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(5)]
+        })
+    })
+}
+
+const editTasteProfileForm = () => {
+    return forms.create({
+        'name':fields.string({
+            label:'Update Taste Profile',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(5)]
+        })
+    })
+}
+
+const createPlaceOfOriginForm = () => {
+    return forms.create({
+        'name':fields.string({
+            label:'Place of Origin',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(4)]
+        })
+    })
+}
+
+const editPlaceOfOriginForm = () => {
+    return forms.create({
+        'name':fields.string({
+            label:'Update Place of Origin',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(4)]
+        })
+    })
+}
+
+module.exports = {
+    bootstrapField, 
+    createTeaForm, editTeaForm, 
+    createUserForm, editUserForm, editUserPasswordForm, 
+    createBrandForm, editBrandForm, 
+    createTasteProfileForm, editTasteProfileForm, 
+    createPlaceOfOriginForm, editPlaceOfOriginForm 
+}

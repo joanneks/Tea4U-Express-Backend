@@ -19,11 +19,17 @@ app.use(express.urlencoded({
 
 const cloudinaryRoutes = require('./routes/cloudinary');
 const teaRoutes = require('./routes/tea');
+const brandRoutes = require('./routes/brand');
+const tasteProfileRoutes = require('./routes/taste-profile');
+const placeOfOriginRoutes = require('./routes/place-of-origin');
 const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
 
 app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea',teaRoutes);
+app.use('/brand',brandRoutes);
+app.use('/taste-profile',tasteProfileRoutes);
+app.use('/place-of-origin',placeOfOriginRoutes);
 app.use('/user',userRoutes);
 app.use('/cart',cartRoutes);
 
