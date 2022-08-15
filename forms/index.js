@@ -51,10 +51,10 @@ const createTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) =
             widget:widgets.select(),
             choices:packaging
         }),
-        'cost':fields.string({
+        'cost':fields.number({
             required:true,
             errorAfterField:true,
-            validators:[validators.digits(),validators.min(0)]
+            validators:[validators.min(0)]
         }),
         'quantity':fields.number({
             label:'Stock Quantity',
@@ -250,5 +250,80 @@ const editTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) => 
     })
 }
 
+const createUserForm = () => {
+    return forms.create({
+        'first_name':fields.string({
+            label:'First Name',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        }),
+        'last_name':fields.string({
+            label:'Last Name',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        }),
+        'email':fields.email({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(8)]
+        }),
+        'password':fields.password({
+            required:true,
+            errorAfterField:true,
+            // validators:[validators.minlength(8)]
+        }),
+        'confirm_password':fields.password({
+            required:true,
+            errorAfterField:true,
+            validators: [ validators.matchField('password')]
+        })
+    })
+}
+const editUserForm = () => {
+    return forms.create({
+        'first_name':fields.string({
+            label:'First Name',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        }),
+        'last_name':fields.string({
+            label:'Last Name',
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        }),
+        'email':fields.email({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(8)]
+        }),
+    })
+}
 
-module.exports = {bootstrapField, createTeaForm, editTeaForm }
+const editUserPasswordForm = () => {
+    return forms.create({
+        'former_password':fields.password({
+            label:'Former password',
+            required:true,
+            errorAfterField:true,
+            // validators:[validators.minlength(8)]
+        }),
+        'password':fields.password({
+            label:'Change password',
+            required:true,
+            errorAfterField:true,
+            // validators:[validators.minlength(8)]
+        }),
+        'confirm_password':fields.password({
+            label:'Confirm New Password',
+            required:true,
+            errorAfterField:true,
+            validators: [ validators.matchField('password')]
+        })
+    })
+}
+
+module.exports = {bootstrapField, createTeaForm, editTeaForm, createUserForm, editUserForm, editUserPasswordForm }

@@ -54,4 +54,8 @@ const TasteProfile = bookshelf.model('TasteProfile',{
     }
 })
 
-module.exports = { Tea, TeaType, Brand, Packaging, PlaceOfOrigin, TasteProfile }
+const User = bookshelf.model('User',{
+    tableName:'users'
+})
+
+module.exports = { Tea, TeaType, Brand, Packaging, PlaceOfOrigin, TasteProfile, User }

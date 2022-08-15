@@ -1,10 +1,48 @@
 {{#extends 'base'}}
     {{#block 'content'}}
-    <div class="container">
-        <h1>User Login</h1>
-        <form method="POST">
-
-        </form>
+    <div class="container-fluid">
+        <div>
+            <h1 style="display:inline-block">Manage Users</h1>
+            <a href="/user/register" class="btn btn-primary btn-sm" style="float:right">Register New User</a>    
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Created On</th>
+                    <th>Last Modified On</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.first_name}}</td>
+                    <td>{{this.last_name}}</td>
+                    <td>{{this.email}}</td>
+                    <td>
+                        {{#moment}}
+                        '{{this.datetime_created}}' format='YYYY-MM-DD'
+                        {{/moment}}
+                    </td>
+                    <td>
+                        {{#moment}}
+                        '{{this.datetime_created}}' format=''
+                        {{/moment}}
+                    </td>
+                    <td>
+                        <a href="/user/edit/{{this.id}}" class="btn btn-primary btn-sm ">Edit</a>
+                        <a href="/user/delete/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>       
+                        <a href="/user/edit-password/{{this.id}}" class="btn btn-primary btn-sm ">Change Password</a>            
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 
     {{/block}}

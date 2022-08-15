@@ -1,0 +1,13 @@
+{{#extends 'base'}}
+    {{#block 'content'}}
+    <div class="container">
+        <h1>Modify User Details</h1>
+        <form method="POST">
+            {{{form}}}
+            <input type="submit" class="btn btn-primary my-3 "/>
+            <a href="/user" class="btn btn-danger my-3 ">Return</a>
+        </form>
+    </div>
+
+    {{/block}}
+{{/extends}}
