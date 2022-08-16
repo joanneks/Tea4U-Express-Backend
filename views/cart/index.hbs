@@ -2,9 +2,48 @@
     {{#block 'content'}}
     <div class="container">
         <h1>Your Cart</h1>
-        <form method="POST">
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Product Image</th>
+                        <th>Cost Per Item</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each cartItems}}
+                    <tr>
+                        <td>{{this.tea.name}}</td>
+                        <td><img src="{{this.tea.image_url}}" style="width:130px;height:130px;object-fit:cover;"/></td>
+                        <td>{{divide this.tea.cost 100}}</td>
+                        <td>
+                            <form method="POST" action="/cart/update-quantity/{{this.tea_id}}">
+                                <input type="text" value="{{this.quantity}}" name="quantity"/>
+                                <a href="/cart/minus/{{this.tea_id}}"><img src="/minus.png" style="height:20px;"/></a>
+                                <a href="/cart/add/{{this.tea_id}}"><img src="/add.png" style="height:20px;"/></a>
+                                <a href="/cart/remove/{{this.tea_id}}"><img src="/remove.png" style="height:20px;"/></a>
+                                {{!-- <input type="image" src="/save1.png" alt="Submit" style="height:20px;"> --}}
+                                <input type="submit" value="Save changes" class="btn btn-success btn-sm"/>
+                            </form>
+                        </td>
+                        <td>{{multiply (divide this.tea.cost 100) this.quantity}}</td>
+                    </tr>
+                    {{/each}}
 
-        </form>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total Cost:</td>
+                        <td>{{totalCost}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
     </div>
 
     {{/block}}

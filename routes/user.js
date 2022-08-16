@@ -17,7 +17,7 @@ const getHashedPassword = (password) => {
 
 router.get('/logout', function(req,res){
     req.session.user = null;
-    req.flash('success_messages', "You have been logged out");
+    req.flash('success_messages', "You have successfully logged out");
     res.redirect('/user/login')
 })
 
@@ -86,6 +86,7 @@ router.post('/register', function(req,res){
             user.set('datetime_last_modified',userLastModifiedDate);
             user.set(userFormData);
             await user.save();
+            req.flash('success_messages', "You have signed up successfully");
             res.redirect('/user');
         },
         'error':async function(userForm){
@@ -114,6 +115,7 @@ router.get('/edit/:user_id', checkIfAuthenticated, async function(req,res){
     // set field values from values last saved in database 
     userForm.fields.first_name.value = user.get('first_name');
     userForm.fields.last_name.value = user.get('last_name');
+    userForm.fields.username.value = user.get('username');
     userForm.fields.email.value = user.get('email');
 
     res.render('user/edit',{
@@ -134,6 +136,7 @@ router.post('/edit/:user_id', checkIfAuthenticated, async function(req,res){
             // user.set('password',user.get('password'));
             user.set('datetime_last_modified',userLastModifiedDate);
             await user.save();
+            req.flash('success_messages',"User details updated successfully");
             res.redirect('/user');
         },
         'error':async function(userForm){
@@ -178,6 +181,7 @@ router.post('/edit-password/:user_id', checkIfAuthenticated, async function(req,
                 console.log('---------',password);
                 user.set('password',password);
                 await user.save();
+                req.flash('success_messages',"Password updated successfully");
                 res.redirect('/user');
             } else {
                 res.render('user/password',{
@@ -204,6 +208,7 @@ router.post('/edit-password/:user_id', checkIfAuthenticated, async function(req,
 router.get('/delete/:user_id', checkIfAuthenticated, async function(req,res){
     const user = await dataLayer.getUserById(req.params.user_id);
     user.destroy();
+    req.flash('success_messages',"User has been deleted");
     res.redirect('/user');
 })
 

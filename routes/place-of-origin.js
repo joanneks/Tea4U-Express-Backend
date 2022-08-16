@@ -22,6 +22,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
             const placeOfOrigin = new PlaceOfOrigin();
             placeOfOrigin.set('name',placeOfOriginForm.data.name);
             await placeOfOrigin.save();
+            req.flash('success_messages',"New Place of Origin created successfully");
             res.redirect('/place-of-origin');
         },
         'error':async function (placeOfOriginForm){
@@ -79,7 +80,8 @@ router.post('/edit/:place_of_origin_id', checkIfAuthenticated,async function (re
         'success':async function(placeOfOriginForm){
             placeOfOrigin.set(placeOfOriginForm.data);
             placeOfOrigin.save();
-            res.redirect('/place-of-origin')
+            req.flash('success_messages',"Place of Origin updated successfully");
+            res.redirect('/place-of-origin');
         },
         'error':async function(placeOfOriginForm){
             res.render('dashboard/place-of-origin/edit',{
@@ -101,6 +103,7 @@ router.post('/edit/:place_of_origin_id', checkIfAuthenticated,async function (re
 router.get('/delete/:place_of_origin_id', checkIfAuthenticated, async function (req,res){
     const placeOfOrigin = await dataLayer.getPlaceOfOriginById(req.params.place_of_origin_id);
     placeOfOrigin.destroy();
+    req.flash('success_messages',"Place of Origin has been deleted");
     res.redirect('/place-of-origin');
 })
 

@@ -30,6 +30,8 @@ app.use(express.urlencoded({
   extended: false
 }))
 
+app.use(express.static('public/images')); 
+
 // setup a middleware to inject the session data into the hbs files
 app.use(function(req,res,next){
   // res.locals will contain all the variables available to hbs files
@@ -38,11 +40,27 @@ app.use(function(req,res,next){
   next();
 })
 
-// setup middleware to share data across all hbs files
+// setup middleware to save user details into session to share data across all hbs files
 app.use(function(req,res,next){
   res.locals.user = req.session.user;
   next()
 })
+
+// setup middleware to save cartCount into session to share data across all hbs files
+app.use(async function(req,res,next){
+  if(req.session.user){
+    const cartItems = await getCartByUserId(req.session.user.id);
+    res.locals.cartCount = cartItems.toJSON().length;
+  }
+  next();
+})
+
+// const api = {
+//   customers: require('./routes/api/customer')
+// }
+
+// register api routes
+// app.use('/api/customer',express.json(),api.customer)
 
 const cloudinaryRoutes = require('./routes/cloudinary');
 const teaRoutes = require('./routes/tea');
@@ -51,6 +69,7 @@ const tasteProfileRoutes = require('./routes/taste-profile');
 const placeOfOriginRoutes = require('./routes/place-of-origin');
 const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
+const { getCartByUserId } = require('./dal/cart');
 
 app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea',teaRoutes);
@@ -60,6 +79,8 @@ app.use('/place-of-origin',placeOfOriginRoutes);
 app.use('/user',userRoutes);
 app.use('/cart',cartRoutes);
 
+
+app.use(express.static('public'))
 
 app.listen(3000,function (res,req){
     console.log("Server started")

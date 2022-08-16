@@ -22,6 +22,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
             const brand = new Brand();
             brand.set('name',brandForm.data.name);
             await brand.save();
+            req.flash('success_messages',"New Tea Brand created successfully");
             res.redirect('/brand');
         },
         'error':async function (brandForm){
@@ -78,6 +79,7 @@ router.post('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
         'success':async function(brandForm){
             brand.set(brandForm.data);
             brand.save();
+            req.flash('success_messages',"Tea Brand updated successfully");
             res.redirect('/brand')
         },
         'error':async function(brandForm){
@@ -100,6 +102,7 @@ router.post('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
 router.get('/delete/:brand_id', checkIfAuthenticated, async function (req,res){
     const brand = await dataLayer.getBrandById(req.params.brand_id);
     brand.destroy();
+    req.flash('success_messages',"Tea Brand has been deleted");
     res.redirect('/brand');
 })
 

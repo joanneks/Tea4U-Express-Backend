@@ -23,6 +23,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
             const tasteProfile = new TasteProfile();
             tasteProfile.set('name',tasteProfileForm.data.name);
             await tasteProfile.save();
+            req.flash('success_messages',"New Taste Profile created successfully");
             res.redirect('/taste-profile');
         },
         'error':async function (tasteProfileForm){
@@ -79,7 +80,8 @@ router.post('/edit/:taste_profile_id', checkIfAuthenticated,async function (req,
         'success':async function(tasteProfileForm){
             tasteProfile.set(tasteProfileForm.data);
             tasteProfile.save();
-            res.redirect('/taste-profile')
+            req.flash('success_messages',"Taste Profile updated succesfully");
+            res.redirect('/taste-profile');
         },
         'error':async function(tasteProfileForm){
             res.render('dashboard/taste-profile/edit',{
@@ -101,6 +103,7 @@ router.post('/edit/:taste_profile_id', checkIfAuthenticated,async function (req,
 router.get('/delete/:taste_profile_id', checkIfAuthenticated, async function (req,res){
     const tasteProfile = await dataLayer.getTasteProfileById(req.params.taste_profile_id);
     tasteProfile.destroy();
+    req.flash('success_messages',"Taste Profile has been deleted");
     res.redirect('/taste-profile');
 })
 

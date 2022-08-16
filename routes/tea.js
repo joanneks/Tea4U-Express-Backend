@@ -58,6 +58,7 @@ router.post ('/create', checkIfAuthenticated, async function (req,res){
                 await tea.tasteProfile().attach(teaForm.data.taste_profiles.split(','));
             };
 
+            req.flash('success_messages',"Tea Product created successfully");
             res.redirect('/tea');
         },
         'error':function(teaForm){
@@ -140,7 +141,8 @@ router.post('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
             console.log(toRemove);
             await tea.tasteProfile().detach(toRemove);
             await tea.tasteProfile().attach(tasteProfileIds)
-            res.redirect('/tea')
+            req.flash('success_messages',"Tea Product updated successfully");
+            res.redirect('/tea');
         },
         'error':function(teaForm){
             res.render('tea/edit',{
@@ -161,6 +163,7 @@ router.post('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
 router.get('/delete/:tea_id', checkIfAuthenticated, async function(req,res){
     const tea = await dataLayer.getTeaById(req.params.tea_id);
     tea.destroy();
+    req.flash('success_messages',"Tea Product has been deleted");
     res.redirect('/tea');
 })
 

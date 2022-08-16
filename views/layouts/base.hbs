@@ -40,6 +40,7 @@
         <div>
           {{#if user}}
           <span style="margin-right:10px;">{{user.username}}</span>
+          <a href="/cart" class="btn btn-success btn-sm mx-3">Cart ({{cartCount}})</a>
           {{!-- <a href="/cart" class="btn btn-primary btn-sm">Cart ({{cartCount}})</a> --}}
           <a href="/user/logout" class="btn btn-danger btn-sm">Logout</a>
           {{else}}
@@ -51,6 +52,19 @@
       </div>
 
     </nav>
+
+    {{#if success_messages}}
+    {{#each success_messages}}
+    <div class="alert alert-success">{{this}}</div>
+    {{/each}}
+    {{/if}}
+
+    {{#if error_messages}}
+    {{#each error_messages}}
+    <div class="alert alert-danger">{{this}}</div>
+    {{/each}}
+    {{/if}}
+
     <div style="height:30px;"></div>
     {{#block 'content'}}
     {{/block}}
