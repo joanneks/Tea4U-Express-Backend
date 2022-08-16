@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const cartServiceLayer = require('../services/cart');
+const {checkIfAuthenticated} = require('../middlewares');
 
 
-router.get('/',async function(req,res){
+router.get('/', checkIfAuthenticated,async function(req,res){
     const cartByUserId = await cartServiceLayer.getCartByUserId(req.session.user.id);
     console.log(cartByUserId.toJSON());
     let totalCost = 0;
@@ -18,21 +19,21 @@ router.get('/',async function(req,res){
     })
 })
 
-router.get('/add/:tea_id', async function (req,res){
+router.get('/add/:tea_id', checkIfAuthenticated, async function (req,res){
     const userId = req.session.user.id;
     const teaId = req.params.tea_id;
     await cartServiceLayer.addOneCartItem(userId,teaId,1);
     res.redirect('/cart');
 })
 
-router.get('/minus/:tea_id', async function (req,res){
+router.get('/minus/:tea_id', checkIfAuthenticated, async function (req,res){
     const userId = req.session.user.id;
     const teaId = req.params.tea_id;
     await cartServiceLayer.minusOneCartItem(userId,teaId);
     res.redirect('/cart');
 })
 
-router.get('/update-quantity/:tea_id', async function (req,res){
+router.get('/update-quantity/:tea_id', checkIfAuthenticated, async function (req,res){
     const userId = req.session.user.id;
     const teaId = req.params.tea_id;
     const newQuantity = req.body.quantity;
@@ -41,7 +42,7 @@ router.get('/update-quantity/:tea_id', async function (req,res){
     res.redirect('/cart');
 })
 
-router.post('/update-quantity/:tea_id', async function (req,res){
+router.post('/update-quantity/:tea_id', checkIfAuthenticated, async function (req,res){
     const userId = req.session.user.id;
     const teaId = req.params.tea_id;
     const newQuantity = req.body.quantity;
@@ -49,7 +50,7 @@ router.post('/update-quantity/:tea_id', async function (req,res){
     res.redirect('/cart');
 })
 
-router.get('/remove/:tea_id', async function(req,res){
+router.get('/remove/:tea_id', checkIfAuthenticated, async function(req,res){
     const userId = req.session.user.id;
     const teaId = req.params.tea_id;
     await cartServiceLayer.removeCartItem(userId,teaId);

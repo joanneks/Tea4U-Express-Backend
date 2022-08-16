@@ -21,6 +21,7 @@
             <h3>{{#each placeOfOrigin}}{{this.name}}{{/each}}</h3>
             <form method="POST" style="width:20vw;display:inline-block">
                 {{{form}}}
+            <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
                 <input type="submit" class="btn btn-primary my-3" style="display:inline-block;"/>
             </form>
         </div>

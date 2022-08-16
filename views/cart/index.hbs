@@ -27,6 +27,7 @@
                                 <a href="/cart/remove/{{this.tea_id}}"><img src="/remove.png" style="height:20px;"/></a>
                                 {{!-- <input type="image" src="/save1.png" alt="Submit" style="height:20px;"> --}}
                                 <input type="submit" value="Save changes" class="btn btn-success btn-sm"/>
+                                <input type="hidden" value="{{../csrfToken}}" name="_csrf"/>   
                             </form>
                         </td>
                         <td>{{multiply (divide this.tea.cost 100) this.quantity}}</td>
@@ -43,6 +44,9 @@
                 </tbody>
 
             </table>
+            <div>
+                <a href="/checkout" class="btn btn-primary my-3">Checkout</a>
+            </div>
         </div>
     </div>
 
