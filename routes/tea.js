@@ -125,7 +125,7 @@ router.post('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
     teaForm.handle(req,{
         'success':async function (teaForm){
             let {cost,taste_profiles,...teaData} = teaForm.data;
-
+            console.log('teaform.data',teaForm.data);
             const teaLastModifiedDate= moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
             
             tea.set('cost',teaForm.data.cost*100);

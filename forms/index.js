@@ -52,6 +52,7 @@ const createTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) =
             choices:packaging
         }),
         'cost':fields.number({
+            label:'Cost ($)',
             required:true,
             errorAfterField:true,
             validators:[validators.min(0)]
@@ -168,7 +169,7 @@ const editTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) => 
             label:'Cost ($)',
             required:true,
             errorAfterField:true,
-            validators:[validators.integer(),validators.min(0)]
+            validators:[validators.min(0)]
         }),
         'quantity':fields.number({
             label:'Stock Quantity',

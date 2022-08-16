@@ -24,7 +24,7 @@ exports.up = function(db) {
     password:{type:'string',length:100,notNull:true},
     shipping_address:{type:'string',length:100,notNull:true},
     postal_code:{type:'smallint',unsigned:true,notNull:true},
-    mobile_number:{type:'smallint',unsigned:true,notNull:true},
+    mobile_number:{type:'int',unsigned:true,notNull:true},
     datetime_created:{type:'datetime', notNull:true},
     datetime_last_modified:{type:'datetime', notNull:true}
   });

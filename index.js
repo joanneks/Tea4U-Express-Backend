@@ -8,6 +8,7 @@ const moment = require('moment');
 moment().format();
 
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const csrf = require('csurf');
 
 const session = require('express-session');
@@ -35,10 +36,10 @@ app.use(express.urlencoded({
   extended: false
 }));
 
-// CSRF
+// CSRF - create csrfToken function instance in middleware to share across hbs
 const csrfInstance = csrf();
 app.use(function(req,res,next){
-  // console.log("Checking for csrf exclusion");
+  // csrf protection exclusion for these routes
   if (req.url === '/checkout/process_payment' || req.url.slice(0,5) == '/api/') {
     next();
   } else {
@@ -48,7 +49,6 @@ app.use(function(req,res,next){
 
 app.use(function(req,res,next){
   if(req.csrfToken){
-    // the csrfToken function is avaliable because of `app.use(csrf())`
     res.locals.csrfToken = req.csrfToken(); 
   }
   next();
@@ -77,12 +77,12 @@ app.use(async function (req, res, next) {
   next();
 });
 
-// const api = {
-//   customers: require('./routes/api/customer')
-// }
+const api = {
+  customer: require('./routes/api/customer')
+}
 
 // register api routes
-// app.use('/api/customer',express.json(),api.customer)
+app.use('/api/customer',express.json(),api.customer)
 
 const { getCartByUserId } = require('./dal/cart');
 
