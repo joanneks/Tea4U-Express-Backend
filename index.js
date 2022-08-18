@@ -22,6 +22,7 @@ wax.setLayoutPath('./views/layouts');
 
 app.set('view engine', 'hbs');
 
+
 app.use(session({
   store: new FileStore(),  // we want to use files to store sessions
   secret: process.env.SESSION_SECRET, // used to generate the session id
@@ -76,6 +77,7 @@ app.use(async function (req, res, next) {
   };
   next();
 });
+
 
 const api = {
   customer: require('./routes/api/customer')

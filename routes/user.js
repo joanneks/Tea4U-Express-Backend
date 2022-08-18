@@ -169,16 +169,12 @@ router.post('/edit-password/:user_id', checkIfAuthenticated, async function(req,
             const {former_password,confirm_password,userFormData} = userForm.data;
             const formerPassword = user.get('password');
             const formerPasswordUserInput = getHashedPassword(userForm.data.former_password);
-            console.log('formerPasswordUserInput',formerPasswordUserInput);
-            console.log('former-password',formerPassword);
             console.log(formerPasswordUserInput == formerPassword);
             console.log('userForm.data.password',userForm.data.password);
             const password = getHashedPassword(userForm.data.password);
             console.log(password);
 
-            if(userForm.data.former_password == formerPassword){
-                console.log('true condition met');
-                console.log('---------',password);
+            if(formerPasswordUserInput == formerPassword){
                 user.set('password',password);
                 await user.save();
                 req.flash('success_messages',"Password updated successfully");
