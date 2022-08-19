@@ -68,7 +68,7 @@ const CartItem = bookshelf.model('CartItem',{
         return this.belongsTo('Tea');
     },
     user(){
-        return this.belongsTo('User')
+        return this.belongsTo('Customer')
     }
 })
 

@@ -80,11 +80,13 @@ app.use(async function (req, res, next) {
 
 
 const api = {
-  customer: require('./routes/api/customer')
+  customer: require('./routes/api/customer'),
+  cart: require('./routes/api/cart'),
 }
 
 // register api routes
-app.use('/api/customer',express.json(),api.customer)
+app.use('/api/customer',express.json(),api.customer);
+app.use('/api/cart',express.json(),api.cart);
 
 const { getCartByUserId } = require('./dal/cart');
 

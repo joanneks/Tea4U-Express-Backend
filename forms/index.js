@@ -175,7 +175,7 @@ const editTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles) => 
             label:'Stock Quantity',
             required:true,
             errorAfterField:true,
-            validators:[validators.integer(),validators.min(1)]
+            validators:[validators.integer(),validators.min(0)]
         }),
         'weight':fields.number({
             label:'Product Weight (g)',

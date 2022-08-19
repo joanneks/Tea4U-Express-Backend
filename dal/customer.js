@@ -16,4 +16,14 @@ async function getCustomerByEmailAndPassword (email,password) {
     return customer
 }
 
-module.exports = { getAllCustomers,getCustomerByEmailAndPassword};
+
+async function getCustomerByEmail (email) {
+    const customer = await Customer.where({
+        email:email
+    }).fetch({
+        require: false
+    })
+    return customer
+}
+
+module.exports = { getAllCustomers,getCustomerByEmailAndPassword, getCustomerByEmail};

@@ -28,6 +28,7 @@ router.post('/create',async function (req,res){
     const customerLastModifiedDate = customerCreatedDate;
     
     let validationStatus = [];
+    let errorMessages={};
     const firstName = req.body.first_name;
     const lastName = req.body.last_name;
     const username = req.body.username;
@@ -37,20 +38,32 @@ router.post('/create',async function (req,res){
     const postalCode = req.body.postal_code;
     const mobileNumber = req.body.mobile_number;
 
+
     // validate field values to have min and max characters.
-    function validateLength (fieldValue,lowerLimit,upperLimit){
+    function validateLength (fieldValueKey,fieldValue,lowerLimit,upperLimit){
         if(fieldValue.length>=lowerLimit && fieldValue.length<=upperLimit){
             validationStatus.push(true);
         }else{
             validationStatus.push(false);
+            errorMessages[fieldValueKey] = `Field Value must be between `+ lowerLimit + ` and ` + upperLimit + ` characters`;
         }
     }
-    // validate email must include '@' and '.'
+    const existingCustomer = await customerDataLayer.getCustomerByEmail(email);
+    // validate email must include '@' and '.' and must not exist in database already
     function validateEmail(email){
-        if(email.includes('@') && email.includes('.')){
-            validationStatus.push(true);
+        if(existingCustomer){
+            if(existingCustomer.get('email') == email){
+                validationStatus.push(false);
+                errorMessages.emailExist = "An account with this email already exists";
+                
+            }
         }else{
-            validationStatus.push(false);
+            if(email.includes('@') && email.includes('.')){
+                validationStatus.push(true);
+            }else{
+                validationStatus.push(false);
+                errorMessages.emailInvalid = `Email needs to have "@" and "."`;
+            }
         }
     }
     // validate mobile number start with 8,9
@@ -59,6 +72,7 @@ router.post('/create',async function (req,res){
             validationStatus.push(true);
         }else{
             validationStatus.push(false);
+            errorMessages.mobileInvalid = `SG mobile numbers need to start with 8 or 9.`;
         }
     }
     // validate password for special characters,number and 1 uppercase alphabet
@@ -84,12 +98,14 @@ router.post('/create',async function (req,res){
             validationCheck.push(true);
         } else {
             validationCheck.push(false);
+            errorMessages.passwordSpecialCheckInvalid = `Password needs to contain at least 1 special character: '!','@','#','$','%'`;
         }
 
         if(password.toLowerCase()!=password && password.toUpperCase()!=password){
             validationCheck.push(true);
         }else{
           validationCheck.push(false);
+          errorMessages.passwordCapitalCheckInvalid = `Password needs to contain at least 1 uppercase alphabet`;
         }
 
         let numberCheck=[];
@@ -107,6 +123,7 @@ router.post('/create',async function (req,res){
             validationCheck.push(true);
         } else {
             validationCheck.push(false);
+            errorMessages.passwordNumberCheckInvalid = `Password needs to be alphanumeric with at least 1 number.`;
         };
 
         if(!validationCheck.includes(false)){
@@ -116,25 +133,28 @@ router.post('/create',async function (req,res){
         }
 
     };
-    validateLength(firstName,3,30);
-    validateLength(lastName,3,30);
-    validateLength(username,3,30);
-    validateLength(email,3,50);
-    validateLength(password,8,100);
-    validateLength(shippingAddress,5,100);
-    validateLength(postalCode,6,6);
-    validateLength(mobileNumber,8,8);
+    validateLength('firstName',firstName,3,30);
+    validateLength('lastName',lastName,3,30);
+    validateLength('username',username,3,30);
+    validateLength('email',email,3,50);
+    validateLength('password',password,8,30);
+    validateLength('shippingAddress',shippingAddress,5,100);
+    validateLength('postalCode',postalCode,6,6);
+    validateLength('mobileNumber',mobileNumber,8,8);
     validateEmail(email);
     validateMobile(mobileNumber);
     validatePassword(password);
     
-    console.log(validationStatus);
+    console.log(validationStatus,errorMessages);
 
     password = getHashedPassword(password);
 
     if(validationStatus.includes(false)){
         res.status(400);
-        res.json('Field values do not meet requirements to be inserted into database')
+        res.json({
+            message:'Failed to create customer in mysql database',
+            errorMessages
+        })
     } else{    
         try{
             const newCustomer = {
@@ -169,17 +189,9 @@ router.get('/',async function (req,res){
     res.status(200);
 })
 
-// router.get('/login-jwt', async function(req,res){
-//     console.log('GET',req.jwt);
-    // const email = req.session.jwt.email;
-    // const password = getHashedPassword(req.session.jwt.password);
-    // const customer = await customerDataLayer.getCustomerByEmailAndPassword(email,password);
-    // console.log('GET',customer.toJSON());
-    // res.json(customer.toJSON);
-// })
 router.get('/profile', checkIfAuthenticatedJWT, async(req,res)=>{
-    const user = req.user;
-    res.send(user);
+    const customer = req.customer;
+    res.send(customer);
 })
 
 router.post('/login',async function(req,res){
@@ -206,7 +218,7 @@ router.post('/login',async function(req,res){
             process.env.REFRESH_TOKEN_SECRET,
             '7d'
         )
-        req.session.jwt = {
+        req.session.customer = {
             username:customerUsername,
             id:customerId,
             email:customerEmail,
@@ -217,6 +229,7 @@ router.post('/login',async function(req,res){
         res.json({
             accessToken,
             refreshToken,
+            userDetails:req.session.customer,
             message:'Login success'
         })
     } else {
@@ -225,73 +238,77 @@ router.post('/login',async function(req,res){
     }
 })
 
-// router.post('/refresh', async function (req,res){
-//     // get the refresh token from the body - do not need to use the header for that
-//     const refreshToken = req.body.refreshToken;
-//     if(refreshToken){
-//         // checkif token is already blacklisted
-//         const blacklistedToken = await BlacklistedToken.where({
-//             token:refreshToken
-//         }).fetch({
-//             require:false
-//         })
+router.post('/refresh', async function (req,res){
+    // get the refresh token from the body - do not need to use the header for that
+    const refreshToken = req.body.refreshToken;
+    if(refreshToken){
+        // checkif token is already blacklisted
+        // const blacklistedToken = await BlacklistedToken.where({
+        //     token:refreshToken
+        // }).fetch({
+        //     require:false
+        // })
 
-//         // if blacklisted token isnot null, then it means it exists
-//         if(blacklistedToken){
-//             res.status(400);
-//             res.json({
-//                 error:"Refresh token has been blacklisted"
-//             })
-//             return;
-//         }
+        // if blacklisted token isnot null, then it means it exists
+        // if(blacklistedToken){
+        //     res.status(400);
+        //     res.json({
+        //         error:"Refresh token has been blacklisted"
+        //     })
+        //     return;
+        // }
 
-//         // verify if it is legit
-//         jwt.verify(refreshToken,
-//             process.env.REFRESH_TOKEN_SECRET,function (err,tokenData){
-//                 if (!err){
-//                     // generate a new access token and send back
-//                     const accessToken = generateAccessToken(
-//                         tokenData.username, 
-//                         tokenData.id, 
-//                         tokenData.email, 
-//                         process.env.TOKEN_SECRET,
-//                         '1h'
-//                     )
-//                     res.json({
-//                         accessToken
-//                     })
-//                 }else{
-//                     res. status(400);
-//                     res.json({
-//                         error:'Invalid refresh token'
-//                     })
-//                 }
-//             })
+        // verify if it is legit
+        jwt.verify(refreshToken,
+            process.env.REFRESH_TOKEN_SECRET,function (err,tokenData){
+                if (!err){
+                    // generate a new access token and send back
+                    const accessToken = generateAccessToken(
+                        tokenData.username, 
+                        tokenData.id, 
+                        tokenData.email, 
+                        process.env.TOKEN_SECRET,
+                        '1h'
+                    )
+                    res.json({
+                        accessToken
+                    })
+                }else{
+                    res. status(400);
+                    res.json({
+                        error:'Invalid refresh token'
+                    })
+                }
+            })
 
-//     } else{
-//         res.status(400);
-//         res.json({
-//             error:'No refresh token found'
-//         })
-//     }
-// })
+    } else{
+        res.status(400);
+        res.json({
+            error:'No refresh token found'
+        })
+    }
+})
 
 
 router.post('/logout',async function(req,res){
     const refreshToken = req.body.refreshToken
     if(refreshToken){
         // if refreshToken exists we will add to blacklist table
+                // const token = new BlacklistedToken();
+                // token.set('token',refreshToken);
+                // token.set('date_created', new Date())
+                // await token.save();
         jwt.verify(refreshToken,
             process.env.REFRESH_TOKEN_SECRET,
             async function(err,tokenData){
             if(!err){
                 res.json({
-                    message:"RefreshToken found!"
+                    message:"RefreshToken found!",
+                    message:"Logout success!"
                 })
             }
         })
     } else{
-        // if not found
         res.status(400);
         res.json({
             error:"No refresh token found!"

@@ -1,0 +1,16 @@
+{
+    "cookie": {
+        "originalMaxAge": null,
+        "expires": null,
+        "httpOnly": true,
+        "path": "/"
+    },
+    "csrfSecret": "uNP08lwMgFOlJ95FBIECziuD",
+    "flash": {},
+    "__lastAccess": 1660920440436,
+    "user": {
+        "id": 1,
+        "email": "testadmin@tea4u.sg",
+        "username": "testadmin"
+    }
+}
