@@ -1,9 +1,9 @@
 const express =require('express');
 const router = express.Router();
-const {createPlaceOfOriginForm, editPlaceOfOriginForm , bootstrapField} = require('../forms');
-const dataLayer = require('../dal/place-of-origin');
-const {PlaceOfOrigin} = require('../models');
-const {checkIfAuthenticated} = require('../middlewares');
+const {createPlaceOfOriginForm, editPlaceOfOriginForm , bootstrapField} = require('../../forms');
+const dataLayer = require('../../dal/place-of-origin');
+const {PlaceOfOrigin} = require('../../models');
+const {checkIfAuthenticated} = require('../../middlewares');
 
 router.get('/', checkIfAuthenticated,async function (req,res){
     const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();

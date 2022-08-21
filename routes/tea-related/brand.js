@@ -1,9 +1,9 @@
 const express =require('express');
 const router = express.Router();
-const {createBrandForm, editBrandForm, bootstrapField} = require('../forms');
-const dataLayer = require('../dal/brand');
-const {Brand} = require('../models');
-const {checkIfAuthenticated} = require('../middlewares');
+const {createBrandForm, editBrandForm, bootstrapField} = require('../../forms');
+const dataLayer = require('../../dal/brand');
+const {Brand} = require('../../models');
+const {checkIfAuthenticated} = require('../../middlewares');
 
 router.get('/', checkIfAuthenticated,async function (req,res){
     const brands = await dataLayer.getAllBrands();
@@ -16,7 +16,7 @@ router.get('/', checkIfAuthenticated,async function (req,res){
 
 router.post('/', checkIfAuthenticated,async function (req,res){
     const brands = await dataLayer.getAllBrands();
-    const brandForm  = createBrandForm();
+    const brandForm  = createBrandForm("Brand Name");
     brandForm.handle(req,{
         'success':async function (brandForm){
             const brand = new Brand();
@@ -41,7 +41,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
 });
 
 router.get('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
-    const brandForm  = editBrandForm();
+    const brandForm  = createBrandForm("Update Brand Name");
     const brands = await dataLayer.getAllBrands();
     const brand = await dataLayer.getBrandById(req.params.brand_id);
     brandForm.fields.name.value = brand.get('name');
@@ -72,7 +72,7 @@ router.get('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
 })
 
 router.post('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
-    const brandForm  = editBrandForm();
+    const brandForm  = createBrandForm("Update Brand Name");
     const brands = await dataLayer.getAllBrands();
     const brand = await dataLayer.getBrandById(req.params.brand_id);
     brandForm.handle(req,{

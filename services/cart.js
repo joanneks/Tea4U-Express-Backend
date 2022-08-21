@@ -33,7 +33,6 @@ async function minusOneCartItem(userId,teaId){
         const cartItemReduced = await cartDataLayer.minusOneCartItem(userId,teaId);
         return cartItemReduced;
     } else{
-        console.log('hello');
         return false;
     }
 };
@@ -42,16 +41,22 @@ async function updateCartItemQuantity(userId,teaId,newQuantity){
     const tea = await teaDataLayer.getTeaById(teaId);
     const teaQuantity = tea.get('quantity');
     console.log('tea Quantity',teaQuantity);
-        if(teaQuantity >= newQuantity && newQuantity >= 0){
-            console.log(teaQuantity)
+    if (newQuantity<0){
+        console.log('newQuantity<0');
+        return false;
+    } 
+    else if(newQuantity == 0){
+        return 2;
+    } 
+    else if (newQuantity>=0){
+        if(teaQuantity >= newQuantity){
+            console.log("newQuantity >= 0, teaQuantity >= newQuantity")
             return cartDataLayer.updateCartItemQuantity(userId,teaId,newQuantity);
-        } else if(teaQuantity < newQuantity && newQuantity >= 0){
-            console.log(teaQuantity < newQuantity && newQuantity >= 0);
-            return 0;
-        } else {
-            console.log(teaQuantity);
-            return false;
+        } else if (teaQuantity < newQuantity){
+            console.log("newQuantity >= 0, teaQuantity < newQuantity")
+            return 1
         }
+    }
 };
 
 async function removeCartItem(userId,teaId){

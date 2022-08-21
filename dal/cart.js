@@ -50,7 +50,6 @@ async function removeCartItem(userId,teaId){
 };
 
  async function minusOneCartItem(userId,teaId){
-    console.log('hello000000');
     const cartItem = await getCartItemByUserAndTeaId(userId,teaId);
     console.log(cartItem);
 

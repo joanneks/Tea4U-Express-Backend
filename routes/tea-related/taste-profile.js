@@ -1,9 +1,9 @@
 const express =require('express');
 const router = express.Router();
-const {createTasteProfileForm, editTasteProfileForm, bootstrapField} = require('../forms');
-const dataLayer = require('../dal/taste-profile');
-const {TasteProfile} = require('../models');
-const {checkIfAuthenticated} = require('../middlewares');
+const {createTasteProfileForm, editTasteProfileForm, bootstrapField} = require('../../forms');
+const dataLayer = require('../../dal/taste-profile');
+const {TasteProfile} = require('../../models');
+const {checkIfAuthenticated} = require('../../middlewares');
 
 router.get('/', checkIfAuthenticated, async function (req,res){
     const tasteProfiles = await dataLayer.getAllTasteProfiles();

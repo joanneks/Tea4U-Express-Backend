@@ -134,47 +134,60 @@ router.post('/minus/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
 })
 
 router.post('/update-quantity/:tea_id',  checkIfAuthenticatedJWT, async function (req,res){
-    const userId = req.body.user_id;
-    const newQuantity = req.body.quantity;
-    const teaId = req.params.tea_id;
-    // cartItemQuantityAmended refers to the updated CartItem data saved
-    const cartItemQuantityAmended = await cartServiceLayer.updateCartItemQuantity(userId,teaId,newQuantity);
     try{
-        if(cartItemQuantityAmended == 0){
-            const message = "Quantity set must be more than the stock available";
-            if (newQuantity < 0){
-                console.log('helllooo');
-                message = "Quantity set must be a positive number";
+        // need to send back access token as well. tested with arc
+        const userId = req.body.user_id;
+        const teaId = req.params.tea_id;
+        const newQuantity = req.body.quantity;
+
+        if(userId==req.session.customer.id){
+            let message = "";
+            // cartItemQuantityAmended refers to the updated CartItem data saved
+            const cartItemQuantityAmended = await cartServiceLayer.updateCartItemQuantity(userId,teaId,newQuantity);
+            console.log(cartItemQuantityAmended);
+
+            if(cartItemQuantityAmended == false){
+                console.log('cartItemQuantityAmended == false');
                 res.status(200);
                 res.json({
-                    message
+                    message:"Quantity set must be a positive number"
                 })
-            } else{
+            } 
+            else if(cartItemQuantityAmended == 2){
                 res.status(200);
                 res.json({
-                    message
+                    message:"Quantity set to 0. Tea Product removed from cart successfully"
                 })
+            } 
+            else if(cartItemQuantityAmended == 1){
+                console.log('cartItemQuantityAmended == 1');
+                    res.status(200);
+                    res.json({
+                        message: "Insufficient stock - quantity set is more than stock availability"
+                    })
+                // }
+            }else if (cartItemQuantityAmended){
+                console.log('cartItemQuantityAmende == ');
+                console.log(cartItemQuantityAmended.get('quantity'));
+                message = "Tea Product quantity in cart updated to " + cartItemQuantityAmended.get('quantity') + " successfully";
+                console.log(message);
+                res.status(200);
+                res.json({
+                    cartItemQuantityAmended,
+                    message
+                });
             }
-        }else{
-            message = "Tea Product quantity in cart updated to " + cartItemQuantityAmended.get('quantity') + " successfully";
+        } else{
+            res.status(401);
             res.json({
-                cartItemQuantityAmended,
-                message
-            });
-            res.status(200)
+                message:"Customer/User Id not jwt verified, request to reduce tea product quantity in cart failed"
+            })
         }
     }catch(e){
-        if(cartItemQuantityAmended == false){
-            res.status(400);
-            res.json({
-                message:"Quantity set must be a positive number"
-            })
-        }else{
-            res.status(400);
-            res.json({
-                message:"Response received invalid, request to reduce tea product quantity in cart failed"
-            })
-        }
+        res.status(400);
+        res.json({
+            message:"Response received invalid, request to reduce tea product quantity in cart failed"
+        })
     }
 })
 
@@ -186,22 +199,28 @@ router.post('/remove/:tea_id', checkIfAuthenticatedJWT, async function(req,res){
         // itemRemoved refers to the CartItem data that was removed
         const itemRemoved = await cartServiceLayer.removeCartItem(userId,teaId);
         
-        if(itemRemoved == false){
-            console.log(itemRemoved);
-            res.status(200)
+        if(userId==req.session.customer.id){
+            if(itemRemoved == false){
+                console.log(itemRemoved);
+                res.status(200)
+                res.json({
+                    itemAdded:'',
+                    message:'Tea Product does not exist in cart. Request to remove cart item failed.'
+                });
+            } else {
+                console.log(itemRemoved.toJSON());
+                res.status(200)
+                res.json({
+                    itemAdded:'itemRemoved',
+                    message:'Tea Product removed from cart successfully'
+                });
+            }
+        } else{
+            res.status(401);
             res.json({
-                itemAdded:'',
-                message:'Tea Product does not exist in cart. Request to remove cart item failed.'
-            });
-        } else {
-            console.log(itemRemoved.toJSON());
-            res.status(200)
-            res.json({
-                itemAdded:'itemRemoved',
-                message:'Tea Product removed from cart successfully'
-            });
+                message:"Customer/User Id not jwt verified, request to reduce tea product quantity in cart failed"
+            })
         }
-
     }catch(e){
         res.status(400);
         res.json({
