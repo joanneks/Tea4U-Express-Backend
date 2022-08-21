@@ -1,1 +1,17 @@
-{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"flash":{},"customer":{"username":"testuser","id":5,"email":"tuser@gmail.com","accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOjUsImVtYWlsIjoidHVzZXJAZ21haWwuY29tIiwiaWF0IjoxNjYwOTI1MTc3LCJleHAiOjE2NjA5Mjg3Nzd9.4m9XFCtkrIKqqxx_Tw72bmgWB0G3WN33LGNe1HZJE70","refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOjUsImVtYWlsIjoidHVzZXJAZ21haWwuY29tIiwiaWF0IjoxNjYwOTI1MTc3LCJleHAiOjE2NjE1Mjk5Nzd9.IcHkQruVlzieR7ZbJyUk9OR5o3ikJQjMh56e8HfrDuc"},"__lastAccess":1660936478766}
+{
+    "cookie": {
+        "originalMaxAge": null,
+        "expires": null,
+        "httpOnly": true,
+        "path": "/"
+    },
+    "flash": {},
+    "customer": {
+        "username": "testuser",
+        "id": 5,
+        "email": "tuser@gmail.com",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOjUsImVtYWlsIjoidHVzZXJAZ21haWwuY29tIiwiaWF0IjoxNjYwOTI1MTc3LCJleHAiOjE2NjA5Mjg3Nzd9.4m9XFCtkrIKqqxx_Tw72bmgWB0G3WN33LGNe1HZJE70",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOjUsImVtYWlsIjoidHVzZXJAZ21haWwuY29tIiwiaWF0IjoxNjYwOTI1MTc3LCJleHAiOjE2NjE1Mjk5Nzd9.IcHkQruVlzieR7ZbJyUk9OR5o3ikJQjMh56e8HfrDuc"
+    },
+    "__lastAccess": 1660936478766
+}

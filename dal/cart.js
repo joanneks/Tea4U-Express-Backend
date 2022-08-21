@@ -53,9 +53,11 @@ async function removeCartItem(userId,teaId){
     console.log('hello000000');
     const cartItem = await getCartItemByUserAndTeaId(userId,teaId);
     console.log(cartItem);
+
     const quantity = cartItem.get('quantity');
     const newQuantity = quantity - 1;
     console.log('quantity',quantity,'New quantity',newQuantity);
+
     cartItem.set('quantity',newQuantity);
     await cartItem.save();
     return cartItem;
@@ -63,12 +65,16 @@ async function removeCartItem(userId,teaId){
 
  async function updateCartItemQuantity (userId,teaId,newQuantity){
     const cartItem = await getCartItemByUserAndTeaId(userId,teaId);
+    console.log(cartItem);
     if(cartItem){
         if(newQuantity == 0){
+            console.log('newQuantity to set',newQuantity);
             removeCartItem(userId,teaId);
         } else if (newQuantity > 0){
+            console.log('newQuantity to set',newQuantity);
             cartItem.set('quantity',newQuantity);
             await cartItem.save();
+            return cartItem;
         }
     };
  };

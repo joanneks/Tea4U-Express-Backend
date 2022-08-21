@@ -41,15 +41,28 @@ async function minusOneCartItem(userId,teaId){
 async function updateCartItemQuantity(userId,teaId,newQuantity){
     const tea = await teaDataLayer.getTeaById(teaId);
     const teaQuantity = tea.get('quantity');
+    console.log('tea Quantity',teaQuantity);
         if(teaQuantity >= newQuantity && newQuantity >= 0){
+            console.log(teaQuantity)
             return cartDataLayer.updateCartItemQuantity(userId,teaId,newQuantity);
+        } else if(teaQuantity < newQuantity && newQuantity >= 0){
+            console.log(teaQuantity < newQuantity && newQuantity >= 0);
+            return 0;
         } else {
+            console.log(teaQuantity);
             return false;
         }
 };
 
 async function removeCartItem(userId,teaId){
-    return cartDataLayer.removeCartItem(userId,teaId)
+    const cartItem = await cartDataLayer.getCartItemByUserAndTeaId(userId,teaId);
+    if(cartItem){
+        console.log('cartItem removed',cartItem.toJSON());
+        return cartDataLayer.removeCartItem(userId,teaId)
+    } else {
+        console.log('cartItem removed',cartItem);
+        return false
+    }
 }
 
 
