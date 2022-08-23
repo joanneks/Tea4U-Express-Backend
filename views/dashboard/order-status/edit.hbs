@@ -7,7 +7,7 @@
         <div style="margin-top:30px;">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/brand">Brands</a>
+                    <a class="nav-link" href="/brand">Brands</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/taste-profile">Taste Profiles</a>
@@ -19,7 +19,7 @@
                     <a class="nav-link" href="/shipping-method">Shipping Methods</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/order-status">Order Status</a>
+                    <a class="nav-link active" aria-current="page" href="/order-status">Order Status</a>
                 </li>
             </ul>
         </div>
@@ -27,7 +27,8 @@
             <form method="POST" style="width:20vw;display:inline-block">
                 {{{form}}}
                 <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
-                <input type="submit" value="Add New Brand" class="btn btn-primary my-3" style="display:inline-block;"/>
+                <input type="submit" class="btn btn-primary my-3" style="display:inline-block;"/>
+                <a href="/order-status" class="btn btn-danger my-3">Cancel</a>
             </form>
         </div>
         <table class="table">

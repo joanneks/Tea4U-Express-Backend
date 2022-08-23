@@ -43,7 +43,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
 
 router.get('/edit/:shipping_method_id', checkIfAuthenticated,async function (req,res){
     const shippingMethodForm  = createShippingMethodForm("Update Shipping Method Name");
-    const shippingMethods = await dataLayer.getAllShippingMethods();
+    const shippingMethods = await dataLayer.getAllShippingRates();
     const shippingMethod = await dataLayer.getShippingMethodById(req.params.shipping_method_id);
     shippingMethodForm.fields.name.value = shippingMethod.get('name');
     shippingMethodForm.fields.price.value = shippingMethod.get('price')/100;
@@ -77,7 +77,7 @@ router.get('/edit/:shipping_method_id', checkIfAuthenticated,async function (req
 
 router.post('/edit/:shipping_method_id', checkIfAuthenticated,async function (req,res){
     const shippingMethodForm  = createShippingMethodForm("Update Shipping Method Name");
-    const shippingMethods = await dataLayer.getAllShippingMethods();
+    const shippingMethods = await dataLayer.getAllShippingRates();
     const shippingMethod = await dataLayer.getShippingMethodById(req.params.shipping_method_id);
     shippingMethodForm.handle(req,{
         'success':async function(shippingMethodForm){
