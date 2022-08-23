@@ -16,7 +16,6 @@ async function getCustomerByEmailAndPassword (email,password) {
     return customer
 }
 
-
 async function getCustomerByEmail (email) {
     const customer = await Customer.where({
         email:email
@@ -26,4 +25,13 @@ async function getCustomerByEmail (email) {
     return customer
 }
 
-module.exports = { getAllCustomers,getCustomerByEmailAndPassword, getCustomerByEmail};
+async function getCustomerById (customerId) {
+    const customer = await Customer.where({
+        id:customerId
+    }).fetch({
+        require: false
+    })
+    return customer
+}
+
+module.exports = { getAllCustomers,getCustomerByEmailAndPassword, getCustomerByEmail, getCustomerById};

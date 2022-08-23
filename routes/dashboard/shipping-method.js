@@ -6,7 +6,7 @@ const {ShippingMethod} = require('../../models');
 const {checkIfAuthenticated} = require('../../middlewares');
 
 router.get('/', checkIfAuthenticated,async function (req,res){
-    const shippingMethods = await dataLayer.getAllShippingMethods();
+    const shippingMethods = await dataLayer.getAllShippingRates();
     const shippingMethodForm  = createShippingMethodForm();
     res.render('dashboard/shipping-method/index',{
         'form': shippingMethodForm.toHTML(bootstrapField),

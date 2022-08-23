@@ -4,22 +4,21 @@ const { editOrderForm, bootstrapField } = require('../forms')
 const orderDataLayer = require('../dal/order');
 const orderStatusDataLayer = require('../dal/order-status');
 const shippingMethodDataLayer = require('../dal/shipping-method');
-const customerDataLayer = require('../dal/customer');
 const moment = require('moment');
 const momentTimezone = require('moment-timezone');
+const {checkIfAuthenticated} = require('../middlewares');
 
-router.get('/',async function(req,res){
+router.get('/', checkIfAuthenticated, async function(req,res){
     const orders = await orderDataLayer.getAllOrders();
-    // const customer = await customerDataLayer.get
     res.render('order/index',{
         orders:orders.toJSON()
     })
 })
 
 
-router.get('/edit/:order_id',async function(req,res){
+router.get('/edit/:order_id', checkIfAuthenticated, async function(req,res){
     const order = await orderDataLayer.getOrderById(req.params.order_id);
-    const orderStatuses = await orderStatusDataLayer.getAllOrderStatuses();
+    const orderStatuses = await orderStatusDataLayer.getAllOrderStatusesOption();
     const shippingMethods = await shippingMethodDataLayer.getAllShippingMethods();
 
     const orderForm = editOrderForm(orderStatuses,shippingMethods);
@@ -52,7 +51,7 @@ router.get('/edit/:order_id',async function(req,res){
     })
 })
 
-router.post('/edit/:order_id',async function(req,res){
+router.post('/edit/:order_id', checkIfAuthenticated, async function(req,res){
     const order = await orderDataLayer.getOrderById(req.params.order_id);
     const orderStatuses = await orderStatusDataLayer.getAllOrderStatuses();
     const shippingMethods = await shippingMethodDataLayer.getAllShippingMethods();
@@ -86,7 +85,7 @@ router.post('/edit/:order_id',async function(req,res){
     })
 })
 
-router.get('/delete/:order_id', async function (req,res){
+router.get('/delete/:order_id', checkIfAuthenticated, async function (req,res){
     const order = await orderDataLayer.getOrderById(req.params.order_id);
     order.destroy();
     req.flash('success_messages',"Order "+req.params.order_id+" deleted");

@@ -12,13 +12,6 @@ async function getAllShippingRates () {
     return shippingMethods;
 }
 
-// async function getAllOrderStatuses () {
-//     const orderStatuses = await OrderStatus.fetchAll({}).map(orderStatus => {
-//         return [orderStatus.get('id'),orderStatus.get('name')];
-//     });
-//     return orderStatuses;
-// }
-
 async function getShippingMethodById (shippingMethodId) {
     const shippingMethod = await ShippingMethod.where({id:shippingMethodId}).fetch({
         require:true

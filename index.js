@@ -103,6 +103,7 @@ const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
 const checkoutRoutes = require('./routes/checkout');
 const orderRoutes = require('./routes/order');
+const customerRoutes = require('./routes/customer');
 
 app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea', teaRoutes);
@@ -115,6 +116,7 @@ app.use('/user', userRoutes);
 app.use('/cart', cartRoutes);
 app.use('/checkout', checkoutRoutes);
 app.use('/order', orderRoutes);
+app.use('/customer', customerRoutes);
 
 
 app.use(express.static('public'))

@@ -1,0 +1,16 @@
+{{#extends 'base'}}
+    {{#block 'content'}}
+    <div class="container-fluid">
+        <h1>Edit Customer Account</h1>
+        <form method="POST">
+            <div class="my-4">
+                <h2>Customer Details</h2>
+                {{{form}}}
+            </div>
+            <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
+            <input type="submit" class="btn btn-primary my-3 "/>
+        </form>
+    </div>
+
+    {{/block}}
+{{/extends}}

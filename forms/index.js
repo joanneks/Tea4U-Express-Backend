@@ -431,6 +431,51 @@ const editOrderForm = (orderStatuses,shippingMethods)=> {
     })
 }
 
+const editCustomerForm = (orderStatuses,shippingMethods)=> {
+    return forms.create({
+        'first_name':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2),validators.maxlength(30)]
+        }),
+        'last_name':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2),validators.maxlength(30)]
+        }),
+        'username':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(3),validators.maxlength(30)]
+        }),
+        'email':fields.email({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(3),validators.maxlength(50)]
+        }),
+        'password':fields.password({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(3),validators.maxlength(50)]
+        }),
+        'shipping_address':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(5),validators.maxlength(100)]
+        }),
+        'postal_code':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.maxlength(6)]
+        }),
+        'mobile_number':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.maxlength(8)]
+        }),
+    })
+}
+
 module.exports = {
     bootstrapField, 
     createTeaForm, 
@@ -440,5 +485,5 @@ module.exports = {
     createPlaceOfOriginForm, editPlaceOfOriginForm,
     createShippingMethodForm, createOrderStatusForm,
     createSearchForm,
-    editOrderForm
+    editOrderForm,editCustomerForm
 }
