@@ -28,13 +28,13 @@ exports.up = function(db) {
       notNull:true,
       defaultValue:0
     },
-    customer_id:{
+    user_id:{
       type:'int',
       unsigned:true,
       notNull:true,
       foreignKey:{
-        name:'cart_item_test_customer_fk',
-        table:'customers',
+        name:'cart_item_test_user_fk',
+        table:'users',
         mapping:'id',
         rules:{
           onDelete:'cascade',

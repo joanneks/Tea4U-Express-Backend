@@ -82,11 +82,13 @@ app.use(async function (req, res, next) {
 const api = {
   customer: require('./routes/api/customer'),
   cart: require('./routes/api/cart'),
+  checkout: require('./routes/api/checkout'),
 }
 
 // register api routes
 app.use('/api/customer',express.json(),api.customer);
 app.use('/api/cart',express.json(),api.cart);
+app.use('/api/checkout',express.json(),api.checkout);
 
 const { getCartByUserId } = require('./dal/cart');
 
@@ -100,6 +102,7 @@ const orderStatusRoutes = require('./routes/dashboard/order-status');
 const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
 const checkoutRoutes = require('./routes/checkout');
+const orderRoutes = require('./routes/order');
 
 app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea', teaRoutes);
@@ -111,6 +114,7 @@ app.use('/order-status', orderStatusRoutes);
 app.use('/user', userRoutes);
 app.use('/cart', cartRoutes);
 app.use('/checkout', checkoutRoutes);
+app.use('/order', orderRoutes);
 
 
 app.use(express.static('public'))

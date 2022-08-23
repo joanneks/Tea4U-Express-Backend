@@ -1,1 +1,16 @@
-{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"csrfSecret":"x6SnjShB4n20a6yoGfMU5hpA","flash":{},"__lastAccess":1661241117423,"user":{"id":1,"email":"testadmin@tea4u.sg","username":"testadmin"}}
+{
+    "cookie": {
+        "originalMaxAge": null,
+        "expires": null,
+        "httpOnly": true,
+        "path": "/"
+    },
+    "csrfSecret": "x6SnjShB4n20a6yoGfMU5hpA",
+    "flash": {},
+    "__lastAccess": 1661243932814,
+    "user": {
+        "id": 1,
+        "email": "testadmin@tea4u.sg",
+        "username": "testadmin"
+    }
+}

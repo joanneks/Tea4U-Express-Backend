@@ -1,0 +1,65 @@
+{{#extends 'base'}}
+    {{#block 'content'}}
+    <div class="container-fluid">
+        <div>
+            <h1 style="display:inline-block">List of Orders</h1> 
+        </div>
+        <div class="my-3">
+            {{!-- <form method="GET">
+                {{{form}}}
+            <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
+                <input type="submit" class="btn btn-primary my-3"/>
+            </form> --}}
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order Id</th>
+                    <th>Customer Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Order Status [ ID ]</th>
+                    <th>Shipping Method</th>
+                    <th>Shipping Address</th>
+                    <th>Postal Code</th>
+                    <th>Remarks</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.customer_id}}</td>
+                    <td>{{this.user.first_name}}</td>
+                    <td>{{this.user.last_name}}</td>
+                    <td>{{this.orderStatus.name}} [ {{this.order_status_id}} ]</td>
+                    <td>{{this.shippingMethod.name}} - {{this.shippingMethod.min_days}} to {{this.shippingMethod.max_days}} business days</td>
+                    <td>{{this.shipping_address}}</td>
+                    <td>{{this.postal_code}}</td>
+                    <td>{{this.remarks}}</td>
+                    <td>
+                        <div><img src="{{this.image_url}}" style="height:100px"/></div>
+                    </td>
+                    <td>
+                        <a href="/order/edit/{{this.id}}" class="btn btn-primary btn-sm ">Edit</a>
+                        <a href="/order/delete/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>
+                        <div style="margin-top:10px;font-size:smaller;font-style:italic">
+                            created on {{#moment}}
+                            '{{this.datetime_created}}' format='YYYY-MM-DD'
+                            {{/moment}}
+                        </div>
+                        <div style="font-size:smaller;font-style:italic">
+                            last modified on {{#moment}}
+                            '{{this.datetime_created}}' format=''
+                            {{/moment}}
+                        </div>                        
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    {{/block}}
+{{/extends}}

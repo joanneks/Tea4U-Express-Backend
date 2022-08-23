@@ -9,7 +9,7 @@ router.post('/', checkIfAuthenticatedJWT, async function(req,res){
         const userId = req.body.user_id;
         if(userId==req.session.customer.id){
             // need to send back access token as well. tested with arc
-            const cartByUserId = await cartServiceLayer.getCartByUserId(req.body.user_id);
+            const cartByUserId = await cartServiceLayer.getCartByUserId(userId);
             console.log(cartByUserId.toJSON());
             let totalCost = 0;
             cartByUserId.toJSON().map(each=>{

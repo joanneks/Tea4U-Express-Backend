@@ -1,7 +1,9 @@
 const { OrderStatus } = require('../models');
 
 async function getAllOrderStatuses () {
-    const orderStatuses = await OrderStatus.collection().fetch({});
+    const orderStatuses = await OrderStatus.fetchAll({}).map(orderStatus => {
+        return [orderStatus.get('id'),orderStatus.get('name')];
+    });
     return orderStatuses;
 }
 

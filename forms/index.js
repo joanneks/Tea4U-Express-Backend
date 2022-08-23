@@ -31,7 +31,7 @@ const createTeaForm = (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles,mi
         'name':fields.string({
             required:true,
             errorAfterField:true,
-            validators:[validators.minlength(5)]
+            validators:[validators.minlength(5),validators.maxlength(50)]
         }),
         'brand_id':fields.string({
             label:'Brand',
@@ -390,6 +390,47 @@ const createSearchForm = function (brands,teaTypes,packaging,placeOfOrigins,tast
     })
 }
 
+const editOrderForm = (orderStatuses,shippingMethods)=> {
+    return forms.create({
+        'customer_id':fields.number({
+            label:"Customer ID",
+            required:true,
+            errorAfterField:true,
+            validators:[validators.integer()]
+        }),
+        'order_status_id':fields.string({
+            label:"Order Status",
+            required:true,
+            errorAfterField:true,
+            widget: widgets.select(),
+            choices:orderStatuses
+        }),
+        'shipping_method_id':fields.string({
+            label:"Shipping Method",
+            required:true,
+            errorAfterField:true,
+            widget: widgets.select(),
+            choices:shippingMethods
+        }),
+        'shipping_address':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(5),validators.maxlength(100)]
+        }),
+        'postal_code':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(5),validators.maxlength(6)]
+        }),
+        'remarks':fields.string({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.maxlength(200)]
+        }),
+
+    })
+}
+
 module.exports = {
     bootstrapField, 
     createTeaForm, 
@@ -398,5 +439,6 @@ module.exports = {
     createTasteProfileForm, editTasteProfileForm, 
     createPlaceOfOriginForm, editPlaceOfOriginForm,
     createShippingMethodForm, createOrderStatusForm,
-    createSearchForm
+    createSearchForm,
+    editOrderForm
 }

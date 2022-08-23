@@ -59,7 +59,10 @@ const User = bookshelf.model('User',{
 })
 
 const Customer = bookshelf.model('Customer',{
-    tableName:'customers'
+    tableName:'customers',
+    order(){
+        return this.hasMany('Order')
+    }
 })
 
 const CartItem = bookshelf.model('CartItem',{
@@ -72,18 +75,51 @@ const CartItem = bookshelf.model('CartItem',{
     }
 })
 
+const CartItemTest = bookshelf.model('CartItemTest',{
+    tableName:'cart_items_test',
+    tea(){
+        return this.belongsTo('Tea');
+    },
+    user(){
+        return this.belongsTo('User')
+    }
+})
+
 const ShippingMethod = bookshelf.model('ShippingMethod',{
-    tableName:'shipping_methods'
+    tableName:'shipping_methods',
+    order(){
+        return this.hasMany('Order')
+    }
 })
 
 const OrderStatus = bookshelf.model('OrderStatus',{
-    tableName:'order_statuses'
+    tableName:'order_statuses',
+    order(){
+        return this.hasMany('Order')
+    }
+})
+
+const OrderItems = bookshelf.model('OrderItems',{
+    tableName:'order_items'
+})
+
+const Order = bookshelf.model('Order',{
+    tableName:'orders',
+    orderStatus(){
+        return this.belongsTo('OrderStatus')
+    },
+    shippingMethod(){
+        return this.belongsTo('ShippingMethod')
+    },
+    user(){
+        return this.belongsTo('Customer')
+    }
 })
 
 module.exports = { 
     Tea, TeaType, 
     Brand, Packaging, PlaceOfOrigin, TasteProfile, 
     User, Customer,
-    CartItem,
-    ShippingMethod, OrderStatus
+    CartItem, CartItemTest,
+    ShippingMethod, OrderStatus, OrderItems, Order
 }

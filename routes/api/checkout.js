@@ -3,24 +3,29 @@ const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY,{
     apiVersion:"2020-08-27"
 });
-const cartServiceLayer = require('../services/cart-test');
-const teaDataLayer = require ('../dal/tea');
-const shippingDataLayer = require ('../dal/shipping-method');
-const userDataLayer = require ('../dal/user');
-const {checkIfAuthenticated} = require('../middlewares');
-const {OrderItems, Order} = require('../models');
+const {checkIfAuthenticatedJWT} = require('../../middlewares');
+const cartServiceLayer = require('../../services/cart');
+const teaDataLayer = require ('../../dal/tea');
+const shippingDataLayer = require ('../../dal/shipping-method');
+const {OrderItems, Order} = require('../../models');
 const moment = require('moment');
 const momentTimezone = require('moment-timezone');
 
-router.get('/', checkIfAuthenticated,async function (req,res){
+router.post('/', checkIfAuthenticatedJWT,async function (req,res){
     try{
-        const items = await cartServiceLayer.getCartByUserId(req.session.user.id);
-        // const user = await userDataLayer.getUserById(req.session.user.id);
-        // console.log(user);
+        let userId = req.body.user_id;
+        let userEmail = req.body.user_email;
+        let userShippingAddress =req.body.shipping_address;
+        let userPostalCode = req.body.postal_code;
+        console.log('USER DETAILS',userId,userEmail,userShippingAddress,userPostalCode);
+
+        const items = await cartServiceLayer.getCartByUserId(userId);
         let lineItems = [];
         let meta = [];
         let paymentErrors= [];
+        // console.log("ITEMS",items);
         for(let item of items){
+            console.log("TESTING",item);
             let teaProduct = await teaDataLayer.getTeaById(item.get('tea_id'));
     
             let brandName = teaProduct.related('brand').get('name');
@@ -55,8 +60,6 @@ router.get('/', checkIfAuthenticated,async function (req,res){
                 tea_id:item.get('tea_id'),
                 cart_item_id:item.get('id'),
                 quantity:item.get('quantity')
-                // shipping_address:"123 Yishun Ave",
-                // postal_code:"123456"
             });
         };
         
@@ -66,19 +69,18 @@ router.get('/', checkIfAuthenticated,async function (req,res){
             line_items:lineItems,
             success_url:process.env.STRIPE_SUCCESS_URL+"?sessionId={CHECKOUT_SESSION_ID}",
             cancel_url:process.env.STRIPE_CANCEL_URL,
-            client_reference_id:req.session.user.id,
-            customer_email:req.session.user.email,
+            client_reference_id:userId,
+            customer_email:userEmail,
             metadata:{
                 orders:metaData,
-                user_id:req.session.user.id,
-                address: "123 Yishun Ave",
-                postal_code: "123456",
+                user_id:userId,
+                address: userShippingAddress,
+                postal_code: userPostalCode,
             }
         };
-        console.log('session',session);
     
         let shippingOptions = [];
-        const shippingMethods = await shippingDataLayer.getAllShippingRates();
+        const shippingMethods = await shippingDataLayer.getAllShippingMethods();
         for (let each of shippingMethods){
             const eachShippingRate = {
                 shipping_rate_data: {
@@ -102,7 +104,6 @@ router.get('/', checkIfAuthenticated,async function (req,res){
               }
             shippingOptions.push(eachShippingRate);
         }
-        console.log('shippingOptions',shippingOptions);
         session.shipping_options = shippingOptions;
     
         let stripeSesssion = await stripe.checkout.sessions.create(session);
@@ -128,14 +129,11 @@ router.get('/', checkIfAuthenticated,async function (req,res){
 });
 
 router.get('/success',function(req,res){
-    // res.send('payment success');
-    req.flash('success_messages',"Order created - payment success");
-    res.redirect('/order');
+    res.send('payment success');
 });
 
 router.get('/cancel',function(req,res){
-    req.flash('success_messages',"Order not created - payment cancelled");
-    res.redirect('/cart');
+    res.send('payment cancelled');
 });
 
 router.post('/process_payment',express.raw({type:'application/json'}),async function(req,res){
@@ -144,6 +142,7 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
     let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
     let sigHeader = req.headers["stripe-signature"];
     let event = null;
+    // console.log('payloadd',payload,'endpointsecret',endpointSecret,'sigheader',sigHeader)
     try{
         event = stripe.webhooks.constructEvent(payload, sigHeader,endpointSecret);
         if(event.type == 'checkout.session.completed'){
@@ -151,8 +150,8 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
             let paymentEvent = event.data.object;
             let shippingAddress = paymentEvent.metadata.address;
             let shippingPostalCode = paymentEvent.metadata.postal_code;
-            let customerId = paymentEvent.client_reference_id;
-            console.log('customer id',customerId);
+            let userId = paymentEvent.client_reference_id;
+            console.log('user id',userId);
 
             const orderCreatedDate= moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
             const orderLastModifiedDate = orderCreatedDate;
@@ -162,15 +161,13 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
             let shippingMethodId = shippingMethod.get('id');
 
             let order = new Order();
-            // order.set('id',orderId);
             order.set('shipping_address',shippingAddress);
             order.set('postal_code',shippingPostalCode);
             order.set('datetime_created',orderCreatedDate);
             order.set('datetime_last_modified',orderLastModifiedDate);
             order.set('shipping_method_id',shippingMethodId);
             order.set('order_status_id',1);
-            // order.set('customer_id',customerId);
-            order.set('customer_id',4);
+            order.set('customer_id',userId);
             console.log('new order-----',order);
             await order.save();
 
@@ -185,8 +182,7 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
             metadata.map(async (each)=>{
                 let orderedItems = new OrderItems();
                 orderedItems.set('quantity',each.quantity);
-                // orderedItems.set('cart_item_id',each.cart_item_id);
-                orderedItems.set('cart_item_id',41);
+                orderedItems.set('cart_item_id',each.cart_item_id);
                 orderedItems.set('order_id',newOrderId);
                 console.log('orderedItems_',orderedItems);
                 await orderedItems.save();
