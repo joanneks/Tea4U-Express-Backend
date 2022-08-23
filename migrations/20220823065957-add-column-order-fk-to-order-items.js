@@ -20,7 +20,7 @@ exports.up = function(db) {
     unsigned:true,
     notNull:true,
     foreignKey:{
-      name:'order__order_item_fk',
+      name:'order_order_item_fk',
       table:'orders',
       mapping:'id',
       rules:{
@@ -32,7 +32,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return db.removeColumn('tea','brand_id');;
+  return db.removeColumn('order_items','order_id');;
 };
 
 exports._meta = {

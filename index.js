@@ -92,11 +92,11 @@ const { getCartByUserId } = require('./dal/cart');
 
 const cloudinaryRoutes = require('./routes/cloudinary');
 const teaRoutes = require('./routes/tea');
-const brandRoutes = require('./routes/tea-related/brand');
-const tasteProfileRoutes = require('./routes/tea-related/taste-profile');
-const placeOfOriginRoutes = require('./routes/tea-related/place-of-origin');
-const shippingMethodRoutes = require('./routes/tea-related/shipping-method');
-const orderStatusRoutes = require('./routes/tea-related/order-status');
+const brandRoutes = require('./routes/dashboard/brand');
+const tasteProfileRoutes = require('./routes/dashboard/taste-profile');
+const placeOfOriginRoutes = require('./routes/dashboard/place-of-origin');
+const shippingMethodRoutes = require('./routes/dashboard/shipping-method');
+const orderStatusRoutes = require('./routes/dashboard/order-status');
 const userRoutes = require('./routes/user');
 const cartRoutes = require('./routes/cart');
 const checkoutRoutes = require('./routes/checkout');
