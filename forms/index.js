@@ -249,7 +249,6 @@ const createBrandForm = (label) => {
 const createTasteProfileForm = () => {
     return forms.create({
         'name':fields.string({
-            label:'Taste Profile',
             required:true,
             errorAfterField:true,
             validators:[validators.minlength(5)]
@@ -260,7 +259,7 @@ const createTasteProfileForm = () => {
 const editTasteProfileForm = () => {
     return forms.create({
         'name':fields.string({
-            label:'Update Taste Profile',
+            label:'Update Taste Profile Name',
             required:true,
             errorAfterField:true,
             validators:[validators.minlength(5)]
@@ -271,7 +270,6 @@ const editTasteProfileForm = () => {
 const createPlaceOfOriginForm = () => {
     return forms.create({
         'name':fields.string({
-            label:'Place of Origin',
             required:true,
             errorAfterField:true,
             validators:[validators.minlength(4)]
@@ -282,7 +280,7 @@ const createPlaceOfOriginForm = () => {
 const editPlaceOfOriginForm = () => {
     return forms.create({
         'name':fields.string({
-            label:'Update Place of Origin',
+            label:'Update Place of Origin Name',
             required:true,
             errorAfterField:true,
             validators:[validators.minlength(4)]
@@ -312,6 +310,17 @@ const createShippingMethodForm = () => {
             required:true,
             errorAfterField:true,
             validators:[validators.integer()]
+        })
+    })
+}
+
+const createOrderStatusForm = (label) => {
+    return forms.create({
+        'name':fields.string({
+            label:label,
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(4)]
         })
     })
 }
@@ -388,6 +397,6 @@ module.exports = {
     createBrandForm,
     createTasteProfileForm, editTasteProfileForm, 
     createPlaceOfOriginForm, editPlaceOfOriginForm,
-    createShippingMethodForm,
+    createShippingMethodForm, createOrderStatusForm,
     createSearchForm
 }

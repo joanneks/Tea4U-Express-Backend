@@ -76,10 +76,14 @@ const ShippingMethod = bookshelf.model('ShippingMethod',{
     tableName:'shipping_methods'
 })
 
+const OrderStatus = bookshelf.model('OrderStatus',{
+    tableName:'order_statuses'
+})
+
 module.exports = { 
     Tea, TeaType, 
     Brand, Packaging, PlaceOfOrigin, TasteProfile, 
     User, Customer,
     CartItem,
-    ShippingMethod
+    ShippingMethod, OrderStatus
 }
