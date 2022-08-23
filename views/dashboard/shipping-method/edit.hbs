@@ -10,40 +10,40 @@
                     <a class="nav-link" href="/brand">Brands</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/taste-profile">Taste Profiles</a>
+                    <a class="nav-link" href="/taste-profile">Taste Profiles</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/place-of-origin">Place of Origins</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/shipping-method">Shipping Methods</a>
+                    <a class="nav-link active" aria-current="page" href="/shipping-method">Shipping Methods</a>
                 </li>
             </ul>
         </div>
         <div class="container-fluid" style="margin-top:30px;">
             <form method="POST" style="width:20vw;display:inline-block">
                 {{{form}}}
-            <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
-                <input type="submit" value="Add New Taste Profile" class="btn btn-primary my-3" style="display:inline-block;"/>
+                <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
+                <input type="submit" value="Update Shipping Method" class="btn btn-primary my-3" style="display:inline-block;"/>
             </form>
         </div>
         <table class="table">
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Taste Profile</th>
+                    <th>Shipping Method Name</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {{#each tasteProfiles}}
+                {{#each shippingMethods}}
                 <tr>
                     <td>{{this.id}}</td>
                     <td>{{this.name}}</td>
 
                     <td>
-                        <a href="/taste-profile/edit/{{this.id}}" class="btn btn-primary btn-sm ">Edit</a>
-                        <a href="/taste-profile/delete/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>                
+                        <a href="/shipping-method/edit/{{this.id}}" class="btn btn-primary btn-sm ">Edit</a>
+                        <a href="/shipping-method/delete/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>                
                     </td>
                 </tr>
                 {{/each}}

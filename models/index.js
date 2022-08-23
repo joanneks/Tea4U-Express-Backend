@@ -72,8 +72,14 @@ const CartItem = bookshelf.model('CartItem',{
     }
 })
 
+const ShippingMethod = bookshelf.model('ShippingMethod',{
+    tableName:'shipping_methods'
+})
+
 module.exports = { 
     Tea, TeaType, 
     Brand, Packaging, PlaceOfOrigin, TasteProfile, 
     User, Customer,
-    CartItem }
+    CartItem,
+    ShippingMethod
+}

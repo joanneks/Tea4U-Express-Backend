@@ -1,3 +1,5 @@
+
+
 const forms = require('forms');
 
 const fields = forms.fields;
@@ -228,7 +230,7 @@ const createLoginForm = () => {
         }),
         'password':fields.password({
             required:true,
-            widget:widgets.select(),
+            widget:widgets.password(),
         })
     })
 }
@@ -288,6 +290,31 @@ const editPlaceOfOriginForm = () => {
     })
 }
 
+const createShippingMethodForm = () => {
+    return forms.create({
+        'name':fields.string({
+            // label:label,
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        }),
+        'price':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.min(0)]
+        }),
+        'min_days':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.integer()]
+        }),
+        'max_days':fields.number({
+            required:true,
+            errorAfterField:true,
+            validators:[validators.integer()]
+        })
+    })
+}
 
 const createSearchForm = function (brands,teaTypes,packaging,placeOfOrigins,tasteProfiles){
     return forms.create({
@@ -361,5 +388,6 @@ module.exports = {
     createBrandForm,
     createTasteProfileForm, editTasteProfileForm, 
     createPlaceOfOriginForm, editPlaceOfOriginForm,
+    createShippingMethodForm,
     createSearchForm
 }

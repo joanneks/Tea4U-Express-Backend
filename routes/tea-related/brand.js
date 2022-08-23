@@ -1,6 +1,6 @@
 const express =require('express');
 const router = express.Router();
-const {createBrandForm, editBrandForm, bootstrapField} = require('../../forms');
+const {createBrandForm, bootstrapField} = require('../../forms');
 const dataLayer = require('../../dal/brand');
 const {Brand} = require('../../models');
 const {checkIfAuthenticated} = require('../../middlewares');

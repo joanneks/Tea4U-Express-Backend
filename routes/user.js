@@ -22,6 +22,8 @@ router.get('/logout', function(req,res){
 })
 
 router.get('/login', async function (req,res){
+    console.log('hello')
+    console.log(createLoginForm)
     const loginForm = createLoginForm();
     res.render('user/login',{
         form:loginForm.toHTML(bootstrapField)
