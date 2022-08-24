@@ -99,8 +99,14 @@ const OrderStatus = bookshelf.model('OrderStatus',{
     }
 })
 
-const OrderItems = bookshelf.model('OrderItems',{
-    tableName:'order_items'
+const OrderItem = bookshelf.model('OrderItem',{
+    tableName:'order_items',
+    order(){
+        return this.belongsTo('Order')
+    },
+    tea(){
+        return this.belongsTo('Tea');
+    }
 })
 
 const Order = bookshelf.model('Order',{
@@ -121,5 +127,5 @@ module.exports = {
     Brand, Packaging, PlaceOfOrigin, TasteProfile, 
     User, Customer,
     CartItem, CartItemTest,
-    ShippingMethod, OrderStatus, OrderItems, Order
+    ShippingMethod, OrderStatus, OrderItem, Order
 }

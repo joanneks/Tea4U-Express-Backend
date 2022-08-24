@@ -50,4 +50,10 @@ async function getAllTea(){
     return tea;
 };
 
-module.exports = {getAllTeaTypes, getAllBrands, getAllPackaging, getAllPlaceOfOrigins, getAllTasteProfiles, getTeaById, getAllTea}
+async function setTeaQuantity(teaId,updatedTeaQuantity){
+    const tea = await getTeaById(teaId);
+    tea.set('quantity',updatedTeaQuantity);
+    await tea.save();
+}
+
+module.exports = {getAllTeaTypes, getAllBrands, getAllPackaging, getAllPlaceOfOrigins, getAllTasteProfiles, getTeaById, getAllTea, setTeaQuantity}

@@ -183,6 +183,7 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
                 let orderedItems = new OrderItems();
                 orderedItems.set('quantity',each.quantity);
                 orderedItems.set('cart_item_id',each.cart_item_id);
+                orderedItems.set('tea_id',each.tea_id);
                 orderedItems.set('order_id',newOrderId);
                 console.log('orderedItems_',orderedItems);
                 await orderedItems.save();

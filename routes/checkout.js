@@ -5,10 +5,10 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY,{
 });
 const cartServiceLayer = require('../services/cart-test');
 const teaDataLayer = require ('../dal/tea');
+const teaServiceLayer = require ('../services/tea');
 const shippingDataLayer = require ('../dal/shipping-method');
-const userDataLayer = require ('../dal/user');
 const {checkIfAuthenticated} = require('../middlewares');
-const {OrderItems, Order} = require('../models');
+const {OrderItem, Order} = require('../models');
 const moment = require('moment');
 const momentTimezone = require('moment-timezone');
 
@@ -55,8 +55,6 @@ router.get('/', checkIfAuthenticated,async function (req,res){
                 tea_id:item.get('tea_id'),
                 cart_item_id:item.get('id'),
                 quantity:item.get('quantity')
-                // shipping_address:"123 Yishun Ave",
-                // postal_code:"123456"
             });
         };
         
@@ -169,8 +167,8 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
             order.set('datetime_last_modified',orderLastModifiedDate);
             order.set('shipping_method_id',shippingMethodId);
             order.set('order_status_id',1);
-            // order.set('customer_id',customerId);
             order.set('customer_id',4);
+            // order.set('customer_id',4);
             console.log('new order-----',order);
             await order.save();
 
@@ -183,13 +181,21 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
             console.log('metadata',metadata);
             
             metadata.map(async (each)=>{
-                let orderedItems = new OrderItems();
+                let orderedItems = new OrderItem();
                 orderedItems.set('quantity',each.quantity);
                 // orderedItems.set('cart_item_id',each.cart_item_id);
                 orderedItems.set('cart_item_id',41);
+                orderedItems.set('tea_id',each.tea_id);
                 orderedItems.set('order_id',newOrderId);
                 console.log('orderedItems_',orderedItems);
                 await orderedItems.save();
+
+                await teaServiceLayer.updateTeaQuantity(each.tea_id,each.quantity);
+            })
+
+            let customerCart = await cartServiceLayer.getCartByUserId(customerId);
+            customerCart.map(async (each)=>{
+                await each.destroy();
             })
 
             res.send({

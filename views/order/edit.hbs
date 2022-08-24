@@ -2,7 +2,19 @@
     {{#block 'content'}}
     <div class="container-fluid">
         <div>
-            <h1 style="display:inline-block">List of Orders</h1> 
+            <h1 style="display:inline-block">Order Id: {{this.orderId}}</h1> 
+            <h6>
+                <div style="margin-top:10px;font-size:smaller;font-style:italic">
+                    created on {{#moment}}
+                    '{{this.datetime_created}}' format='YYYY-MM-DD'
+                    {{/moment}}
+                </div>
+                <div style="font-size:smaller;font-style:italic">
+                    last modified on {{#moment}}
+                    '{{this.datetime_created}}' format=''
+                    {{/moment}}
+                </div>   
+            </h6>
         </div>
         <div class="my-3">
             <form method="POST">
@@ -11,6 +23,44 @@
                 <input type="submit" class="btn btn-primary my-3"/>
             </form>
         </div>
+         <table class="table">
+            <thead>
+                <tr>
+                    <th>Order Item Id</th>
+                    <th>Brand Id</th>
+                    <th>Tea Id</th>
+                    <th>Tea Name</th>
+                    <th>Cost ($)</th>
+                    <th>Weight (g)</th>
+                    <th>Quantity</th>
+                    <th>Image</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orderItems}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.tea.brand_id}}
+                        {{#forEach ../brandArray}}
+                        {{brand}}
+                        {{/forEach}}
+                    </td>
+                    <td>{{this.tea_id}}</td>
+                    <td>{{this.tea.name}}</td>
+                    <td>{{divide this.tea.cost 100}}</td>
+                    <td>{{this.tea.weight}}</td>
+                    <td>{{this.quantity}}</td>
+                    {{#if this.tea.image_url}}
+                    <td><img src="{{this.tea.image_url}}" style="height:150px;max-width:180px;object-fit:cover"/></td>
+                    {{else}}
+                    <td></td>
+                    {{/if}}
+                    <td></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 
     {{/block}}

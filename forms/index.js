@@ -390,14 +390,14 @@ const createSearchForm = function (brands,teaTypes,packaging,placeOfOrigins,tast
     })
 }
 
-const editOrderForm = (orderStatuses,shippingMethods)=> {
+const editOrderForm = (orderStatuses,shippingMethods,label)=> {
     return forms.create({
-        'customer_id':fields.number({
-            label:"Customer ID",
-            required:true,
-            errorAfterField:true,
-            validators:[validators.integer()]
-        }),
+        // 'customer_id':fields.number({
+        //     label:label,
+        //     required:true,
+        //     errorAfterField:true,
+        //     validators:[validators.integer()]
+        // }),
         'order_status_id':fields.string({
             label:"Order Status",
             required:true,
@@ -476,6 +476,33 @@ const editCustomerForm = (orderStatuses,shippingMethods)=> {
     })
 }
 
+
+const createSearchOrderForm = function (orderStatuses,shippingMethods){
+    return forms.create({
+        order_id:fields.number({
+            required:false,
+            errorAfterField:true,
+            validators:[validators.integer()]
+        }),
+        email:fields.email({
+            required:false,
+            errorAfterField:true,
+        }),
+        order_status_id:fields.string({
+            required:false,
+            errorAfterField:true,
+            widget:widgets.select(),
+            choices:orderStatuses
+        }),
+        shipping_method_id:fields.string({
+            required:false,
+            errorAfterField:true,
+            widget:widgets.select(),
+            choices:shippingMethods
+        })
+    })
+}
+
 module.exports = {
     bootstrapField, 
     createTeaForm, 
@@ -485,5 +512,6 @@ module.exports = {
     createPlaceOfOriginForm, editPlaceOfOriginForm,
     createShippingMethodForm, createOrderStatusForm,
     createSearchForm,
-    editOrderForm,editCustomerForm
+    editOrderForm,editCustomerForm,
+    createSearchOrderForm
 }

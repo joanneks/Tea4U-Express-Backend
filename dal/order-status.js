@@ -20,4 +20,4 @@ async function getOrderStatusById (orderStatusId) {
     return orderStatus;
 }
 
-module.exports = {getAllOrderStatuses, getOrderStatusById};
+module.exports = {getAllOrderStatuses, getAllOrderStatusesOption, getOrderStatusById};

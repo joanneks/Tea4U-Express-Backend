@@ -78,8 +78,6 @@ async function removeCartItem(userId,teaId){
     };
  };
 
-
-
 module.exports = {
     getCartByUserId, getCartItemByUserAndTeaId, 
     addOneCartItem, removeCartItem, minusOneCartItem,

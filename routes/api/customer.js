@@ -371,6 +371,7 @@ router.get('/',async function (req,res){
 router.get('/profile', checkIfAuthenticatedJWT, async(req,res)=>{
     const customer = req.customer;
     res.send(customer);
+
 })
 
 router.post('/login',async function(req,res){
