@@ -10,7 +10,7 @@
         <img src="/landing.jpeg" style="position:absolute;object-fit:cover;width:100vw;height:90vh;"/>
         <form method="POST" class="loginForm">
             {{{form}}}
-            <div><a href="/user/register" style="float:right;font-size:smaller">Register New User</a></div>
+            {{!-- <div><a href="/user/register" style="float:right;font-size:smaller">Register New User</a></div> --}}
             <div>
                 <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
                 <input type="submit" value="Login" class="btn btn-success" style="margin-top:10px;margin-right:15px;"/>

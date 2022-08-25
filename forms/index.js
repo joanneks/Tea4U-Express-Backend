@@ -294,7 +294,7 @@ const createShippingMethodForm = () => {
             // label:label,
             required:true,
             errorAfterField:true,
-            validators:[validators.minlength(2)]
+            validators:[validators.minlength(2),validators.maxlength(20)]
         }),
         'price':fields.number({
             required:true,
