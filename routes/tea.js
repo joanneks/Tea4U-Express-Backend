@@ -29,7 +29,7 @@ router.get('/', checkIfAuthenticated, async function (req,res){
                 if(searchForm.data.name){
                     query.where('name','like','%'+ searchForm.data.name + '%');
                 };
-            } else if(process.env.DB_DRIVER == "mysql"){
+            } else if(process.env.DB_DRIVER == "postgres"){
                 if(searchForm.data.name){
                     query.where('name','ilike','%'+ searchForm.data.name + '%');
                 };
