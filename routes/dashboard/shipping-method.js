@@ -49,7 +49,7 @@ router.get('/edit/:shipping_method_id', checkIfAuthenticated,async function (req
     const shippingMethods = await dataLayer.getAllShippingRates();
     const shippingMethod = await dataLayer.getShippingMethodById(req.params.shipping_method_id);
     shippingMethodForm.fields.name.value = shippingMethod.get('name');
-    shippingMethodForm.fields.price.value = shippingMethod.get('price');
+    shippingMethodForm.fields.price.value = shippingMethod.get('price')/100;
     shippingMethodForm.fields.min_days.value = shippingMethod.get('min_days');
     shippingMethodForm.fields.max_days.value = shippingMethod.get('max_days');
 
@@ -84,7 +84,7 @@ router.post('/edit/:shipping_method_id', checkIfAuthenticated,async function (re
     const shippingMethod = await dataLayer.getShippingMethodById(req.params.shipping_method_id);
     shippingMethodForm.handle(req,{
         'success':async function(shippingMethodForm){
-            let {price,shippingMethodData} = shippingMethodForm.data;
+            let {price,...shippingMethodData} = shippingMethodForm.data;
             shippingMethod.set('price',shippingMethodForm.data.price * 100);
             shippingMethod.set(shippingMethodData);
             await shippingMethod.save();

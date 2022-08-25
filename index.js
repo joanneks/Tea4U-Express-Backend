@@ -125,10 +125,10 @@ app.use('/customer', customerRoutes);
 
 app.use(express.static('public'))
 
-// app.listen(3000, function (res, req) {
-//   console.log("Server started")
-// })
-
-app.listen(process.env.PORT, function (res, req) {
+app.listen(3000, function (res, req) {
   console.log("Server started")
 })
+
+// app.listen(process.env.PORT, function (res, req) {
+//   console.log("Server started")
+// })
