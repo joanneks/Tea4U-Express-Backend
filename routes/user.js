@@ -67,14 +67,14 @@ router.post('/login',  async function (req,res){
     })
 })
 
-router.get('/register', function(req,res){
+router.get('/register', checkIfAuthenticated, function(req,res){
     const userForm  = createUserForm();
     res.render('user/register',{
         'form': userForm.toHTML(bootstrapField)
     });
 });
 
-router.post('/register', function(req,res){
+router.post('/register', checkIfAuthenticated, function(req,res){
     const userForm  = createUserForm();
     const user = new User();
     userForm.handle(req,{
