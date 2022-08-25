@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { Order } = require('../models');
-const { editOrderForm, createSearchOrderForm, bootstrapField } = require('../forms')
+const { editOrderForm, createSearchOrderForm, bootstrapField, editPlaceOfOriginForm } = require('../forms')
 const orderDataLayer = require('../dal/order');
 const orderItemsDataLayer = require('../dal/order-items');
 const orderStatusDataLayer = require('../dal/order-status');
+const customerStatusDataLayer = require('../dal/order-status');
 const brandDataLayer = require('../dal/brand');
 const customerDataLayer = require('../dal/customer');
 const shippingMethodDataLayer = require('../dal/shipping-method');
@@ -29,9 +30,9 @@ router.get('/', checkIfAuthenticated, async function(req,res){
                 if(searchOrderForm.data.order_id){
                     query.where('id','=',searchOrderForm.data.order_id);
                 };
-                // if(searchOrderForm.data.email){
-                //     query.join('customers','customer_id','customers.id').where('customer.email','=',searchOrderForm.data.email);
-                // };
+                if(searchOrderForm.data.email){
+                    query.where('customer_id', '=', searchOrderForm.data.email);
+                };
                 if(searchOrderForm.data.order_status_id && searchOrderForm.data.order_status_id != 0){
                     query.where('order_status_id', '=', searchOrderForm.data.order_status_id);
                 };
@@ -46,6 +47,7 @@ router.get('/', checkIfAuthenticated, async function(req,res){
                 res.render('order/index',{
                     form:searchOrderForm.toHTML(bootstrapField),
                     orders:orderSearchResult.toJSON(),
+                    message:"No results found"
                 })
             }
         },
@@ -69,19 +71,28 @@ router.get('/edit/:order_id', checkIfAuthenticated, async function(req,res){
     const order = await orderDataLayer.getOrderById(req.params.order_id);
     const orderStatuses = await orderStatusDataLayer.getAllOrderStatusesOption();
     const shippingMethods = await shippingMethodDataLayer.getAllShippingMethods();
-
     const orderItems = await orderItemsDataLayer.getOrderItemsByOrderId(req.params.order_id);
     const customer = await customerDataLayer.getCustomerById(order.get('customer_id'));
-    const label = "Customer ID - " + customer.toJSON().first_name + " " + customer.toJSON().last_name;
+    const label = "Customer ID "+ order.get('customer_id') + " - " + customer.toJSON().first_name + " " + customer.toJSON().last_name;
 
-    let brandArray = [];
+    let orderItemsArray = [];
+
     for(each of orderItems.toJSON()){
         let brand = await brandDataLayer.getBrandById(each.tea.brand_id);
-        brandArray.push({brand:brand.toJSON().name});
-    }
-    console.log('BRAND ARRAY',brandArray)
-    console.log('BRAND ARRAY',orderItems)
 
+        let orderItemsObject = {
+            id:each.id,
+            quantity:each.quantity,
+            teaBrandId:each.tea.brand_id,
+            teaBrand:brand.toJSON().name,
+            teaId: each.tea_id,
+            teaName:each.tea.name,
+            teaCost:each.tea.cost,
+            teaWeight:each.tea.weight,
+            teaImage:each.tea.image_url,
+        };
+        orderItemsArray.push(orderItemsObject);
+    }
     const orderForm = editOrderForm(orderStatuses,shippingMethods,label);
 
     orderForm.fields.shipping_address.value = order.get('shipping_address');
@@ -89,34 +100,39 @@ router.get('/edit/:order_id', checkIfAuthenticated, async function(req,res){
     orderForm.fields.remarks.value = order.get('remarks');
     orderForm.fields.shipping_method_id.value = order.get('shipping_method_id');
     orderForm.fields.order_status_id.value = order.get('order_status_id');
-    // orderForm.fields.customer_id.value = order.get('customer_id');
 
     orderForm.handle(req,{
         'success':async function(orderForm){
             res.render('order/edit',{
                 form:orderForm.toHTML(bootstrapField),
+                label:label,
                 brandArray:brandArray,
                 orderId:req.params.order_id,
                 order:order.toJSON(),
-                orderItems:orderItems.toJSON()
+                orderItems:orderItems.toJSON(),
+                orderItemsArray:orderItemsArray
             })
         },
         'empty':async function(orderForm){
             res.render('order/edit',{
                 form:orderForm.toHTML(bootstrapField),
+                label:label,
                 brandArray:brandArray,
                 orderId:req.params.order_id,
                 order:order.toJSON(),
-                orderItems:orderItems.toJSON()
+                orderItems:orderItems.toJSON(),
+                orderItemsArray:orderItemsArray
             })
         },
         'error':async function(orderForm){
             res.render('order/edit',{
                 form:orderForm.toHTML(bootstrapField),
+                label:label,
                 brandArray:brandArray,
                 orderId:req.params.order_id,
                 order:order.toJSON(),
-                orderItems:orderItems.toJSON()
+                orderItems:orderItems.toJSON(),
+                orderItemsArray:orderItemsArray
             })
         }
     })

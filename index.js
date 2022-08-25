@@ -83,12 +83,14 @@ const api = {
   customer: require('./routes/api/customer'),
   cart: require('./routes/api/cart'),
   checkout: require('./routes/api/checkout'),
+  order: require('./routes/api/order'),
 }
 
 // register api routes
 app.use('/api/customer',express.json(),api.customer);
 app.use('/api/cart',express.json(),api.cart);
 app.use('/api/checkout',express.json(),api.checkout);
+app.use('/api/order',express.json(),api.order);
 
 const { getCartByUserId } = require('./dal/cart-test');
 

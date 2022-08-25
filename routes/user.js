@@ -30,7 +30,7 @@ router.get('/login', async function (req,res){
     })
 })
 
-router.post('/login', async function (req,res){
+router.post('/login',  async function (req,res){
     const loginForm = createLoginForm();
     loginForm.handle(req,{
         'success':async function(loginForm){
@@ -42,7 +42,7 @@ router.post('/login', async function (req,res){
             })
             if(!user){
                 req.flash('error_messages', "Invalid credentials");
-                res.redirect("/users/login");
+                res.redirect("/user/login");
             } else {
                 req.session.user = {
                     id: user.get('id'),

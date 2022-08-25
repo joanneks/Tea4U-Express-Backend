@@ -3,20 +3,21 @@
     <div class="container-fluid">
         <div>
             <h1 style="display:inline-block">Order Id: {{this.orderId}}</h1> 
+            <h5 style="margin-left:10px;margin-top:15px">{{this.label}}</h5>
             <h6>
-                <div style="margin-top:10px;font-size:smaller;font-style:italic">
-                    created on {{#moment}}
+                <div style="margin-left:20px;margin-top:5px;font-size:smaller;font-style:italic">
+                    Order Date: {{#moment}}
                     '{{this.datetime_created}}' format='YYYY-MM-DD'
                     {{/moment}}
                 </div>
-                <div style="font-size:smaller;font-style:italic">
-                    last modified on {{#moment}}
+                <div style="margin-left:20px;font-size:smaller;font-style:italic">
+                    Last Modified: {{#moment}}
                     '{{this.datetime_created}}' format=''
                     {{/moment}}
                 </div>   
             </h6>
         </div>
-        <div class="my-3">
+        <div class="my-3" style="margin-left:10px;margin-right:10px">
             <form method="POST">
                 {{{form}}}
             <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
@@ -28,6 +29,7 @@
                 <tr>
                     <th>Order Item Id</th>
                     <th>Brand Id</th>
+                    <th>Brand Name</th>
                     <th>Tea Id</th>
                     <th>Tea Name</th>
                     <th>Cost ($)</th>
@@ -38,21 +40,18 @@
                 </tr>
             </thead>
             <tbody>
-                {{#each orderItems}}
+                {{#each orderItemsArray}}
                 <tr>
                     <td>{{this.id}}</td>
-                    <td>{{this.tea.brand_id}}
-                        {{#forEach ../brandArray}}
-                        {{brand}}
-                        {{/forEach}}
-                    </td>
-                    <td>{{this.tea_id}}</td>
-                    <td>{{this.tea.name}}</td>
-                    <td>{{divide this.tea.cost 100}}</td>
-                    <td>{{this.tea.weight}}</td>
+                    <td>{{this.teaBrandId}}</td>
+                    <td>{{this.teaBrand}}</td>
+                    <td>{{this.teaId}}</td>
+                    <td>{{this.teaName}}</td>
+                    <td>{{divide this.teaCost 100}}</td>
+                    <td>{{this.teaWeight}}</td>
                     <td>{{this.quantity}}</td>
-                    {{#if this.tea.image_url}}
-                    <td><img src="{{this.tea.image_url}}" style="height:150px;max-width:180px;object-fit:cover"/></td>
+                    {{#if this.teaImage}}
+                    <td><img src="{{this.teaImage}}" style="height:150px;max-width:180px;object-fit:cover"/></td>
                     {{else}}
                     <td></td>
                     {{/if}}

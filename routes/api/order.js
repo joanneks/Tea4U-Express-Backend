@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const orderDataLayer = require('../dal/order');
-const orderItemsDataLayer = require('../dal/order-items');
-const {checkIfAuthenticatedJWT} = require('../middlewares');
+const orderDataLayer = require('../../dal/order');
+const orderItemsDataLayer = require('../../dal/order-items');
+const {checkIfAuthenticatedJWT} = require('../../middlewares');
 
 router.get('/:customer_id', checkIfAuthenticatedJWT, async function(req,res){
     let customerId = parseInt(req.params.customer_id)
