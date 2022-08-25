@@ -94,6 +94,7 @@ app.use('/api/order',express.json(),api.order);
 
 const { getCartByUserId } = require('./dal/cart-test');
 
+const landingRoutes = require('./routes/landing');
 const cloudinaryRoutes = require('./routes/cloudinary');
 const teaRoutes = require('./routes/tea');
 const brandRoutes = require('./routes/dashboard/brand');
@@ -107,6 +108,7 @@ const checkoutRoutes = require('./routes/checkout');
 const orderRoutes = require('./routes/order');
 const customerRoutes = require('./routes/customer');
 
+app.use('/', landingRoutes);
 app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea', teaRoutes);
 app.use('/brand', brandRoutes);
@@ -123,10 +125,10 @@ app.use('/customer', customerRoutes);
 
 app.use(express.static('public'))
 
-// app.listen(3000, function (res, req) {
-//   console.log("Server started")
-// })
-
-app.listen(process.env.PORT, function (res, req) {
+app.listen(3000, function (res, req) {
   console.log("Server started")
 })
+
+// app.listen(process.env.PORT, function (res, req) {
+//   console.log("Server started")
+// })

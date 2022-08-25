@@ -18,7 +18,7 @@ const getHashedPassword = (password) => {
 router.get('/logout', function(req,res){
     req.session.user = null;
     req.flash('success_messages', "You have successfully logged out");
-    res.redirect('/user/login')
+    res.redirect('/user/login');
 })
 
 router.get('/login', async function (req,res){
@@ -55,7 +55,8 @@ router.post('/login',  async function (req,res){
         },
         'error':async function(loginForm){
             res.render('user/login',{
-                form:loginForm.toHTML(bootstrapField)
+                form:loginForm.toHTML(bootstrapField),
+                message:"Login required"
             })
         },
         'empty':async function(loginForm){

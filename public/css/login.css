@@ -1,0 +1,13 @@
+/* .form-group{
+    bottom: 20px;
+} */
+
+.loginForm{
+    position:absolute;
+    width:360px;
+    margin-left:50px;
+    margin-top:80px;
+    background-color:e2d5d4;
+    padding:30px;
+    border-radius:20px;
+}

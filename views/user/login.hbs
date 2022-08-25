@@ -1,4 +1,42 @@
-{{#extends 'base'}}
+
+{{#block 'css'}}
+  <link rel="stylesheet" href="/css/login.css" type="text/css" />
+{{/block}}
+
+{{#extends 'base-landing'}}
+    {{#block 'content'}}
+    <div style="background-color:#c4a9a6;position:relative;">
+        {{!-- <h3 style="position:absolute;margin-left:80px;margin-top:60px;color:white;z-index: 100;">Welcome to <span style="font-size:xxx-large;">Tea4u</span></h3> --}}
+        <img src="/landing.jpeg" style="position:absolute;object-fit:cover;width:100vw;height:90vh;"/>
+        <form method="POST" class="loginForm">
+            {{{form}}}
+            <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
+            <input type="submit" value="Login" class="btn btn-success" style="margin-top:10px"/>
+        </form>
+        
+    </div>
+
+    {{/block}}
+{{/extends}}
+
+
+{{#block 'js'}}
+<script>
+    let allFormDiv = document.querySelectorAll('.form-group');
+    for (let each of allFormDiv) {
+        each.style = "margin-bottom:10px;"
+    }
+
+    let allLabel = document.querySelectorAll('.form-group label');
+    for (let each of allLabel) {
+        console.log(each)
+        each.style = "font-size:medium;"
+    }
+</script>
+{{/block}}
+
+
+{{!-- {{#extends 'base'}}
     {{#block 'content'}}
     <div class="container">
         <h1>Login</h1>
@@ -10,4 +48,4 @@
     </div>
 
     {{/block}}
-{{/extends}}
+{{/extends}} --}}

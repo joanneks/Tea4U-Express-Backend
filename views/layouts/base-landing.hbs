@@ -13,10 +13,11 @@
   <title>Tea4U</title>
 
   {{#block 'css'}}
-  {{/block}}
+  <link rel="stylesheet" href="/css/landing.css" type="text/css" />
+{{/block}}
 </head>
 
-<body style="padding:0px;background-color:#f7f3f2;">
+<body style="padding:0px;background-color:#c4a9a6">
   <div class="container-fluid" style="padding:0px">
 
     <!-- A grey horizontal navbar that becomes vertical on small screens -->
@@ -60,7 +61,7 @@
       </div>
 
     </nav>
-
+    <div style="position:absolute;z-index:100;">
     {{#if success_messages}}
     {{#each success_messages}}
     <div class="alert alert-success">{{this}}</div>
@@ -72,7 +73,7 @@
     <div class="alert alert-danger">{{this}}</div>
     {{/each}}
     {{/if}}
-
+    </div>
     
     {{#block 'content'}}
     {{/block}}

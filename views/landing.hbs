@@ -1,0 +1,36 @@
+
+{{#block 'css'}}
+  <link rel="stylesheet" href="/css/landing.css" type="text/css" />
+{{/block}}
+
+{{#extends 'base-landing'}}
+    {{#block 'content'}}
+    <div style="background-color:#c4a9a6;position:relative;">
+        <h3 style="position:absolute;margin-left:80px;margin-top:50px;color:white;z-index: 100;">Welcome to <span style="font-size:xxx-large;">Tea4u</span></h3>
+        <img src="/landing.jpeg" style="position:absolute;object-fit:cover;width:100vw;height:90vh;"/>
+        <div style="position:absolute;margin-left:150px;margin-top:140px;color:white;z-index: 100;font-size:x-large;">
+            <p>Life is like a cup of tea</p>
+            <p></p>The longer you brew it, the richer it gets</p>
+            <p></p>The essence is in how you make it</p>
+        </div>
+        
+    </div>
+
+    {{/block}}
+{{/extends}}
+
+
+{{#block 'js'}}
+<script>
+    let allFormDiv = document.querySelectorAll('.form-group');
+    for (let each of allFormDiv) {
+        each.style = "margin-bottom:10px;"
+    }
+
+    let allLabel = document.querySelectorAll('.form-group label');
+    for (let each of allLabel) {
+        console.log(each)
+        each.style = "font-size:medium;"
+    }
+</script>
+{{/block}}
