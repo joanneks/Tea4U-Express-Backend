@@ -29,45 +29,49 @@ router.get('/', checkIfAuthenticated, async function (req,res){
                 if(searchForm.data.name){
                     query.where('name','like','%'+ searchForm.data.name + '%');
                 };
-                if(searchForm.data.min_cost){
-                    query.where('cost','>=',searchForm.data.min_cost*100);
+            } else if(process.env.DB_DRIVER == "mysql"){
+                if(searchForm.data.name){
+                    query.where('name','ilike','%'+ searchForm.data.name + '%');
                 };
-                if(searchForm.data.max_cost){
-                    query.where('cost','<=',searchForm.data.max_cost*100);
-                };
-                if(searchForm.data.min_stock_count){
-                    query.where('quantity','>',searchForm.data.max_stock_count);
-                };
-                if(searchForm.data.max_stock_count){
-                    query.where('quantity','<',searchForm.data.max_stock_count);
-                };
-                if (searchForm.data.brand_id && searchForm.data.brand_id != "0") {
-                    query.where('brand_id', '=', searchForm.data.brand_id);
-                };
-                if (searchForm.data.tea_type_id && searchForm.data.tea_type_id != "0") {
-                    query.where('tea_type_id', '=', searchForm.data.tea_type_id);
-                };
-                if (searchForm.data.packaging_id && searchForm.data.packaging_id != "0") {
-                    query.where('packaging_id', '=', searchForm.data.packaging_id);
-                };
-                if (searchForm.data.place_of_origin_id && searchForm.data.place_of_origin_id != "0") {
-                    query.where('place_of_origin_id', '=', searchForm.data.place_of_origin_id);
-                };
-                if(searchForm.data.taste_profiles){
-                    query.query('join','taste_profiles_tea','tea.id','tea_id').where(
-                        'taste_profile_id' , 'in', searchForm.data.taste_profiles.split(',')
-                    );
-                };
-
-                const teaSearchResult =await query.fetch({
-                    withRelated:['teaType','brand','packaging','placeOfOrigin','tasteProfile']
-                });
-
-                res.render('tea/index',{
-                    form: searchForm.toHTML(bootstrapField),
-                    tea: teaSearchResult.toJSON(),
-                })
             }
+            if(searchForm.data.min_cost){
+                query.where('cost','>=',searchForm.data.min_cost*100);
+            };
+            if(searchForm.data.max_cost){
+                query.where('cost','<=',searchForm.data.max_cost*100);
+            };
+            if(searchForm.data.min_stock_count){
+                query.where('quantity','>',searchForm.data.max_stock_count);
+            };
+            if(searchForm.data.max_stock_count){
+                query.where('quantity','<',searchForm.data.max_stock_count);
+            };
+            if (searchForm.data.brand_id && searchForm.data.brand_id != "0") {
+                query.where('brand_id', '=', searchForm.data.brand_id);
+            };
+            if (searchForm.data.tea_type_id && searchForm.data.tea_type_id != "0") {
+                query.where('tea_type_id', '=', searchForm.data.tea_type_id);
+            };
+            if (searchForm.data.packaging_id && searchForm.data.packaging_id != "0") {
+                query.where('packaging_id', '=', searchForm.data.packaging_id);
+            };
+            if (searchForm.data.place_of_origin_id && searchForm.data.place_of_origin_id != "0") {
+                query.where('place_of_origin_id', '=', searchForm.data.place_of_origin_id);
+            };
+            if(searchForm.data.taste_profiles){
+                query.query('join','taste_profiles_tea','tea.id','tea_id').where(
+                    'taste_profile_id' , 'in', searchForm.data.taste_profiles.split(',')
+                );
+            };
+
+            const teaSearchResult =await query.fetch({
+                withRelated:['teaType','brand','packaging','placeOfOrigin','tasteProfile']
+            });
+
+            res.render('tea/index',{
+                form: searchForm.toHTML(bootstrapField),
+                tea: teaSearchResult.toJSON(),
+            })
         },
         'empty':async function(){
             res.render('tea/index',{

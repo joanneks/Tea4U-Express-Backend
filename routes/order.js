@@ -26,30 +26,28 @@ router.get('/', checkIfAuthenticated, async function(req,res){
     
     searchOrderForm.handle(req,{
         'success':async function (searchOrderForm){
-            if(process.env.DB_DRIVER == "mysql"){
-                if(searchOrderForm.data.order_id){
-                    query.where('id','=',searchOrderForm.data.order_id);
-                };
-                if(searchOrderForm.data.email){
-                    query.where('customer_id', '=', searchOrderForm.data.email);
-                };
-                if(searchOrderForm.data.order_status_id && searchOrderForm.data.order_status_id != 0){
-                    query.where('order_status_id', '=', searchOrderForm.data.order_status_id);
-                };
-                if(searchOrderForm.data.shipping_method_id && searchOrderForm.data.shipping_method_id != 0){
-                    query.where('shipping_method_id', '=', searchOrderForm.data.shipping_method_id);
-                };
+            if(searchOrderForm.data.order_id){
+                query.where('id','=',searchOrderForm.data.order_id);
+            };
+            if(searchOrderForm.data.email){
+                query.where('customer_id', '=', searchOrderForm.data.email);
+            };
+            if(searchOrderForm.data.order_status_id && searchOrderForm.data.order_status_id != 0){
+                query.where('order_status_id', '=', searchOrderForm.data.order_status_id);
+            };
+            if(searchOrderForm.data.shipping_method_id && searchOrderForm.data.shipping_method_id != 0){
+                query.where('shipping_method_id', '=', searchOrderForm.data.shipping_method_id);
+            };
 
-                const orderSearchResult = await query.fetch({
-                    withRelated:['orderStatus','shippingMethod','user']
-                });
+            const orderSearchResult = await query.fetch({
+                withRelated:['orderStatus','shippingMethod','user']
+            });
 
-                res.render('order/index',{
-                    form:searchOrderForm.toHTML(bootstrapField),
-                    orders:orderSearchResult.toJSON(),
-                    message:"No results found"
-                })
-            }
+            res.render('order/index',{
+                form:searchOrderForm.toHTML(bootstrapField),
+                orders:orderSearchResult.toJSON(),
+                message:"No results found"
+            })
         },
         'empty':async function(){
             res.render('order/index',{
