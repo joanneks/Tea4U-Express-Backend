@@ -41,7 +41,7 @@ router.get('/', checkIfAuthenticated, async function (req,res){
                 query.where('cost','<=',searchForm.data.max_cost*100);
             };
             if(searchForm.data.min_stock_count){
-                query.where('quantity','>',searchForm.data.max_stock_count);
+                query.where('quantity','>',searchForm.data.min_stock_count);
             };
             if(searchForm.data.max_stock_count){
                 query.where('quantity','<',searchForm.data.max_stock_count);
