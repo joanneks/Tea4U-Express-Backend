@@ -41,6 +41,7 @@ app.use(express.urlencoded({
 const csrfInstance = csrf();
 app.use(function(req,res,next){
   // csrf protection exclusion for these routes
+  // console.log('req.url',req.url,req);
   if (req.url === '/checkout/process_payment' || req.url.slice(0,5) == '/api/') {
     next();
   } else {
@@ -84,6 +85,7 @@ const api = {
   cart: require('./routes/api/cart'),
   checkout: require('./routes/api/checkout'),
   order: require('./routes/api/order'),
+  tea: require('./routes/api/tea'),
 }
 
 // register api routes
@@ -91,6 +93,7 @@ app.use('/api/customer',express.json(),api.customer);
 app.use('/api/cart',express.json(),api.cart);
 app.use('/api/checkout',express.json(),api.checkout);
 app.use('/api/order',express.json(),api.order);
+app.use('/api/tea',express.json(),api.tea);
 
 const { getCartByUserId } = require('./dal/cart-test');
 
@@ -125,10 +128,10 @@ app.use('/customer', customerRoutes);
 
 app.use(express.static('public'))
 
-// app.listen(3000, function (res, req) {
-//   console.log("Server started")
-// })
-
-app.listen(process.env.PORT, function (res, req) {
+app.listen(3000, function (res, req) {
   console.log("Server started")
 })
+
+// app.listen(process.env.PORT, function (res, req) {
+//   console.log("Server started")
+// })

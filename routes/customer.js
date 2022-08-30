@@ -58,24 +58,24 @@ router.get('/edit/:customer_id', checkIfAuthenticated,async function (req,res){
 })
 
 router.post('/edit/:customer_id', checkIfAuthenticated,async function (req,res){
+    console.log('tiger')
     const customerForm  = editCustomerForm();
     const customer = await dataLayer.getCustomerById(req.params.customer_id);
 
+    console.log('tiger2',customer)
     customerForm.handle(req,{
         'success':async function(customerForm){
-            let {passwordInput,...customerFormData} = customerForm.data;
-            let password = getHashedPassword(passwordInput);
+            let {password,...customerFormData} = customerForm.data;
+            let passwordHashed = getHashedPassword(password);
             // const customerCreatedDate = customer.get('datetime_created');
             const customerLastModifiedDate = moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
 
             customer.set(customerFormData);
-            customer.set('password',password);
+            customer.set('password',passwordHashed);
+            console.log('password',passwordHashed);
             customer.set('datetime_last_modified',customerLastModifiedDate);
             await customer.save();
-            res.render('customer/edit',{
-                'form': customerForm.toHTML(bootstrapField),
-                'customer':customer.toJSON()
-            });
+            res.redirect('/customer')
         },
         'error':async function(customerForm){
             res.render('customer/edit',{

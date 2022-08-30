@@ -7,7 +7,6 @@ const moment = require('moment');
 const momentTimezone = require('moment-timezone');
 const { checkIfAuthenticatedJWT } = require('../../middlewares');
 const customerDataLayer = require('../../dal/customer');
-const session = require('express-session');
 
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
@@ -377,9 +376,9 @@ router.get('/profile', checkIfAuthenticatedJWT, async(req,res)=>{
 router.post('/login',async function(req,res){
     const email = req.body.email;
     const password = getHashedPassword(req.body.password);
-    console.log('POST',req.body.password,password)
+    console.log('POST','email',email,'password',req.body.password,password)
     const customer = await customerDataLayer.getCustomerByEmailAndPassword(email,password);
-
+    console.log(customer);
     if(customer){
         const customerUsername = customer.get('username');
         const customerId = customer.get('id');
@@ -402,8 +401,8 @@ router.post('/login',async function(req,res){
             username:customerUsername,
             id:customerId,
             email:customerEmail,
-            accessToken,
-            refreshToken
+            // accessToken,
+            // refreshToken
         }
         res.status(200);
         res.json({
@@ -414,7 +413,9 @@ router.post('/login',async function(req,res){
         })
     } else {
         res.status(400);
-        res.json({loginCheck});
+        res.json({
+            message:'Login request failed. Customer account does not exist'
+        });
     }
 })
 

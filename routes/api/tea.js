@@ -1,8 +1,8 @@
 const express = require('express');
-const { Tea } = require('../models');
-const dataLayer = require('../dal/tea')
+const { Tea } = require('../../models');
+const dataLayer = require('../../dal/tea')
 const router = express.Router();
-const {createSearchForm } = require('../forms');
+const {createSearchForm } = require('../../forms');
 
 router.get('/', async function (req,res){
     const tea = await dataLayer.getAllTea();
@@ -23,39 +23,36 @@ router.get('/', async function (req,res){
     searchForm.handle(req,{
         'success': async function(searchForm){
             if(process.env.DB_DRIVER == "mysql"){
-                if(searchForm.data.name){
-                    query.where('name','like','%'+ searchForm.data.name + '%');
+                if(req.query.name){
+                    query.where('name','like','%'+ req.query.name + '%');
                 };
             } else if(process.env.DB_DRIVER == "postgres"){
-                if(searchForm.data.name){
-                    query.where('name','ilike','%'+ searchForm.data.name + '%');
+                if(req.query.name){
+                    query.where('name','ilike','%'+ req.query.name + '%');
                 };
             }
-            if(searchForm.data.min_cost){
-                query.where('cost','>=',searchForm.data.min_cost*100);
+            if(req.query.min_cost){
+                query.where('cost','>=',req.query.min_cost*100);
             };
-            if(searchForm.data.max_cost){
-                query.where('cost','<=',searchForm.data.max_cost*100);
+            if(req.query.max_cost){
+                query.where('cost','<=',req.query.max_cost*100);
             };
-            if(searchForm.data.min_stock_count){
-                query.where('quantity','>',searchForm.data.max_stock_count);
+            // if(req.query.min_stock_count){
+            //     query.where('quantity','>',searchForm.data.max_stock_count);
+            // };
+            if (req.query.brand_id && req.query.brand_id != "0") {
+                query.where('brand_id', '=', req.query.brand_id);
             };
-            if(searchForm.data.max_stock_count){
-                query.where('quantity','<',searchForm.data.max_stock_count);
+            if (req.query.tea_type_id && req.query.tea_type_id != "0") {
+                query.where('tea_type_id', '=', req.query.tea_type_id);
             };
-            if (searchForm.data.brand_id && searchForm.data.brand_id != "0") {
-                query.where('brand_id', '=', searchForm.data.brand_id);
+            if (req.query.packaging_id && req.query.packaging_id != "0") {
+                query.where('packaging_id', '=', req.query.packaging_id);
             };
-            if (searchForm.data.tea_type_id && searchForm.data.tea_type_id != "0") {
-                query.where('tea_type_id', '=', searchForm.data.tea_type_id);
+            if (req.query.place_of_origin_id && req.query.place_of_origin_id != "0") {
+                query.where('place_of_origin_id', '=', req.query.place_of_origin_id);
             };
-            if (searchForm.data.packaging_id && searchForm.data.packaging_id != "0") {
-                query.where('packaging_id', '=', searchForm.data.packaging_id);
-            };
-            if (searchForm.data.place_of_origin_id && searchForm.data.place_of_origin_id != "0") {
-                query.where('place_of_origin_id', '=', searchForm.data.place_of_origin_id);
-            };
-            if(searchForm.data.taste_profiles){
+            if(req.query.taste_profiles){
                 query.query('join','taste_profiles_tea','tea.id','tea_id').where(
                     'taste_profile_id' , 'in', searchForm.data.taste_profiles.split(',')
                 );
@@ -64,15 +61,28 @@ router.get('/', async function (req,res){
             const teaSearchResult =await query.fetch({
                 withRelated:['teaType','brand','packaging','placeOfOrigin','tasteProfile']
             });
+            console.log('req.query',req.query);
+            console.log(teaSearchResult.toJSON().length)
             res.status(200);
             res.json({
-                tea: teaSearchResult.toJSON()
+                tea: teaSearchResult.toJSON(),
+                teaTypes,
+                brands,
+                packaging,
+                placeOfOrigins,
+                tasteProfiles,
+                message:"Search completed"
             })
         },
         'empty':async function(){
             res.status(200);
             res.json({
                 tea: tea.toJSON(),
+                teaTypes,
+                brands,
+                packaging,
+                placeOfOrigins,
+                tasteProfiles,
                 message:"No search request submitted"
             })
         },
@@ -80,6 +90,11 @@ router.get('/', async function (req,res){
             res.status(400);
             res.json({
                 tea: tea.toJSON(),
+                teaTypes,
+                brands,
+                packaging,
+                placeOfOrigins,
+                tasteProfiles,
                 message:"Bad request - query failed, all tea products are displayed by default"
             })
         }

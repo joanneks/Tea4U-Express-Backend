@@ -431,7 +431,7 @@ const editOrderForm = (orderStatuses,shippingMethods,label)=> {
     })
 }
 
-const editCustomerForm = (orderStatuses,shippingMethods)=> {
+const editCustomerForm = ()=> {
     return forms.create({
         'first_name':fields.string({
             required:true,
