@@ -2,12 +2,15 @@ const express = require('express');
 const router = express.Router();
 const cartServiceLayer = require('../../services/cart');
 const {checkIfAuthenticatedJWT} = require('../../middlewares');
+const { dataType } = require('db-migrate');
 
 
 router.post('/', checkIfAuthenticatedJWT, async function(req,res){
     try{
         const userId = req.body.user_id;
-        if(userId==req.session.customer.id){
+        console.log('userId',userId);
+        console.log('true or false',userId==req.customer.id);
+        if(userId==req.customer.id){
             // need to send back access token as well. tested with arc
             const cartByUserId = await cartServiceLayer.getCartByUserId(userId);
             console.log(cartByUserId.toJSON());
@@ -39,19 +42,22 @@ router.post('/', checkIfAuthenticatedJWT, async function(req,res){
 
 router.post('/add/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
     try{
-        // need to send back access token as well. tested with arc
         const userId = req.body.user_id;
-        const teaId = req.params.tea_id;
+        const teaId = req.body.tea_id;
+        console.log('userid',userId);
+        console.log('userid',req.customer.id);
+        console.log('true or false',userId==req.customer.id);
 
-        if(userId==req.session.customer.id){
+        if(userId==req.customer.id){
             // itemAdded refers to the updated CartItem data saved
             const itemAdded = await cartServiceLayer.addOneCartItem(userId,teaId,1);
             console.log('itemAdded - return 0 or object',itemAdded);
     
-            let formerQuantity = itemAdded.get('quantity')-1;
-            console.log('former quantity',formerQuantity);
+            // let formerQuantity = itemAdded.get('quantity')-1;
+            // console.log('former quantity',formerQuantity);
             
             if(itemAdded == 0){
+                console.log('0000000')
                 res.status(200);
                 res.json({
                     itemAdded:'',
@@ -86,9 +92,10 @@ router.post('/minus/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
     try {
         // need to send back access token as well. tested with arc
         const userId = req.body.user_id;
-        const teaId = req.params.tea_id;
-
-        if(userId==req.session.customer.id){
+        const teaId = req.body.tea_id;
+        console.log(userId,teaId)
+        console.log('true or false',userId==req.customer.id)
+        if(userId==req.customer.id){
             // itemReduced refers to the updated CartItem data saved
             const itemReduced = await cartServiceLayer.minusOneCartItem(userId,teaId);
             console.log('-----itemREduced---',itemReduced);

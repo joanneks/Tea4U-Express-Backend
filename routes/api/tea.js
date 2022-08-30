@@ -11,7 +11,6 @@ router.get('/', async function (req,res){
     const packaging = await dataLayer.getAllPackaging();
     const placeOfOrigins = await dataLayer.getAllPlaceOfOrigins();
     const tasteProfiles = await dataLayer.getAllTasteProfiles();
-    // const tasteProfiles = await dataLayer.getAllTasteProfiles();
 
     let query = Tea.collection();
     teaTypes.unshift([0, '--- All TeaTypes ---']);
@@ -52,9 +51,10 @@ router.get('/', async function (req,res){
             if (req.query.place_of_origin_id && req.query.place_of_origin_id != "0") {
                 query.where('place_of_origin_id', '=', req.query.place_of_origin_id);
             };
+            console.log(req.query.taste_profiles)
             if(req.query.taste_profiles){
                 query.query('join','taste_profiles_tea','tea.id','tea_id').where(
-                    'taste_profile_id' , 'in', searchForm.data.taste_profiles.split(',')
+                    'taste_profile_id' , 'in', req.query.taste_profiles
                 );
             };
 

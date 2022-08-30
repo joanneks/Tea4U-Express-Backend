@@ -72,7 +72,7 @@ const CartItem = bookshelf.model('CartItem',{
     },
     user(){
         return this.belongsTo('Customer')
-    }
+    },
 })
 
 const CartItemTest = bookshelf.model('CartItemTest',{

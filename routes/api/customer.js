@@ -361,15 +361,25 @@ router.post('/edit',async function (req,res){
 
 })
 
-router.get('/',async function (req,res){
-    const customers = await customerDataLayer.getAllCustomers();
-    res.json(customers);
-    res.status(200);
-})
-
 router.get('/profile', checkIfAuthenticatedJWT, async(req,res)=>{
-    const customer = req.customer;
-    res.send(customer);
+    try{
+        let customerId = req.customer.id;
+        console.log('req.customer',req.customer)
+        console.log(customerId)
+        let customer = await customerDataLayer.getCustomerById(customerId)
+        console.log(customer)
+        let customerDetails = customer.toJSON();
+        console.log(customerDetails)
+        customerDetails.password = '';
+        res.status(200);
+        res.send(customerDetails);
+        // let customer = req.customer
+        // res.status(200);
+        // res.send(customer);
+    } catch(e){
+        res.status(403);
+        res.send("Customer does not exist or JWT access token verification failed")
+    }
 
 })
 

@@ -23,6 +23,7 @@ async function addOneCartItem(userId,teaId,quantity){
 
 async function minusOneCartItem(userId,teaId){
     const cartItem = await cartDataLayer.getCartItemByUserAndTeaId(userId,teaId);
+    console.log('cartItem',cartItem)
     const quantity = cartItem.get('quantity');
     if ( quantity == 1){
         console.log('removed cartItem - quantity',quantity);
@@ -33,6 +34,7 @@ async function minusOneCartItem(userId,teaId){
         const cartItemReduced = await cartDataLayer.minusOneCartItem(userId,teaId);
         return cartItemReduced;
     } else{
+        console.log('return false')
         return false;
     }
 };
