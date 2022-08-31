@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const cartDataLayer = require('../../dal/cart');
 const cartServiceLayer = require('../../services/cart');
 const {checkIfAuthenticatedJWT} = require('../../middlewares');
 const { dataType } = require('db-migrate');
@@ -52,9 +53,7 @@ router.post('/add/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
             // itemAdded refers to the updated CartItem data saved
             const itemAdded = await cartServiceLayer.addOneCartItem(userId,teaId,1);
             console.log('itemAdded - return 0 or object',itemAdded);
-    
-            // let formerQuantity = itemAdded.get('quantity')-1;
-            // console.log('former quantity',formerQuantity);
+            const cartItems = await cartDataLayer.getCartByUserId(userId);
             
             if(itemAdded == 0){
                 console.log('0000000')
@@ -68,6 +67,7 @@ router.post('/add/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
                 res.status(200)
                 res.json({
                     itemAdded:itemAdded,
+                    cartItems:cartItems,
                     message:'Tea Product quantity in cart added by 1 successfully'
                 });
                 console.log('added success');
