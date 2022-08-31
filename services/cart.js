@@ -7,23 +7,34 @@ async function getCartByUserId (userId) {
 };
 
 async function addOneCartItem(userId,teaId,quantity){
-    const tea = await teaDataLayer.getTeaById(teaId);
-    const teaQuantity = tea.get('quantity');
-    console.log('teaQuantity',teaQuantity);
-
-    if(teaQuantity >= 1){
+    const cartItem = await cartDataLayer.getCartItemByUserAndTeaId(userId,teaId);
+    if(cartItem){
+        const cartItemQuantity = cartItem.get('quantity');
+        const tea = await teaDataLayer.getTeaById(teaId);
+        const teaQuantity = tea.get('quantity');
+        console.log('teaQuantity',teaQuantity);
+        console.log('cartItemservicelayer',cartItem)
+        if(cartItemQuantity < teaQuantity){
+            if(teaQuantity >= 1 && cartItemQuantity < teaQuantity){
+                const itemAdded = await cartDataLayer.addOneCartItem(userId,teaId,quantity);
+                return itemAdded;
+            } else if(teaQuantity == 0){
+                return teaQuantity
+            } else{
+                return false;
+            }
+        }else{
+            return 1;
+        }
+    } else{
         const itemAdded = await cartDataLayer.addOneCartItem(userId,teaId,quantity);
         return itemAdded;
-    } else if(teaQuantity == 0){
-        return teaQuantity
-    } else{
-        return false;
     }
 };
 
 async function minusOneCartItem(userId,teaId){
     const cartItem = await cartDataLayer.getCartItemByUserAndTeaId(userId,teaId);
-    console.log('cartItem',cartItem)
+    console.log('cartItem status',cartItem)
     const quantity = cartItem.get('quantity');
     if ( quantity == 1){
         console.log('removed cartItem - quantity',quantity);
@@ -33,7 +44,10 @@ async function minusOneCartItem(userId,teaId){
         console.log('reduced cartItem - quantity',quantity);
         const cartItemReduced = await cartDataLayer.minusOneCartItem(userId,teaId);
         return cartItemReduced;
-    } else{
+    } else if (quantity == null){
+        console.log('return null, 1');
+        return 1;
+    } else {
         console.log('return false')
         return false;
     }

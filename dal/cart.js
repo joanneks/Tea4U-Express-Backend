@@ -17,6 +17,7 @@ async function getCartItemByUserAndTeaId (userId,teaId){
     }).fetch({
         require:false
     });
+    console.log('cartItem1',cartItem)
     return cartItem;
 };
 

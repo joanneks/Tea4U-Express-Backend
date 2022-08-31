@@ -398,7 +398,7 @@ router.post('/login',async function(req,res){
             customerId,
             customerEmail,
             process.env.TOKEN_SECRET,
-            '1h'
+            '1d'
         )
         const refreshToken = generateAccessToken(
             customerUsername,

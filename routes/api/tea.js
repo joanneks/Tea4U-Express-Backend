@@ -36,9 +36,6 @@ router.get('/', async function (req,res){
             if(req.query.max_cost){
                 query.where('cost','<=',req.query.max_cost*100);
             };
-            // if(req.query.min_stock_count){
-            //     query.where('quantity','>',searchForm.data.max_stock_count);
-            // };
             if (req.query.brand_id && req.query.brand_id != "0") {
                 query.where('brand_id', '=', req.query.brand_id);
             };
@@ -51,7 +48,6 @@ router.get('/', async function (req,res){
             if (req.query.place_of_origin_id && req.query.place_of_origin_id != "0") {
                 query.where('place_of_origin_id', '=', req.query.place_of_origin_id);
             };
-            console.log(req.query.taste_profiles)
             if(req.query.taste_profiles){
                 query.query('join','taste_profiles_tea','tea.id','tea_id').where(
                     'taste_profile_id' , 'in', req.query.taste_profiles

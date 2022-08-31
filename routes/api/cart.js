@@ -54,7 +54,7 @@ router.post('/add/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
             const itemAdded = await cartServiceLayer.addOneCartItem(userId,teaId,1);
             console.log('itemAdded - return 0 or object',itemAdded);
             const cartItems = await cartDataLayer.getCartByUserId(userId);
-            
+            console.log(itemAdded == 0)
             if(itemAdded == 0){
                 console.log('0000000')
                 res.status(200);
@@ -64,14 +64,34 @@ router.post('/add/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
                 })
                 console.log('No stock to add to cart',itemAdded);
             } else{
-                res.status(200)
-                res.json({
-                    itemAdded:itemAdded,
-                    cartItems:cartItems,
-                    message:'Tea Product quantity in cart added by 1 successfully'
-                });
-                console.log('added success');
-                console.log('itemAdded successfully',itemAdded.toJSON());
+                if(itemAdded == 1){
+                    console.log('insufficient')
+                    res.status(200)
+                    res.json({
+                        itemAdded:[],
+                        cartItems:cartItems,
+                        message:'Insufficient stock for desired purchase quantity'
+                    });
+                } else
+                if(itemAdded || itemAdded == null){
+                    console.log('add')
+                    res.status(200)
+                    res.json({
+                        itemAdded:itemAdded,
+                        cartItems:cartItems,
+                        message:'Tea Product quantity in cart added by 1 successfully'
+                    });
+                    console.log('added success');
+                    console.log('itemAdded successfully',itemAdded.toJSON());    
+                }
+                // else{
+                //     console.log('insufficient')
+                //     res.status(200)
+                //     res.json({
+                //         itemAdded:'',
+                //         message:'Insufficient stock for desired purchase quantity'
+                //     });
+                // }
             }
         } else{
             res.status(401);
@@ -95,6 +115,7 @@ router.post('/minus/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
         const teaId = req.body.tea_id;
         console.log(userId,teaId)
         console.log('true or false',userId==req.customer.id)
+            
         if(userId==req.customer.id){
             // itemReduced refers to the updated CartItem data saved
             const itemReduced = await cartServiceLayer.minusOneCartItem(userId,teaId);
@@ -104,16 +125,19 @@ router.post('/minus/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
                 formerQuantity = 1;
             }
             console.log('former quantity',formerQuantity);
+            const cartItems = await cartDataLayer.getCartByUserId(userId);
 
             if ( formerQuantity == 1){
                 res.status(200)
                 res.json({
+                    cartItems,
                     message:'Tea Product removed from cart (qty: 1 to 0) successfully'
                 });
                 console.log('itemReduced - quantity 1 to 0',itemReduced.toJSON());
             } else if ( formerQuantity > 1){
                 res.status(200)
                 res.json({
+                    cartItems,
                     itemReduced,
                     message:'Tea Product quantity in cart reduced by 1 successfully'
                 });
