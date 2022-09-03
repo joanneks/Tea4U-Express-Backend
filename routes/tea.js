@@ -175,7 +175,6 @@ router.get('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
     teaForm.fields.brew_time.value = tea.get('brew_time');
 
     let selectedTasteProfiles = await tea.related('tasteProfile').pluck('id');
-    console.log('selected taste profiles ----',selectedTasteProfiles);
     teaForm.fields.taste_profiles.value = selectedTasteProfiles;
 
     res.render('tea/edit',{
@@ -208,11 +207,8 @@ router.post('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
             await tea.save();
 
             let tasteProfileIds = taste_profiles.split(',').map(id => parseInt(id));
-            console.log(tasteProfileIds);
             let existingTasteProfilesIds = await tea.related('tasteProfile').pluck('id');
-            console.log(existingTasteProfilesIds);
             let toRemove = existingTasteProfilesIds.filter( id => tasteProfileIds.includes(id) === false);
-            console.log(toRemove);
             await tea.tasteProfile().detach(toRemove);
             await tea.tasteProfile().attach(tasteProfileIds)
             req.flash('success_messages',"Tea Product updated successfully");

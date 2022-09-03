@@ -8,14 +8,16 @@ async function getAllOrders () {
 
 async function getOrderById (orderId) {
     const order = await Order.where({id:orderId}).fetch({
-        require:true
+        require:true,
+        withRelated:['user','orderStatus','shippingMethod','orderItem']
     })
     return order;
 }
 
 async function getOrdersByCustomerId (userId) {
-    const order = await Order.where({customer_id:userId}).fetch({
-        require:true
+    const order = await Order.where({customer_id:userId}).orderBy('datetime_created', 'DESC').fetchAll({
+        require:true,
+        withRelated:['user','orderStatus','shippingMethod','orderItem']
     })
     return order;
 }

@@ -57,8 +57,8 @@ router.get('/', async function (req,res){
             const teaSearchResult =await query.fetch({
                 withRelated:['teaType','brand','packaging','placeOfOrigin','tasteProfile']
             });
-            console.log('req.query',req.query);
-            console.log(teaSearchResult.toJSON().length)
+            // console.log('req.query',req.query);
+            // console.log(teaSearchResult.toJSON().length)
             res.status(200);
             res.json({
                 tea: teaSearchResult.toJSON(),
@@ -98,5 +98,13 @@ router.get('/', async function (req,res){
 
 })
 
+router.get('/:tea_id',async function(req,res){
+    const tea = await dataLayer.getTeaById(req.params.tea_id);
+    console.log('TEATING TES',tea);
+    res.status(200);
+    res.json({
+        tea:tea.toJSON()
+    })
+})
 
 module.exports = router;

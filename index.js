@@ -91,7 +91,7 @@ const api = {
 // register api routes
 app.use('/api/customer',express.json(),api.customer);
 app.use('/api/cart',express.json(),api.cart);
-app.use('/api/checkout',express.json(),api.checkout);
+app.use('/api/checkout',api.checkout);
 app.use('/api/order',express.json(),api.order);
 app.use('/api/tea',express.json(),api.tea);
 

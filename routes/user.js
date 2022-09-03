@@ -22,8 +22,6 @@ router.get('/logout', function(req,res){
 })
 
 router.get('/login', async function (req,res){
-    console.log('hello')
-    console.log(createLoginForm)
     const loginForm = createLoginForm();
     res.render('user/login',{
         form:loginForm.toHTML(bootstrapField)
@@ -83,7 +81,6 @@ router.post('/register', checkIfAuthenticated, function(req,res){
             const userCreatedDate= moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
             const userLastModifiedDate = userCreatedDate;
             userFormData.password = getHashedPassword(userFormData.password);
-            console.log(userFormData.password);
             
             user.set('datetime_created',userCreatedDate);
             user.set('datetime_last_modified',userLastModifiedDate);
@@ -172,10 +169,7 @@ router.post('/edit-password/:user_id', checkIfAuthenticated, async function(req,
             const {former_password,confirm_password,userFormData} = userForm.data;
             const formerPassword = user.get('password');
             const formerPasswordUserInput = getHashedPassword(userForm.data.former_password);
-            console.log(formerPasswordUserInput == formerPassword);
-            console.log('userForm.data.password',userForm.data.password);
             const password = getHashedPassword(userForm.data.password);
-            console.log(password);
 
             if(formerPasswordUserInput == formerPassword){
                 user.set('password',password);

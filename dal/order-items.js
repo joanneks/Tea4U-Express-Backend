@@ -1,8 +1,8 @@
 const { OrderItem } = require('../models');
 
 async function getOrderItemsByOrderId (orderId) {
-    const orderItems = await OrderItem.collection().where({order_id:orderId
-    }).fetch({
+    const orderItems = await OrderItem.where({order_id:orderId
+    }).fetchAll({
         require:true,
         withRelated:['order','tea']
     })

@@ -104,7 +104,7 @@ router.get('/edit/:order_id', checkIfAuthenticated, async function(req,res){
             res.render('order/edit',{
                 form:orderForm.toHTML(bootstrapField),
                 label:label,
-                brandArray:brandArray,
+                // brandArray:brandArray,
                 orderId:req.params.order_id,
                 order:order.toJSON(),
                 orderItems:orderItems.toJSON(),
@@ -115,7 +115,7 @@ router.get('/edit/:order_id', checkIfAuthenticated, async function(req,res){
             res.render('order/edit',{
                 form:orderForm.toHTML(bootstrapField),
                 label:label,
-                brandArray:brandArray,
+                // brandArray:brandArray,
                 orderId:req.params.order_id,
                 order:order.toJSON(),
                 orderItems:orderItems.toJSON(),
@@ -126,7 +126,7 @@ router.get('/edit/:order_id', checkIfAuthenticated, async function(req,res){
             res.render('order/edit',{
                 form:orderForm.toHTML(bootstrapField),
                 label:label,
-                brandArray:brandArray,
+                // brandArray:brandArray,
                 orderId:req.params.order_id,
                 order:order.toJSON(),
                 orderItems:orderItems.toJSON(),

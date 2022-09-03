@@ -19,14 +19,12 @@ router.get('/:customer_id', checkIfAuthenticatedJWT, async function(req,res){
             error: "Order Query failed"
         })
     }
-
 })
 
-router.get('/:customer_id/:order_id', async function (req, res) {
-    let customerId = parseInt(req.params.customer_id)
+router.get('/:customer_id/:order_id', checkIfAuthenticatedJWT, async function (req, res) {
+    let customerId = parseInt(req.params.customer_id);
     if(customerId ==req.customer.id){
         let orderItems = await orderItemsDataLayer.getOrderItemsByOrderId(req.params.order_id);
-
         res.status(200);
         res.json({
             orderItems:orderItems.toJSON(),

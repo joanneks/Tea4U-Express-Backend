@@ -364,18 +364,11 @@ router.post('/edit',async function (req,res){
 router.get('/profile', checkIfAuthenticatedJWT, async(req,res)=>{
     try{
         let customerId = req.customer.id;
-        console.log('req.customer',req.customer)
-        console.log(customerId)
         let customer = await customerDataLayer.getCustomerById(customerId)
-        console.log(customer)
         let customerDetails = customer.toJSON();
-        console.log(customerDetails)
         customerDetails.password = '';
         res.status(200);
         res.send(customerDetails);
-        // let customer = req.customer
-        // res.status(200);
-        // res.send(customer);
     } catch(e){
         res.status(403);
         res.send("Customer does not exist or JWT access token verification failed")
@@ -386,9 +379,7 @@ router.get('/profile', checkIfAuthenticatedJWT, async(req,res)=>{
 router.post('/login',async function(req,res){
     const email = req.body.email;
     const password = getHashedPassword(req.body.password);
-    console.log('POST','email',email,'password',req.body.password,password)
     const customer = await customerDataLayer.getCustomerByEmailAndPassword(email,password);
-    console.log(customer);
     if(customer){
         const customerUsername = customer.get('username');
         const customerId = customer.get('id');
@@ -398,7 +389,7 @@ router.post('/login',async function(req,res){
             customerId,
             customerEmail,
             process.env.TOKEN_SECRET,
-            '1d'
+            '15m'
         )
         const refreshToken = generateAccessToken(
             customerUsername,
@@ -432,23 +423,8 @@ router.post('/login',async function(req,res){
 router.post('/refresh', async function (req,res){
     // get the refresh token from the body - do not need to use the header for that
     const refreshToken = req.body.refreshToken;
+
     if(refreshToken){
-        // checkif token is already blacklisted
-        // const blacklistedToken = await BlacklistedToken.where({
-        //     token:refreshToken
-        // }).fetch({
-        //     require:false
-        // })
-
-        // if blacklisted token isnot null, then it means it exists
-        // if(blacklistedToken){
-        //     res.status(400);
-        //     res.json({
-        //         error:"Refresh token has been blacklisted"
-        //     })
-        //     return;
-        // }
-
         // verify if it is legit
         jwt.verify(refreshToken,
             process.env.REFRESH_TOKEN_SECRET,function (err,tokenData){
@@ -459,7 +435,7 @@ router.post('/refresh', async function (req,res){
                         tokenData.id, 
                         tokenData.email, 
                         process.env.TOKEN_SECRET,
-                        '1h'
+                        '15m'
                     )
                     res.json({
                         accessToken
@@ -484,11 +460,6 @@ router.post('/refresh', async function (req,res){
 router.post('/logout',async function(req,res){
     const refreshToken = req.body.refreshToken
     if(refreshToken){
-        // if refreshToken exists we will add to blacklist table
-                // const token = new BlacklistedToken();
-                // token.set('token',refreshToken);
-                // token.set('date_created', new Date())
-                // await token.save();
         jwt.verify(refreshToken,
             process.env.REFRESH_TOKEN_SECRET,
             async function(err,tokenData){

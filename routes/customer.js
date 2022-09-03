@@ -58,11 +58,9 @@ router.get('/edit/:customer_id', checkIfAuthenticated,async function (req,res){
 })
 
 router.post('/edit/:customer_id', checkIfAuthenticated,async function (req,res){
-    console.log('tiger')
     const customerForm  = editCustomerForm();
     const customer = await dataLayer.getCustomerById(req.params.customer_id);
 
-    console.log('tiger2',customer)
     customerForm.handle(req,{
         'success':async function(customerForm){
             let {password,...customerFormData} = customerForm.data;
@@ -72,7 +70,6 @@ router.post('/edit/:customer_id', checkIfAuthenticated,async function (req,res){
 
             customer.set(customerFormData);
             customer.set('password',passwordHashed);
-            console.log('password',passwordHashed);
             customer.set('datetime_last_modified',customerLastModifiedDate);
             await customer.save();
             res.redirect('/customer')

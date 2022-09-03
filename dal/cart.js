@@ -17,7 +17,6 @@ async function getCartItemByUserAndTeaId (userId,teaId){
     }).fetch({
         require:false
     });
-    console.log('cartItem1',cartItem)
     return cartItem;
 };
 
@@ -31,7 +30,6 @@ async function getCartItemByUserAndTeaId (userId,teaId){
             quantity:quantity
         });
         await newCartItem.save();
-        console.log('newCartItem',newCartItem.toJSON());
         return newCartItem;
     } else {
         const formerQuantity = cartItem.get('quantity');
@@ -39,7 +37,6 @@ async function getCartItemByUserAndTeaId (userId,teaId){
         cartItem.set('quantity',newQuantity);
         await cartItem.save();
         console.log('formerQuantity',formerQuantity,'newQuantity'.newQuantity);
-        console.log('add to existing cart item',cartItem.toJSON());
         return cartItem;
     }
  };
@@ -52,7 +49,6 @@ async function removeCartItem(userId,teaId){
 
  async function minusOneCartItem(userId,teaId){
     const cartItem = await getCartItemByUserAndTeaId(userId,teaId);
-    console.log(cartItem);
 
     const quantity = cartItem.get('quantity');
     const newQuantity = quantity - 1;
@@ -65,13 +61,10 @@ async function removeCartItem(userId,teaId){
 
  async function updateCartItemQuantity (userId,teaId,newQuantity){
     const cartItem = await getCartItemByUserAndTeaId(userId,teaId);
-    console.log(cartItem);
     if(cartItem){
         if(newQuantity == 0){
-            console.log('newQuantity to set',newQuantity);
             removeCartItem(userId,teaId);
         } else if (newQuantity > 0){
-            console.log('newQuantity to set',newQuantity);
             cartItem.set('quantity',newQuantity);
             await cartItem.save();
             return cartItem;

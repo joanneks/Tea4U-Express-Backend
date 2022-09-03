@@ -53,7 +53,7 @@ router.get('/', checkIfAuthenticated,async function (req,res){
     
             meta.push({
                 tea_id:item.get('tea_id'),
-                cart_item_id:item.get('id'),
+                // cart_item_id:item.get('id'),
                 quantity:item.get('quantity')
             });
         };
@@ -167,8 +167,7 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
             order.set('datetime_last_modified',orderLastModifiedDate);
             order.set('shipping_method_id',shippingMethodId);
             order.set('order_status_id',1);
-            order.set('customer_id',4);
-            // order.set('customer_id',4);
+            order.set('customer_id',customerId);
             console.log('new order-----',order);
             await order.save();
 
@@ -184,7 +183,7 @@ router.post('/process_payment',express.raw({type:'application/json'}),async func
                 let orderedItems = new OrderItem();
                 orderedItems.set('quantity',each.quantity);
                 // orderedItems.set('cart_item_id',each.cart_item_id);
-                orderedItems.set('cart_item_id',41);
+                // orderedItems.set('cart_item_id',41);
                 orderedItems.set('tea_id',each.tea_id);
                 orderedItems.set('order_id',newOrderId);
                 console.log('orderedItems_',orderedItems);
