@@ -15,24 +15,18 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('order_items',{
-    id:{
-      type:'int',
-      unsigned:true,
-      primaryKey:true,
-      autoIncrement:true
-    },
-    quantity:{
-      type:'int',
-      unsigned:true,
-      notNull:true,
-      defaultValue:0
-    }
-  });
+  let insertValues = [];
+  insertValues.push(db.insert('packaging',
+    ['name'], ['Loose-Leaf']));
+  insertValues.push(db.insert('packaging',
+    ['name'], ['Sachet']));
+  for (let each of insertValues){
+    return each
+  }
 };
 
 exports.down = function(db) {
-  return db.dropTable('order_items');
+  return null;
 };
 
 exports._meta = {

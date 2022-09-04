@@ -13,7 +13,7 @@
   <title>Tea4U</title>
 
   {{#block 'css'}}
-  <link rel="stylesheet" href="/css/landing.css" type="text/css" />
+  {{!-- <link rel="stylesheet" href="/css/landing.css" type="text/css" /> --}}
 {{/block}}
 </head>
 
@@ -49,8 +49,6 @@
         <div>
           {{#if user}}
           <span style="margin-right:10px;">{{user.username}}</span>
-          <a href="/cart" class="btn btn-success btn-sm mx-3">Cart ({{cartCount}})</a>
-          {{!-- <a href="/cart" class="btn btn-primary btn-sm">Cart ({{cartCount}})</a> --}}
           <a href="/user/logout" class="btn btn-danger btn-sm">Logout</a>
           {{else}}
 

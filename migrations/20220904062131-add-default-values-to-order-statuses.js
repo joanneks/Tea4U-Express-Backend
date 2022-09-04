@@ -15,7 +15,18 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.removeColumn('order_items', 'cart_item_id')
+  let insertValues = [];
+  insertValues.push(db.insert('order_statuses',
+    ['name'], ['Paid']));
+  insertValues.push(db.insert('order_statuses',
+    ['name'], ['Processing Order']));
+  insertValues.push(db.insert('order_statuses',
+    ['name'], ['Delivered']));
+  insertValues.push(db.insert('order_statuses',
+    ['name'], ['Completed']));
+  for (let each of insertValues){
+    return each
+  }
 };
 
 exports.down = function(db) {

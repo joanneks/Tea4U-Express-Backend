@@ -15,9 +15,12 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.changeColumn('orders','postal_code',{
-    type:'int',unsigned:true,notNull:true,
-  });
+  let insertValues = [];
+  insertValues.push(db.insert('users',
+    ['first_name','last_name','username','email','password','datetime_created','datetime_last_modified'], ['Sally','Wu','sallywu','admin@tea4u.com','1fIlyd5p4fAYM2JC+JXBg1Rj6JIVZUOfGKuSw6jIaxc=','2022-08-24 18:20:01','2022-08-24 18:20:01']));
+  for (let each of insertValues){
+    return each
+  }
 };
 
 exports.down = function(db) {

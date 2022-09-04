@@ -71,13 +71,13 @@ app.use(function (req, res, next) {
 });
 
 // setup middleware to save cartCount into session to share data across all hbs files
-app.use(async function (req, res, next) {
-  if (req.session.user) {
-    const cartItems = await getCartByUserId(req.session.user.id);
-    res.locals.cartCount = cartItems.toJSON().length;
-  };
-  next();
-});
+// app.use(async function (req, res, next) {
+//   if (req.session.user) {
+//     const cartItems = await getCartByUserId(req.session.user.id);
+//     res.locals.cartCount = cartItems.toJSON().length;
+//   };
+//   next();
+// });
 
 
 const api = {
@@ -95,7 +95,7 @@ app.use('/api/checkout',api.checkout);
 app.use('/api/order',express.json(),api.order);
 app.use('/api/tea',express.json(),api.tea);
 
-const { getCartByUserId } = require('./dal/cart-test');
+const { getCartByUserId } = require('./dal/cart');
 
 const landingRoutes = require('./routes/landing');
 const cloudinaryRoutes = require('./routes/cloudinary');

@@ -3,7 +3,7 @@ const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY,{
     apiVersion:"2020-08-27"
 });
-const cartServiceLayer = require('../services/cart-test');
+const cartServiceLayer = require('../services/cart');
 const teaDataLayer = require ('../dal/tea');
 const teaServiceLayer = require ('../services/tea');
 const shippingDataLayer = require ('../dal/shipping-method');

@@ -23,7 +23,7 @@ exports.up = function(db) {
       autoIncrement:true
     },
     shipping_address:{type:'string',length:100,notNull:true},
-    postal_code:{type:'smallint',unsigned:true,notNull:true},
+    postal_code:{type:'int',unsigned:true,notNull:true},
     remarks:{type:'string',length:'200',notNull:true, defaultValue:'nil'},
     datetime_created:{type:'datetime', notNull:true},
     datetime_last_modified:{type:'datetime', notNull:true},
