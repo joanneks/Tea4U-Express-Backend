@@ -229,33 +229,36 @@ router.post('/remove/:tea_id', checkIfAuthenticatedJWT, async function(req,res){
         const teaId = req.params.tea_id;
         // itemRemoved refers to the CartItem data that was removed
         const itemRemoved = await cartServiceLayer.removeCartItem(userId,teaId);
-        
-        if(userId==req.session.customer.id){
+        const cartItems = await cartDataLayer.getCartByUserId(userId);
+        console.log('LALALA',itemRemoved)
+        console.log('BABABA',cartItems);
+        if(userId==req.customer.id){
             if(itemRemoved == false){
-                console.log(itemRemoved);
+                console.log('cherry')
                 res.status(200)
                 res.json({
                     itemAdded:'',
                     message:'Tea Product does not exist in cart. Request to remove cart item failed.'
                 });
             } else {
+                console.log('babnanan')
                 console.log(itemRemoved.toJSON());
                 res.status(200)
                 res.json({
-                    itemAdded:'itemRemoved',
+                    cartItems,
                     message:'Tea Product removed from cart successfully'
                 });
             }
         } else{
             res.status(401);
             res.json({
-                message:"Customer/User Id not jwt verified, request to reduce tea product quantity in cart failed"
+                message:"Customer/User Id not jwt verified, request to remove tea product from cart failed"
             })
         }
     }catch(e){
         res.status(400);
         res.json({
-            message:"Response received invalid, request to add tea product quantity in cart failed"
+            message:"Response received invalid, request to remove tea product from cart failed"
         })
     }
 })
