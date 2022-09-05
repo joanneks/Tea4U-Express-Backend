@@ -149,7 +149,7 @@ router.post('/create',async function (req,res){
     password = getHashedPassword(password);
 
     if(validationStatus.includes(false)){
-        res.status(400);
+        res.status(200);
         res.json({
             message:'Failed to create customer in mysql database',
             errorMessages
@@ -396,7 +396,7 @@ router.post('/login',async function(req,res){
             customerId,
             customerEmail,
             process.env.REFRESH_TOKEN_SECRET,
-            '7d'
+            '2d'
         )
         req.session.customer = {
             username:customerUsername,
