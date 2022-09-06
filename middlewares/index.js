@@ -12,11 +12,8 @@ const checkIfAuthenticated = function (req,res,next) {
 
 const checkIfAuthenticatedJWT = function(req,res,next){
     const authHeader = req.headers.authorization;
-    console.log(authHeader)
     if(authHeader){
         const token =authHeader.split(" ")[1];
-        console.log(token);
-        console.log(process.env.TOKEN_SECRET)
         jwt.verify(token, process.env.TOKEN_SECRET, function(err,tokenData){
             if(err){
                 res.status(401);

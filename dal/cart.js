@@ -29,12 +29,14 @@ async function getCartItemByUserAndTeaId (userId,teaId){
             tea_id:teaId,
             quantity:quantity
         });
+        console.log('QUANTITY,ITEM DOES NOT EXIST',quantity)
         await newCartItem.save();
         return newCartItem;
     } else {
         const formerQuantity = cartItem.get('quantity');
-        const newQuantity = formerQuantity + 1;
+        const newQuantity = parseInt(formerQuantity) + parseInt(quantity);
         cartItem.set('quantity',newQuantity);
+        console.log('QUANTITY,ITEM EXISTS',quantity)
         await cartItem.save();
         console.log('formerQuantity',formerQuantity,'newQuantity'.newQuantity);
         return cartItem;
@@ -69,6 +71,8 @@ async function removeCartItem(userId,teaId){
             await cartItem.save();
             return cartItem;
         }
+    }else{
+        
     };
  };
 

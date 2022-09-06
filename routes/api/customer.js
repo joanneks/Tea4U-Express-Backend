@@ -396,7 +396,7 @@ router.post('/login',async function(req,res){
             customerId,
             customerEmail,
             process.env.REFRESH_TOKEN_SECRET,
-            '2d'
+            '1d'
         )
         req.session.customer = {
             username:customerUsername,
@@ -435,7 +435,7 @@ router.post('/refresh', async function (req,res){
                         tokenData.id, 
                         tokenData.email, 
                         process.env.TOKEN_SECRET,
-                        '15m'
+                        '1d'
                     )
                     res.json({
                         accessToken

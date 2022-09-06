@@ -100,7 +100,6 @@ router.get('/', async function (req,res){
 
 router.get('/:tea_id',async function(req,res){
     const tea = await dataLayer.getTeaById(req.params.tea_id);
-    console.log('TEATING TES',tea);
     res.status(200);
     res.json({
         tea:tea.toJSON()
