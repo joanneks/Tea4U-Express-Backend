@@ -182,6 +182,142 @@ router.post('/create',async function (req,res){
 
 })
 
+router.post('/edit-password', checkIfAuthenticatedJWT,async function (req,res){
+    const customerLastModifiedDate = moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
+
+    let validationStatus = [];
+    let errorMessages={};
+    const email = req.body.email;
+    let existingPassword = getHashedPassword(req.body.existing_password);
+    let password = req.body.password;
+
+    try{
+        const existingCustomer = await customerDataLayer.getCustomerByEmail(email);
+        const existingCustomerPassword = existingCustomer.get("password");
+
+        if(existingCustomerPassword==existingPassword){
+            // validate field values to have min and max characters.
+            function validateLength (fieldValueKey,fieldValue,lowerLimit,upperLimit){
+                if(fieldValue.length>=lowerLimit && fieldValue.length<=upperLimit){
+                    validationStatus.push(true);
+                }else{
+                    validationStatus.push(false);
+                    errorMessages[fieldValueKey] = `Field Value must be between `+ lowerLimit + ` and ` + upperLimit + ` characters`;
+                }
+            }
+            validateLength('password',password,8,30);
+            // validate password for special characters,number and 1 uppercase alphabet
+            function validatePassword(password){
+                // push true if criteria is met into validationCheck
+                const validationCheck =[]
+        
+                // 1. check if special characters exist in password
+                // 2. check if password has 1 uppercase
+                // 3. check if password is alphanumeric
+                // flaw. alphanumeric test is still true 
+                // if the password is made up of numbers and special characters without alphabets. 
+                // But this code will still work because this fringe case will fail the capital letter check (test 2)
+        
+                const specialCharacters = ['!','@','#','$','%'];
+                let specialCheck = [];
+                for (let i=0;i<specialCharacters.length;i++){
+                if(password.includes(specialCharacters[i])){
+                    specialCheck.push(true);
+                }
+                }
+                if(specialCheck.includes(true)){
+                    validationCheck.push(true);
+                } else {
+                    validationCheck.push(false);
+                    errorMessages.passwordSpecialCheckInvalid = `Password needs to contain at least 1 special character: '!','@','#','$','%'`;
+                }
+        
+                if(password.toLowerCase()!=password && password.toUpperCase()!=password){
+                    validationCheck.push(true);
+                }else{
+                validationCheck.push(false);
+                errorMessages.passwordCapitalCheckInvalid = `Password needs to contain at least 1 uppercase alphabet`;
+                }
+        
+                let numberCheck=[];
+                let checkNumber="";
+            
+                for(let i = 0; i<password.length;i++){
+                    checkNumber = isNaN(parseInt(password[i]));
+                    if(checkNumber==true){
+                    numberCheck.push(true);
+                    } else{
+                    numberCheck.push(false);
+                    }
+                };  
+                if(numberCheck.includes(false) && numberCheck.includes(true)){
+                    validationCheck.push(true);
+                } else {
+                    validationCheck.push(false);
+                    errorMessages.passwordNumberCheckInvalid = `Password needs to be alphanumeric with at least 1 number.`;
+                };
+        
+                if(!validationCheck.includes(false)){
+                    validationStatus.push(true);
+                }else{
+                    validationStatus.push(false);
+                }
+        
+            };
+            validatePassword(password);
+            
+            console.log(validationStatus,errorMessages);
+            password = getHashedPassword(password);
+
+            if(validationStatus.includes(false)){
+                res.status(200);
+                res.json({
+                    message:'Failed to update customer details in mysql database',
+                    errorMessages
+                })
+            } else{    
+                try{
+                    errorMessages.existingPasswordMatch = '';
+                    existingCustomer.set('password',password);
+                    existingCustomer.set('datetime_last_modified',customerLastModifiedDate);
+                    await existingCustomer.save();
+                    console.log('Customer details updated')
+                    res.status(200);
+                    res.json({
+                        message:'Password updated sucessfully',
+                        errorMessages,
+                        updatedPasswordStatus:true
+                    });
+                }catch(e){
+                    res.status(500);
+                    res.json({
+                        message:'Failed to update customer details in mysql database',
+                        errorMessages
+                    })
+                }
+                
+            }
+        }else{
+            let message = "Password does not match existing account created with "+email+" in database";
+            res.status(200);
+            res.json({
+                message,
+                errorMessages:{
+                    existingPasswordMatch:message
+                }
+            })
+        }
+
+    }catch(e){
+        res.status(400);
+        res.json({
+            message:"Email or password is invalid"
+        })
+    }
+
+
+
+})
 router.post('/edit', checkIfAuthenticatedJWT,async function (req,res){
     const customerLastModifiedDate = moment().tz('Asia/Singapore').format('YYYY-MM-DD hh:mm:ss');
 
@@ -197,8 +333,6 @@ router.post('/edit', checkIfAuthenticatedJWT,async function (req,res){
     const shippingAddress = req.body.shipping_address;
     const postalCode = req.body.postal_code;
     const mobileNumber = req.body.mobile_number;
-    console.log(mobileNumber)
-    console.log(postalCode)
 
     try{
         const existingCustomer = await customerDataLayer.getCustomerByEmail(email);
@@ -217,9 +351,7 @@ router.post('/edit', checkIfAuthenticatedJWT,async function (req,res){
             }
             // validate mobile number start with 8,9
             function validateMobile(mobileNumber){
-                console.log(mobileNumber[0])
                 if(mobileNumber[0]==8 || mobileNumber[0]==9){
-                    console.log('mobilecheck',mobileNumber[0]==9)
                     validationStatus.push(true);
                 }else{
                     validationStatus.push(false);
@@ -264,10 +396,8 @@ router.post('/edit', checkIfAuthenticatedJWT,async function (req,res){
                 })
             } else{    
                 try{
-                    console.log('mango')
                     existingCustomer.set('first_name',firstName);
                     existingCustomer.set('last_name',lastName);
-                    console.log('lychee')
                     existingCustomer.set('username',username);
                     existingCustomer.set('shipping_address',shippingAddress);
                     existingCustomer.set('postal_code',postalCode);
