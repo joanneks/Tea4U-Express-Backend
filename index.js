@@ -70,14 +70,6 @@ app.use(function (req, res, next) {
   next()
 });
 
-// setup middleware to save cartCount into session to share data across all hbs files
-// app.use(async function (req, res, next) {
-//   if (req.session.user) {
-//     const cartItems = await getCartByUserId(req.session.user.id);
-//     res.locals.cartCount = cartItems.toJSON().length;
-//   };
-//   next();
-// });
 
 
 const api = {
@@ -128,10 +120,10 @@ app.use('/customer', customerRoutes);
 
 app.use(express.static('public'))
 
-app.listen(3000, function (res, req) {
-  console.log("Server started")
-})
-
-// app.listen(process.env.PORT, function (res, req) {
+// app.listen(3000, function (res, req) {
 //   console.log("Server started")
 // })
+
+app.listen(process.env.PORT, function (res, req) {
+  console.log("Server started")
+})
