@@ -137,12 +137,18 @@ router.post ('/create', checkIfAuthenticated, async function (req,res){
         },
         'error':function(teaForm){
             res.render('tea/create',{
-                form: teaForm.toHTML(bootstrapField)
+                form: teaForm.toHTML(bootstrapField),
+                'cloudinaryName':process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey':process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset':process.env.CLOUDINARY_UPLOAD_PRESET,
             })
         },
         'empty': function (teaForm){
             res.render('tea/create',{
-                form: teaForm.toHTML(bootstrapField)
+                form: teaForm.toHTML(bootstrapField),
+                'cloudinaryName':process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey':process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset':process.env.CLOUDINARY_UPLOAD_PRESET,
             })
         }
     })  
@@ -217,13 +223,19 @@ router.post('/edit/:tea_id', checkIfAuthenticated, async function(req,res){
         'error':function(teaForm){
             res.render('tea/edit',{
                 form: teaForm.toHTML(bootstrapField),
-                tea: tea.toJSON()
+                tea: tea.toJSON(),
+                'cloudinaryName':process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey':process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset':process.env.CLOUDINARY_UPLOAD_PRESET,
             })
         },
         'empty':function(teaForm){
             res.render('tea/edit',{
                 form: teaForm.toHTML(bootstrapField),
-                tea: tea.toJSON()
+                tea: tea.toJSON(),
+                'cloudinaryName':process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey':process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset':process.env.CLOUDINARY_UPLOAD_PRESET,
             })
         }
     })

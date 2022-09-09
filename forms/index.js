@@ -489,12 +489,14 @@ const createSearchOrderForm = function (orderStatuses,shippingMethods){
             errorAfterField:true,
         }),
         order_status_id:fields.string({
+            label:'Order Status',
             required:false,
             errorAfterField:true,
             widget:widgets.select(),
             choices:orderStatuses
         }),
         shipping_method_id:fields.string({
+            label:'Shipping Method',
             required:false,
             errorAfterField:true,
             widget:widgets.select(),
