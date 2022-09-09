@@ -8,7 +8,7 @@ async function getAllOrders () {
 
 async function getOrderById (orderId) {
     const order = await Order.where({id:orderId}).fetch({
-        require:true,
+        require:false,
         withRelated:['user','orderStatus','shippingMethod','orderItem']
     })
     return order;
@@ -16,9 +16,10 @@ async function getOrderById (orderId) {
 
 async function getOrdersByCustomerId (userId) {
     const order = await Order.where({customer_id:userId}).orderBy('datetime_created', 'DESC').fetchAll({
-        require:true,
+        require:false,
         withRelated:['user','orderStatus','shippingMethod','orderItem']
     })
+    console.log('ORDERSS',order)
     return order;
 }
 module.exports = {getAllOrders, getOrderById, getOrdersByCustomerId };

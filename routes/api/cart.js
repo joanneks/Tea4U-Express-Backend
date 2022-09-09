@@ -24,7 +24,7 @@ router.post('/', checkIfAuthenticatedJWT, async function(req,res){
                     console.log("TEA ITEM DOES NOT EXIST")
                     res.status(200);
                     res.json({
-                        cartItems:'',
+                        cartItems:[],
                         message:'Tea Item does not exist in cart'
                 })
                 }
@@ -36,12 +36,14 @@ router.post('/', checkIfAuthenticatedJWT, async function(req,res){
                     const costPerTeaId = each.quantity * (each.tea.cost/100);
                     totalCost += costPerTeaId;
                 });
+                console.log(cartByUserId.toJSON())
                 res.status(200);
                 res.json({
                     cartItems: cartByUserId.toJSON(),
                     totalCost: totalCost,
                     message: "Display all tea products in cart success"
                 });
+                console.log('finish')
             }
         }else{
             res.status(401);
@@ -138,13 +140,13 @@ router.post('/minus/:tea_id', checkIfAuthenticatedJWT, async function (req,res){
                     itemReduced,
                     message:'Tea Product quantity in cart reduced by 1 successfully'
                 });
-            } 
-            // else if ( formerQuantity < 1){
-            //     res.status(200)
-            //     res.json({
-            //         message:'Tea Product does not exist in cart. Request to reduce quantity rejected.'
-            //     });
-            // }
+            } else if ( formerQuantity < 1){
+                res.status(200)
+                res.json({
+                    cartItems:[],
+                    message:'Tea Product does not exist in cart. Request to reduce quantity rejected.'
+                });
+            }
         } else{
             res.status(401);
             res.json({

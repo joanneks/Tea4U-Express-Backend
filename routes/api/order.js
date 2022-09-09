@@ -25,10 +25,18 @@ router.get('/:customer_id/:order_id', checkIfAuthenticatedJWT, async function (r
     let customerId = parseInt(req.params.customer_id);
     if(customerId ==req.customer.id){
         let orderItems = await orderItemsDataLayer.getOrderItemsByOrderId(req.params.order_id);
+        console.log('orderItems')
+        console.log(orderItems)
         res.status(200);
         res.json({
             orderItems:orderItems.toJSON(),
             message:"Order Items Query success"
+        })
+    }else{
+        res.status(400);
+        res.send({
+            orderItems:[],
+            error: "Order Items Query failed"
         })
     }
 })
