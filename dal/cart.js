@@ -3,7 +3,7 @@ const { CartItem } = require('../models');
 async function getCartByUserId (userId) {
     const cart = await CartItem.collection().where({
         customer_id:userId
-    }).fetch({
+    }).orderBy('tea_id','asc').fetch({
         require:false,
         withRelated:['tea']
     });
