@@ -12,6 +12,7 @@ router.get('/', checkIfAuthenticated,async function (req,res){
         'form': teaTypeForm.toHTML(bootstrapField),
         'teaTypes': teaTypes.toJSON()
     });
+    console.log('teatypees',teaTypes);
 });
 
 router.post('/', checkIfAuthenticated,async function (req,res){
@@ -23,7 +24,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
             teaType.set('name',teaTypeForm.data.name);
             await teaType.save();
             req.flash('success_messages',"New Tea Type created successfully");
-            res.redirect('/teaType');
+            res.redirect('/tea-type');
         },
         'error':async function (teaTypeForm){
             res.render('dashboard/tea-type/index',{
@@ -80,7 +81,7 @@ router.post('/edit/:tea_type_id', checkIfAuthenticated,async function (req,res){
             teaType.set(teaTypeForm.data);
             teaType.save();
             req.flash('success_messages',"Tea Type updated successfully");
-            res.redirect('/teaType')
+            res.redirect('/tea-type')
         },
         'error':async function(teaTypeForm){
             res.render('dashboard/tea-type/edit',{
