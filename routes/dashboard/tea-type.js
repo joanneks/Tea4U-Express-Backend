@@ -1,6 +1,6 @@
 const express =require('express');
 const router = express.Router();
-const {createBrandForm, bootstrapField} = require('../../forms');
+const {createTeaTypeForm, bootstrapField} = require('../../forms');
 const dataLayer = require('../../dal/tea');
 const {TeaType} = require('../../models');
 const {checkIfAuthenticated} = require('../../middlewares');
@@ -17,7 +17,7 @@ router.get('/', checkIfAuthenticated,async function (req,res){
 router.post('/', checkIfAuthenticated,async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const teaTypeForm  = createTeaTypeForm("Tea Type Name");
-    brandForm.handle(req,{
+    teaTypeForm.handle(req,{
         'success':async function (teaTypeForm){
             const teaType = new TeaType();
             teaType.set('name',teaType.data.name);
@@ -40,9 +40,9 @@ router.post('/', checkIfAuthenticated,async function (req,res){
     })
 });
 
-router.get('/edit/:brand_id', checkIfAuthenticated,async function (req,res){
+router.get('/edit/:tea_type_id', checkIfAuthenticated,async function (req,res){
     const teaTypeForm  = createteaTypeForm("Update Tea Type Name");
-    const teaTypes = await dataLayer.getAllBrands();
+    const teaTypes = await dataLayer.getAllTeaTypes();
     const teaType = await dataLayer.getTeaTypeById(req.params.tea_type_id);
     teaTypeForm.fields.name.value = teaType.get('name');
 
