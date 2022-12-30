@@ -14,13 +14,6 @@ async function getAllTeaTypes(){
     return teaTypes;
 };
 
-async function getTeaTypeById (teaTypeId) {
-    const teaType = await TeaType.where({id:teaTypeId}).fetch({
-        require:true
-    })
-    return teaType;
-}
-
 async function getAllPackaging (){
     const packaging = await Packaging.fetchAll().map(packaging => {
         return [packaging.get('id'),packaging.get('name')];
@@ -63,4 +56,4 @@ async function setTeaQuantity(teaId,updatedTeaQuantity){
     await tea.save();
 }
 
-module.exports = {getAllTeaTypes, getTeaTypeById, getAllBrands, getAllPackaging, getAllPlaceOfOrigins, getAllTasteProfiles, getTeaById, getAllTea, setTeaQuantity}
+module.exports = {getAllTeaTypes, getAllBrands, getAllPackaging, getAllPlaceOfOrigins, getAllTasteProfiles, getTeaById, getAllTea, setTeaQuantity}

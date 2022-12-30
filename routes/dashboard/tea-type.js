@@ -1,13 +1,14 @@
 const express =require('express');
 const router = express.Router();
 const {createTeaTypeForm, bootstrapField} = require('../../forms');
-const dataLayer = require('../../dal/tea');
+const dataLayer = require('../../dal/tea-type');
 const {TeaType} = require('../../models');
 const {checkIfAuthenticated} = require('../../middlewares');
 
 router.get('/', checkIfAuthenticated,async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const teaTypeForm  = createTeaTypeForm();
+    console.log(teaTypes);
     res.render('dashboard/tea-type/index',{
         'form': teaTypeForm.toHTML(bootstrapField),
         'teaTypes': teaTypes.toJSON()

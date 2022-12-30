@@ -92,8 +92,8 @@ const { getCartByUserId } = require('./dal/cart');
 const landingRoutes = require('./routes/landing');
 const cloudinaryRoutes = require('./routes/cloudinary');
 const teaRoutes = require('./routes/tea');
-const teaTypeRoutes = require('./routes/dashboard/tea-type');
 const brandRoutes = require('./routes/dashboard/brand');
+const teaTypeRoutes = require('./routes/dashboard/tea-type');
 const tasteProfileRoutes = require('./routes/dashboard/taste-profile');
 const placeOfOriginRoutes = require('./routes/dashboard/place-of-origin');
 const shippingMethodRoutes = require('./routes/dashboard/shipping-method');
@@ -107,8 +107,8 @@ const customerRoutes = require('./routes/customer');
 app.use('/', landingRoutes);
 app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea', teaRoutes);
-app.use('/tea-type', teaTypeRoutes);
 app.use('/brand', brandRoutes);
+app.use('/tea-type', teaTypeRoutes);
 app.use('/taste-profile', tasteProfileRoutes);
 app.use('/place-of-origin', placeOfOriginRoutes);
 app.use('/shipping-method', shippingMethodRoutes);
@@ -122,10 +122,10 @@ app.use('/customer', customerRoutes);
 
 app.use(express.static('public'))
 
-// app.listen(3000, function (res, req) {
-//   console.log("Server started")
-// })
-
-app.listen(process.env.PORT, function (res, req) {
+app.listen(3000, function (res, req) {
   console.log("Server started")
 })
+
+// app.listen(process.env.PORT, function (res, req) {
+//   console.log("Server started")
+// })
