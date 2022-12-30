@@ -9,7 +9,7 @@ router.get('/', checkIfAuthenticated,async function (req,res){
     const teaTypes = await dataLayer.getAllTeaTypes();
     const teaTypeForm  = createTeaTypeForm();
     res.render('dashboard/tea-type/index',{
-        'form': teaTypes.toHTML(bootstrapField),
+        'form': teaTypeForm.toHTML(bootstrapField),
         'teaTypes': teaTypes.toJSON()
     });
 });
@@ -20,7 +20,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
     teaTypeForm.handle(req,{
         'success':async function (teaTypeForm){
             const teaType = new TeaType();
-            teaType.set('name',teaType.data.name);
+            teaType.set('name',teaTypeForm.data.name);
             await teaType.save();
             req.flash('success_messages',"New Tea Type created successfully");
             res.redirect('/teaType');
@@ -41,7 +41,7 @@ router.post('/', checkIfAuthenticated,async function (req,res){
 });
 
 router.get('/edit/:tea_type_id', checkIfAuthenticated,async function (req,res){
-    const teaTypeForm  = createteaTypeForm("Update Tea Type Name");
+    const teaTypeForm  = createTeaTypeForm("Update Tea Type Name");
     const teaTypes = await dataLayer.getAllTeaTypes();
     const teaType = await dataLayer.getTeaTypeById(req.params.tea_type_id);
     teaTypeForm.fields.name.value = teaType.get('name');
