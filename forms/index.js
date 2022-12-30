@@ -235,6 +235,17 @@ const createLoginForm = () => {
     })
 }
 
+const createTeaTypeForm = (label) => {
+    return forms.create({
+        'name':fields.string({
+            label:label,
+            required:true,
+            errorAfterField:true,
+            validators:[validators.minlength(2)]
+        })
+    })
+}
+
 const createBrandForm = (label) => {
     return forms.create({
         'name':fields.string({
@@ -509,7 +520,7 @@ module.exports = {
     bootstrapField, 
     createTeaForm, 
     createUserForm, editUserForm, editUserPasswordForm, createLoginForm,
-    createBrandForm,
+    createTeaTypeForm, createBrandForm,
     createTasteProfileForm, editTasteProfileForm, 
     createPlaceOfOriginForm, editPlaceOfOriginForm,
     createShippingMethodForm, createOrderStatusForm,
