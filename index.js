@@ -107,6 +107,7 @@ const customerRoutes = require('./routes/customer');
 app.use('/', landingRoutes);
 app.use('/cloudinary', cloudinaryRoutes);
 app.use('/tea', teaRoutes);
+app.use('/tea-type', teaTypeRoutes);
 app.use('/brand', brandRoutes);
 app.use('/taste-profile', tasteProfileRoutes);
 app.use('/place-of-origin', placeOfOriginRoutes);
