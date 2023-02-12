@@ -39,6 +39,17 @@ let options = {
 
 app.use(session(options));
 
+app.get('/destroy', function (req, res) {
+  req.session.destroy(function(err) {
+    if (err) {
+      console.error(err);
+    } else {
+      res.clearCookie(options.name);
+      res.redirect('/');
+    }
+  });
+});
+
 app.use(flash());
 app.use(cors());
 app.use(express.static('public/images'));
@@ -135,27 +146,11 @@ app.use(express.static('public'))
 //   console.log("Server started")
 // })
 
-// app.listen(process.env.PORT, function (res, req) {
-//   console.log("Server started")
-// })
-
 
 app.listen(process.env.PORT, function (res, req) {
-  // try{
-  //   console.log("Server started")
-  // } catch(err){
-    if(err){
-      req.session.destroy(function(err) {
-        if (err) {
-          console.error(err);
-        } else {
-          res.clearCookie(options.name);
-          res.redirect('/');
-        }
-      });
-    } else{
-        console.log("Server started")
-    }
-  // }
+  console.log("Server started")
 })
+
+
+
 
