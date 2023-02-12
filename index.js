@@ -22,14 +22,22 @@ wax.setLayoutPath('./views/layouts');
 
 app.set('view engine', 'hbs');
 
+// app.use(session({
+//   store: new FileStore(),  // we want to use files to store sessions
+//   secret: process.env.SESSION_SECRET, // used to generate the session id
+//   resave: false, // do we automatically recreate the session even if there is no change to it
+//   saveUninitialized: true, // if a new browser connects do we create a new session
+// }));
 
-app.use(session({
-  // store: new FileStore(),  // we want to use files to store sessions.
-  store: new FileStore({logFn: function(){}}),  // we want to use files to store sessions
+let options = {
+  store: new FileStore(),  // we want to use files to store sessions
   secret: process.env.SESSION_SECRET, // used to generate the session id
   resave: false, // do we automatically recreate the session even if there is no change to it
   saveUninitialized: true, // if a new browser connects do we create a new session
-}));
+  name:'my.connect.sid'
+}
+
+app.use(session(options));
 
 app.use(flash());
 app.use(cors());
@@ -127,6 +135,23 @@ app.use(express.static('public'))
 //   console.log("Server started")
 // })
 
+// app.listen(process.env.PORT, function (res, req) {
+//   console.log("Server started")
+// })
+
+
 app.listen(process.env.PORT, function (res, req) {
-  console.log("Server started")
+  try{
+    console.log("Server started")
+  } catch(err){
+    req.session.destroy(function(err) {
+      if (err) {
+        console.error(err);
+      } else {
+        res.clearCookie(options.name);
+        res.redirect('/');
+      }
+    });
+  }
 })
+
