@@ -141,9 +141,9 @@ app.use(express.static('public'))
 
 
 app.listen(process.env.PORT, function (res, req) {
-  try{
-    console.log("Server started")
-  } catch(err){
+  // try{
+  //   console.log("Server started")
+  // } catch(err){
     req.session.destroy(function(err) {
       if (err) {
         console.error(err);
@@ -152,6 +152,6 @@ app.listen(process.env.PORT, function (res, req) {
         res.redirect('/');
       }
     });
-  }
+  // }
 })
 
