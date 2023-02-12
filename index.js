@@ -24,7 +24,8 @@ app.set('view engine', 'hbs');
 
 
 app.use(session({
-  store: new FileStore(),  // we want to use files to store sessions
+  // store: new FileStore(),  // we want to use files to store sessions
+  store: new filestore({logFn: function(){}}),  // we want to use files to store sessions
   secret: process.env.SESSION_SECRET, // used to generate the session id
   resave: false, // do we automatically recreate the session even if there is no change to it
   saveUninitialized: true, // if a new browser connects do we create a new session
