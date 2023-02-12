@@ -144,14 +144,18 @@ app.listen(process.env.PORT, function (res, req) {
   // try{
   //   console.log("Server started")
   // } catch(err){
-    req.session.destroy(function(err) {
-      if (err) {
-        console.error(err);
-      } else {
-        res.clearCookie(options.name);
-        res.redirect('/');
-      }
-    });
+    if(err){
+      req.session.destroy(function(err) {
+        if (err) {
+          console.error(err);
+        } else {
+          res.clearCookie(options.name);
+          res.redirect('/');
+        }
+      });
+    } else{
+        console.log("Server started")
+    }
   // }
 })
 
